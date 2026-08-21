@@ -9,6 +9,9 @@ export enum BoardShape {
 export const TOUCH_PREVIEW_SIZES = ['off', 'small', 'medium', 'large', 'zoom'] as const;
 export type TouchPreviewSize = typeof TOUCH_PREVIEW_SIZES[number];
 
+export const LOBBY_THEMES = ['cool', 'warm'] as const;
+export type LobbyTheme = typeof LOBBY_THEMES[number];
+
 export const INPUT_MODES = ['drag', 'click', 'auto-click'] as const;
 export type InputMode = typeof INPUT_MODES[number];
 
@@ -20,6 +23,10 @@ export type MainGameplayDifficulty = typeof MAIN_GAMEPLAY_DIFFICULTIES[number];
 
 export const isTouchPreviewSize = (value: unknown): value is TouchPreviewSize => (
   typeof value === 'string' && (TOUCH_PREVIEW_SIZES as readonly string[]).includes(value)
+);
+
+export const isLobbyTheme = (value: unknown): value is LobbyTheme => (
+  typeof value === 'string' && (LOBBY_THEMES as readonly string[]).includes(value)
 );
 
 export const isInputMode = (value: unknown): value is InputMode => (
@@ -87,6 +94,7 @@ export interface GameSettings {
   showNextNumber: boolean;
   showDifficultyScore: boolean;
   soundEnabled: boolean;
+  lobbyTheme: LobbyTheme;
   inputMode: InputMode;
   touchPreviewSize: TouchPreviewSize;
   touchPreviewFollowsPointer: boolean;
@@ -177,6 +185,8 @@ export interface BoardSessionInput {
   inputMode: InputMode;
   touchPreviewRingDepth: 1 | 2;
   boardZoomEnabled: boolean;
+  inactiveNumberFillColor: number;
+  inactiveNumberTextColor: string;
   mode: GameMode;
   onProgress: (current: number, total: number) => void;
   onWrong: (message: string, shouldLoseLife: boolean) => void;
@@ -214,6 +224,7 @@ export const DEFAULT_SETTINGS: GameSettings = {
   showNextNumber: true,
   showDifficultyScore: false,
   soundEnabled: true,
+  lobbyTheme: 'cool',
   inputMode: 'drag',
   touchPreviewSize: 'off',
   touchPreviewFollowsPointer: false,

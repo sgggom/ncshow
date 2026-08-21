@@ -147,8 +147,6 @@ const HIDDEN_QUESTION_SHOW_DURATION_MS = 170;
 const HIDDEN_QUESTION_HIDE_DURATION_MS = 120;
 const NUMBER_FILL_RADIUS_SCALE = 49 / 64;
 const NUMBER_FILL_DISPLAY_SCALE = 0.95;
-const INACTIVE_NUMBER_FILL_COLOR = 0xdee4f3;
-const INACTIVE_NUMBER_TEXT_COLOR = '#335588';
 const CONNECTED_NUMBER_BACKDROP_SCALE = 1.2;
 const CONNECTED_NUMBER_BACKDROP_ALPHA = 0.5;
 const NUMBER_UNDERLINE_Y_OFFSET_SCALE = 0.44;
@@ -521,6 +519,7 @@ export class BoardScene extends Phaser.Scene {
     preferences: Pick<
       BoardSessionInput,
       'showNextNumber' | 'soundEnabled' | 'inputMode' | 'touchPreviewRingDepth' | 'boardZoomEnabled'
+      | 'inactiveNumberFillColor' | 'inactiveNumberTextColor'
     >,
   ): void {
     if (!this.session) return;
@@ -536,6 +535,8 @@ export class BoardScene extends Phaser.Scene {
     this.session.inputMode = preferences.inputMode;
     this.session.touchPreviewRingDepth = preferences.touchPreviewRingDepth;
     this.session.boardZoomEnabled = preferences.boardZoomEnabled;
+    this.session.inactiveNumberFillColor = preferences.inactiveNumberFillColor;
+    this.session.inactiveNumberTextColor = preferences.inactiveNumberTextColor;
     if (boardZoomChanged) {
       this.boardViewportScroll = { x: 0.5, y: 0.5 };
       this.applyBoardViewport();
@@ -1551,7 +1552,7 @@ export class BoardScene extends Phaser.Scene {
       const numberFill = this.add.image(
         position.x,
         position.y,
-        this.numberFillTexture(INACTIVE_NUMBER_FILL_COLOR),
+        this.numberFillTexture(session.inactiveNumberFillColor),
       ).setDisplaySize(numberFillDisplaySize(radius), numberFillDisplaySize(radius));
       const liquidRingRadius = liquidBallRadius(radius);
       const liquidRing: CellShape = isHex
@@ -1601,7 +1602,7 @@ export class BoardScene extends Phaser.Scene {
         position.y + numberFontSize * NUMBER_UNDERLINE_Y_OFFSET_SCALE,
         Math.max(8, numberFontSize * 0.42),
         Math.max(2, numberFontSize * 0.065),
-        Number.parseInt(INACTIVE_NUMBER_TEXT_COLOR.slice(1), 16),
+        Number.parseInt(session.inactiveNumberTextColor.slice(1), 16),
       ).setOrigin(0.5);
       const questionMark = this.add.text(position.x, position.y, '?', {
         fontFamily: 'Nunito Sans, sans-serif',
@@ -1740,7 +1741,7 @@ export class BoardScene extends Phaser.Scene {
         ? COLORS.wrongRipple
         : connected
           ? cellColor
-          : INACTIVE_NUMBER_FILL_COLOR;
+          : this.session!.inactiveNumberFillColor;
       const displayText = String(this.connection?.displayNumber(cellView.index) ?? cellView.index + 1);
       cellView.label.setText(displayText);
       const numberFillTexture = this.numberFillTexture(numberFillColor);
@@ -1774,7 +1775,7 @@ export class BoardScene extends Phaser.Scene {
       cellView.label.setAlpha(1);
       const labelColor = (
         !connected
-          ? INACTIVE_NUMBER_TEXT_COLOR
+          ? this.session!.inactiveNumberTextColor
           : artworkEnabled
             ? contrastTextForColor(cellColor)
             : revealedHidden

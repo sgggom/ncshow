@@ -28,9 +28,11 @@ describe('migrated product scope', () => {
     expect(indexMarkup).not.toContain('id="arranger-screen"');
   });
 
-  it('keeps the lobby on the single light theme', () => {
+  it('offers cool and warm lobby artwork themes without restoring the removed night theme', () => {
     expect(indexMarkup).not.toContain('value="night"');
-    expect(indexMarkup).not.toContain('id="settings-theme"');
+    expect(indexMarkup).toContain('id="lobby-theme"');
+    expect(indexMarkup).toContain('name="lobby-theme" value="cool"');
+    expect(indexMarkup).toContain('name="lobby-theme" value="warm"');
     expect(indexMarkup).not.toContain('lobby-theme-panel--night');
   });
 

@@ -33,6 +33,7 @@ import {
 import {
   BoardShape,
   cellKey,
+  isLobbyTheme,
   isTouchPreviewSize,
   usesClickInput,
   type BoardNeighborhoodPreview,
@@ -43,6 +44,7 @@ import {
   type GameMode,
   type GameSettings,
   type LevelData,
+  type LobbyTheme,
   type MainGameplay,
   type TouchPreviewSize,
 } from './game/types';
@@ -575,6 +577,7 @@ class NumberConnectApp {
   private readonly game: Phaser.Game;
 
   public constructor() {
+    this.applyLobbyTheme(this.settings.lobbyTheme);
     this.renderCoinBalance();
     this.applyPlayPuzzleRotation();
     this.boardScene.registerArtworkTextures(PLAY_PUZZLE_PATTERNS.map((pattern) => ({
@@ -1556,6 +1559,24 @@ class NumberConnectApp {
     return isTouchPreviewSize(value) ? value : 'small';
   }
 
+  private selectedLobbyTheme(): LobbyTheme {
+    const value = query<HTMLInputElement>('input[name="lobby-theme"]:checked').value;
+    return isLobbyTheme(value) ? value : 'cool';
+  }
+
+  private setLobbyThemeControl(theme: LobbyTheme): void {
+    document.querySelectorAll<HTMLInputElement>('input[name="lobby-theme"]').forEach((input) => {
+      input.checked = input.value === theme;
+    });
+  }
+
+  private applyLobbyTheme(theme: LobbyTheme): void {
+    document.documentElement.dataset.lobbyTheme = theme;
+    query<HTMLImageElement>('.default-brand-lockup > img').src = theme === 'warm'
+      ? './ui/lobby-themes/warm/logo.png'
+      : './ui/number-connect-slices/set-7/logo.png';
+  }
+
   private setTouchPreviewSizeControl(size: TouchPreviewSize): void {
     this.touchPreviewSizeControl.querySelectorAll<HTMLInputElement>(
       'input[name="touch-preview-size"]',
@@ -2044,6 +2065,8 @@ class NumberConnectApp {
       inputMode: this.settings.inputMode,
       touchPreviewRingDepth: this.settings.touchPreviewSize === 'large' ? 2 : 1,
       boardZoomEnabled: this.isTouchPreviewZoomMode(),
+      inactiveNumberFillColor: this.settings.lobbyTheme === 'warm' ? 0xede6d9 : 0xdee4f3,
+      inactiveNumberTextColor: this.settings.lobbyTheme === 'warm' ? '#3e3f5e' : '#335588',
       mode: this.mode,
       onProgress: (current, total) => {
         this.currentProgress = current;
@@ -3674,6 +3697,7 @@ class NumberConnectApp {
   }
 
   private populateSettingsForm(): void {
+    this.setLobbyThemeControl(this.settings.lobbyTheme);
     query<HTMLInputElement>('#settings-sound').checked = this.settings.soundEnabled;
     this.solutionToggle.checked = this.solutionRevealed;
     this.setTouchPreviewSizeControl(this.settings.touchPreviewSize);
@@ -3757,10 +3781,12 @@ class NumberConnectApp {
   }
 
   private applySettingsChange(): void {
+    this.settings.lobbyTheme = this.selectedLobbyTheme();
     this.settings.soundEnabled = query<HTMLInputElement>('#settings-sound').checked;
     this.settings.touchPreviewSize = this.selectedTouchPreviewSize();
     this.settings.touchPreviewFollowsPointer = query<HTMLInputElement>('#settings-touch-preview-follow').checked;
     saveSettings(this.settings);
+    this.applyLobbyTheme(this.settings.lobbyTheme);
     this.renderDefaultLobbyLevelNumber();
     this.refreshSettingsControls();
     this.renderTouchPreviewState();
@@ -3771,6 +3797,8 @@ class NumberConnectApp {
       inputMode: this.settings.inputMode,
       touchPreviewRingDepth: this.settings.touchPreviewSize === 'large' ? 2 : 1,
       boardZoomEnabled: this.isTouchPreviewZoomMode(),
+      inactiveNumberFillColor: this.settings.lobbyTheme === 'warm' ? 0xede6d9 : 0xdee4f3,
+      inactiveNumberTextColor: this.settings.lobbyTheme === 'warm' ? '#3e3f5e' : '#335588',
     });
 
     if (this.settingsContext === 'play') {

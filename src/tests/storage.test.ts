@@ -83,6 +83,20 @@ describe('game settings migration', () => {
     }
   });
 
+  it('loads a valid lobby theme and falls back to the cool theme', () => {
+    const getItem = vi.fn()
+      .mockReturnValueOnce(JSON.stringify({ lobbyTheme: 'warm' }))
+      .mockReturnValueOnce(JSON.stringify({ lobbyTheme: 'night' }));
+    vi.stubGlobal('window', { localStorage: { getItem } });
+
+    try {
+      expect(loadSettings().lobbyTheme).toBe('warm');
+      expect(loadSettings().lobbyTheme).toBe('cool');
+    } finally {
+      vi.unstubAllGlobals();
+    }
+  });
+
   it('migrates saved small-window preferences', () => {
     const getItem = vi.fn(() => JSON.stringify({
       touchPreviewEnabled: false,
