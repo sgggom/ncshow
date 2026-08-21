@@ -2723,6 +2723,7 @@ class NumberConnectApp {
   }
 
   private showNormalResult(): void {
+    this.selectNextNormalLevel();
     this.resultContext = 'normal';
     this.resultTitle.textContent = '漂亮的一笔！';
     this.resultMessage.textContent = '你已连接棋盘上的所有数字。';
@@ -2885,7 +2886,7 @@ class NumberConnectApp {
     } else if (this.resultContext === 'collection') {
       this.nextCollectionLevel();
     } else if (this.resultContext === 'normal') {
-      this.nextLevel();
+      this.startSelectedNormalLevel();
     }
   }
 
@@ -3259,7 +3260,7 @@ class NumberConnectApp {
     this.playPuzzleFinaleButton.disabled = false;
     this.playPuzzleFinaleBusy = false;
     this.boardScene.setPaused(false);
-    this.nextLevel();
+    this.startSelectedNormalLevel();
   }
 
   private async flyBoardBeadsToShowcase(
@@ -3409,6 +3410,7 @@ class NumberConnectApp {
         return;
       }
       await this.showPlayPuzzleFinale();
+      this.selectNextNormalLevel();
     } else {
       const patternComplete = await this.showPlayBeadCompletion();
       if (!patternComplete) {
@@ -3508,6 +3510,13 @@ class NumberConnectApp {
     this.lives = 3;
     this.renderLives();
     this.selectNextNormalLevel();
+    this.setCurrentBoard(this.createNormalLevel());
+  }
+
+  private startSelectedNormalLevel(): void {
+    this.resultOverlay.hidden = true;
+    this.lives = 3;
+    this.renderLives();
     this.setCurrentBoard(this.createNormalLevel());
   }
 
