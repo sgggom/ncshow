@@ -1,0 +1,7 @@
+node_modules/
+dist/
+output/
+.playwright-cli/
+NumberConnect.html
+*.tsbuildinfo
+.DS_Store

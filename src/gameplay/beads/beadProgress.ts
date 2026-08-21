@@ -1,0 +1,435 @@
+export interface BeadPatternData {
+  id: string;
+  name: string;
+  width: number;
+  height: number;
+  data: Array<Array<string | null>>;
+}
+
+export interface BeadPixel {
+  x: number;
+  y: number;
+  color: string;
+}
+
+export interface BeadJarItem extends BeadPixel {
+  patternId: string;
+}
+
+export interface BeadProgress {
+  patternId: string;
+  collected: number;
+}
+
+export interface BeadPatternManifestEntry {
+  id: string;
+  name: string;
+  width: number;
+  height: number;
+  data: string;
+}
+
+export interface BeadSequenceState {
+  pattern: BeadPatternData;
+  progress: BeadProgress;
+}
+
+interface StorageLike {
+  getItem: (key: string) => string | null;
+  setItem: (key: string, value: string) => void;
+}
+
+const PROGRESS_KEY = 'number-connect.bead-progress.v1';
+const COLLECTION_KEY = 'number-connect.bead-collection.v1';
+const JAR_KEY = 'number-connect.bead-jar.v1';
+const COLOR_PATTERN = /^#[0-9a-f]{6}$/i;
+
+const browserStorage = (): StorageLike | undefined => {
+  try {
+    return typeof window !== 'undefined' && 'localStorage' in window
+      ? window.localStorage
+      : undefined;
+  } catch {
+    return undefined;
+  }
+};
+
+export const parseBeadPattern = (
+  value: unknown,
+  metadata: Pick<BeadPatternManifestEntry, 'id' | 'name' | 'width' | 'height'>,
+): BeadPatternData => {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error('Invalid bead pattern');
+  const width = Math.floor(Number(metadata.width));
+  const height = Math.floor(Number(metadata.height));
+  if (!metadata.id || !metadata.name || width < 1 || height < 1) {
+    throw new Error('Invalid bead pattern metadata');
+  }
+  if (Object.keys(value).length !== 1 || !('data' in value)) {
+    throw new Error('Bead pattern JSON must only contain data');
+  }
+  const source = (value as { data?: unknown }).data;
+  if (!Array.isArray(source) || source.length !== height) {
+    throw new Error(`Invalid bead pattern row count: expected ${height}`);
+  }
+
+  const data = source.map((row, y) => {
+    if (!Array.isArray(row) || row.length !== width) {
+      throw new Error(`Invalid bead pattern column count at row ${y}: expected ${width}`);
+    }
+    return row.map((color, x) => {
+      if (color !== null && (typeof color !== 'string' || !COLOR_PATTERN.test(color))) {
+        throw new Error(`Invalid bead color at ${x},${y}`);
+      }
+      return color;
+    });
+  });
+
+  return { id: metadata.id, name: metadata.name, width, height, data };
+};
+
+export const parseBeadPatternManifest = (value: unknown): BeadPatternManifestEntry[] => {
+  if (!value || typeof value !== 'object') throw new Error('Invalid bead pattern manifest');
+  const entries = (value as { patterns?: unknown }).patterns;
+  if (!Array.isArray(entries) || entries.length === 0) throw new Error('Bead pattern manifest is empty');
+
+  return entries.map((entry) => {
+    if (!entry || typeof entry !== 'object') throw new Error('Invalid bead pattern manifest entry');
+    const candidate = entry as Partial<BeadPatternManifestEntry>;
+    const width = Math.floor(Number(candidate.width));
+    const height = Math.floor(Number(candidate.height));
+    if (
+      !candidate.id
+      || !candidate.name
+      || width < 1
+      || height < 1
+      || typeof candidate.data !== 'string'
+      || !/^[a-z0-9-]+\.json$/i.test(candidate.data)
+    ) {
+      throw new Error('Invalid bead pattern manifest entry');
+    }
+    return { id: candidate.id, name: candidate.name, width, height, data: candidate.data };
+  });
+};
+
+export const loadBeadPatterns = async (): Promise<BeadPatternData[]> => {
+  const manifestResponse = await fetch('./bead-patterns/patterns.json');
+  if (!manifestResponse.ok) throw new Error('Unable to load bead pattern manifest');
+  const entries = parseBeadPatternManifest(await manifestResponse.json());
+
+  return Promise.all(entries.map(async (entry) => {
+    const response = await fetch(`./bead-patterns/${entry.data}`);
+    if (!response.ok) throw new Error(`Unable to load bead pattern ${entry.id}`);
+    return parseBeadPattern(await response.json(), entry);
+  }));
+};
+
+export const orderedBeads = (pattern: BeadPatternData): BeadPixel[] => {
+  const beads: BeadPixel[] = [];
+  for (let y = 0; y < pattern.height; y += 1) {
+    for (let x = 0; x < pattern.width; x += 1) {
+      const color = pattern.data[y][x];
+      if (color) beads.push({ x, y, color });
+    }
+  }
+  return beads;
+};
+
+export const loadBeadProgress = (
+  pattern: BeadPatternData,
+  storage: StorageLike | undefined = browserStorage(),
+): BeadProgress => {
+  if (!storage) return { patternId: pattern.id, collected: 0 };
+  try {
+    const parsed = JSON.parse(storage.getItem(PROGRESS_KEY) ?? '{}') as Partial<BeadProgress>;
+    const total = orderedBeads(pattern).length;
+    const collected = parsed.patternId === pattern.id && Number.isFinite(Number(parsed.collected))
+      ? Math.max(0, Math.min(total, Math.floor(Number(parsed.collected))))
+      : 0;
+    return { patternId: pattern.id, collected };
+  } catch {
+    return { patternId: pattern.id, collected: 0 };
+  }
+};
+
+export const loadBeadSequence = (
+  patterns: readonly BeadPatternData[],
+  storage: StorageLike | undefined = browserStorage(),
+): BeadSequenceState => {
+  if (patterns.length === 0) throw new Error('No bead patterns available');
+
+  let storedPatternId: string | undefined;
+  try {
+    const parsed = JSON.parse(storage?.getItem(PROGRESS_KEY) ?? '{}') as Partial<BeadProgress>;
+    if (typeof parsed.patternId === 'string') storedPatternId = parsed.patternId;
+  } catch {
+    // Invalid progress falls back to the first pattern.
+  }
+
+  const storedIndex = patterns.findIndex((pattern) => pattern.id === storedPatternId);
+  const pattern = patterns[storedIndex >= 0 ? storedIndex : 0];
+  const progress = loadBeadProgress(pattern, storage);
+  if (orderedBeads(pattern).length > 0 && progress.collected >= orderedBeads(pattern).length) {
+    markBeadPatternCompleted(patterns, pattern.id, storage);
+    return advanceBeadSequence(patterns, pattern, progress, storage);
+  }
+  return { pattern, progress };
+};
+
+export const advanceBeadSequence = (
+  patterns: readonly BeadPatternData[],
+  pattern: BeadPatternData,
+  progress: BeadProgress,
+  storage: StorageLike | undefined = browserStorage(),
+): BeadSequenceState => {
+  if (patterns.length === 0) throw new Error('No bead patterns available');
+  const total = orderedBeads(pattern).length;
+  if (progress.collected < total) return { pattern, progress };
+
+  const currentIndex = patterns.findIndex((candidate) => candidate.id === pattern.id);
+  const nextPattern = patterns[(Math.max(0, currentIndex) + 1) % patterns.length];
+  const nextProgress = { patternId: nextPattern.id, collected: 0 };
+  saveBeadProgress(nextProgress, storage);
+  return { pattern: nextPattern, progress: nextProgress };
+};
+
+export const saveBeadProgress = (
+  progress: BeadProgress,
+  storage: StorageLike | undefined = browserStorage(),
+): void => {
+  try {
+    storage?.setItem(PROGRESS_KEY, JSON.stringify(progress));
+  } catch {
+    // Progress persistence is optional when storage is unavailable.
+  }
+};
+
+export const loadBeadJar = (
+  pattern: BeadPatternData,
+  progress: BeadProgress,
+  storage: StorageLike | undefined = browserStorage(),
+): BeadPixel[] => {
+  try {
+    const parsed = JSON.parse(storage?.getItem(JAR_KEY) ?? '{}') as {
+      patternId?: unknown;
+      beads?: unknown;
+    };
+    if (parsed.patternId !== pattern.id || !Array.isArray(parsed.beads)) return [];
+    const ordered = orderedBeads(pattern);
+    const beadOrder = new Map(ordered.map((bead, index) => [`${bead.x},${bead.y}`, index]));
+    return parsed.beads.filter((value): value is BeadPixel => {
+      if (!value || typeof value !== 'object') return false;
+      const bead = value as Partial<BeadPixel>;
+      if (
+        !Number.isInteger(bead.x)
+        || !Number.isInteger(bead.y)
+        || typeof bead.color !== 'string'
+        || !COLOR_PATTERN.test(bead.color)
+      ) return false;
+      const index = beadOrder.get(`${bead.x},${bead.y}`);
+      return index !== undefined
+        && index >= progress.collected
+        && ordered[index].color.toUpperCase() === bead.color.toUpperCase();
+    });
+  } catch {
+    return [];
+  }
+};
+
+export const saveBeadJar = (
+  patternId: string,
+  beads: readonly BeadPixel[],
+  storage: StorageLike | undefined = browserStorage(),
+): void => {
+  try {
+    storage?.setItem(JAR_KEY, JSON.stringify({ patternId, beads }));
+  } catch {
+    // Pending bead persistence is optional when storage is unavailable.
+  }
+};
+
+export const loadBeadJarQueue = (
+  patterns: readonly BeadPatternData[],
+  progress: BeadProgress,
+  storage: StorageLike | undefined = browserStorage(),
+): BeadJarItem[] => {
+  try {
+    const parsed = JSON.parse(storage?.getItem(JAR_KEY) ?? '{}') as {
+      patternId?: unknown;
+      beads?: unknown;
+    };
+    if (!Array.isArray(parsed.beads)) return [];
+    const patternById = new Map(patterns.map((pattern) => [pattern.id, pattern]));
+    return parsed.beads.flatMap((value): BeadJarItem[] => {
+      if (!value || typeof value !== 'object') return [];
+      const bead = value as Partial<BeadJarItem>;
+      const patternId = typeof bead.patternId === 'string'
+        ? bead.patternId
+        : typeof parsed.patternId === 'string'
+          ? parsed.patternId
+          : undefined;
+      const pattern = patternId ? patternById.get(patternId) : undefined;
+      if (
+        !pattern
+        || typeof bead.x !== 'number'
+        || !Number.isInteger(bead.x)
+        || typeof bead.y !== 'number'
+        || !Number.isInteger(bead.y)
+        || typeof bead.color !== 'string'
+        || !COLOR_PATTERN.test(bead.color)
+      ) return [];
+      const ordered = orderedBeads(pattern);
+      const index = ordered.findIndex((candidate) => candidate.x === bead.x && candidate.y === bead.y);
+      const minimumIndex = pattern.id === progress.patternId ? progress.collected : 0;
+      if (
+        index < minimumIndex
+        || ordered[index]?.color.toUpperCase() !== bead.color.toUpperCase()
+      ) return [];
+      return [{ patternId: pattern.id, x: bead.x, y: bead.y, color: bead.color }];
+    });
+  } catch {
+    return [];
+  }
+};
+
+export const saveBeadJarQueue = (
+  beads: readonly BeadJarItem[],
+  storage: StorageLike | undefined = browserStorage(),
+): void => {
+  try {
+    storage?.setItem(JAR_KEY, JSON.stringify({ version: 2, beads }));
+  } catch {
+    // Pending bead persistence is optional when storage is unavailable.
+  }
+};
+
+const readCompletedPatternIds = (storage: StorageLike | undefined): string[] => {
+  try {
+    const parsed = JSON.parse(storage?.getItem(COLLECTION_KEY) ?? '[]') as unknown;
+    return Array.isArray(parsed) ? parsed.filter((id): id is string => typeof id === 'string') : [];
+  } catch {
+    return [];
+  }
+};
+
+const saveCompletedPatternIds = (
+  patternIds: readonly string[],
+  storage: StorageLike | undefined,
+): void => {
+  try {
+    storage?.setItem(COLLECTION_KEY, JSON.stringify(patternIds));
+  } catch {
+    // Collection persistence is optional when storage is unavailable.
+  }
+};
+
+export const loadCompletedBeadPatternIds = (
+  patterns: readonly BeadPatternData[],
+  storage: StorageLike | undefined = browserStorage(),
+): string[] => {
+  const completed = new Set(readCompletedPatternIds(storage));
+
+  // Older saves only stored the active pattern. In the fixed sequence, every
+  // pattern before it must already have been completed, so preserve that history.
+  try {
+    const progress = JSON.parse(storage?.getItem(PROGRESS_KEY) ?? '{}') as Partial<BeadProgress>;
+    const activeIndex = patterns.findIndex((pattern) => pattern.id === progress.patternId);
+    if (activeIndex > 0) patterns.slice(0, activeIndex).forEach((pattern) => completed.add(pattern.id));
+  } catch {
+    // Invalid legacy progress does not affect an otherwise valid collection.
+  }
+
+  const ordered = patterns.filter((pattern) => completed.has(pattern.id)).map((pattern) => pattern.id);
+  saveCompletedPatternIds(ordered, storage);
+  return ordered;
+};
+
+export const markBeadPatternCompleted = (
+  patterns: readonly BeadPatternData[],
+  patternId: string,
+  storage: StorageLike | undefined = browserStorage(),
+): string[] => {
+  const completed = new Set(loadCompletedBeadPatternIds(patterns, storage));
+  if (patterns.some((pattern) => pattern.id === patternId)) completed.add(patternId);
+  const ordered = patterns.filter((pattern) => completed.has(pattern.id)).map((pattern) => pattern.id);
+  saveCompletedPatternIds(ordered, storage);
+  return ordered;
+};
+
+export const nextBeads = (
+  pattern: BeadPatternData,
+  progress: BeadProgress,
+  maximum: number,
+): BeadPixel[] => {
+  const beads = orderedBeads(pattern);
+  const start = Math.max(0, Math.min(beads.length, Math.floor(progress.collected)));
+  const count = Math.max(0, Math.floor(maximum));
+  return beads.slice(start, start + count);
+};
+
+export const nextBeadsAcrossPatterns = (
+  patterns: readonly BeadPatternData[],
+  pattern: BeadPatternData,
+  progress: BeadProgress,
+  maximum: number,
+): BeadJarItem[] => {
+  if (patterns.length === 0) return [];
+  const startIndex = Math.max(0, patterns.findIndex((candidate) => candidate.id === pattern.id));
+  const result: BeadJarItem[] = [];
+  const requested = Math.max(0, Math.floor(maximum));
+
+  for (let offset = 0; offset < patterns.length && result.length < requested; offset += 1) {
+    const candidate = patterns[(startIndex + offset) % patterns.length];
+    const start = offset === 0 && candidate.id === progress.patternId
+      ? Math.max(0, progress.collected)
+      : 0;
+    const available = orderedBeads(candidate).slice(start, start + requested - result.length);
+    result.push(...available.map((bead) => ({ ...bead, patternId: candidate.id })));
+  }
+  return result;
+};
+
+export const beadJarLaunchInterval = (
+  beads: readonly BeadJarItem[],
+  options: {
+    totalDurationMs?: number;
+    flightDurationMs?: number;
+    patternTransitionDurationMs?: number;
+    defaultIntervalMs?: number;
+    renderReserveMs?: number;
+  } = {},
+): number => {
+  if (beads.length <= 1) return 0;
+  const totalDurationMs = options.totalDurationMs ?? 4_000;
+  const flightDurationMs = options.flightDurationMs ?? 500;
+  const patternTransitionDurationMs = options.patternTransitionDurationMs ?? 560;
+  const defaultIntervalMs = options.defaultIntervalMs ?? 100;
+  const renderReserveMs = options.renderReserveMs ?? 150;
+  let segmentCount = 1;
+  for (let index = 1; index < beads.length; index += 1) {
+    if (beads[index].patternId !== beads[index - 1].patternId) segmentCount += 1;
+  }
+
+  // Every pattern segment waits for its final bead flight before the next
+  // board can slide in. Only launch gaps inside a segment can be shortened.
+  const launchGapCount = beads.length - segmentCount;
+  if (launchGapCount <= 0) return 0;
+  const fixedDuration = (
+    segmentCount * flightDurationMs
+    + (segmentCount - 1) * patternTransitionDurationMs
+    + renderReserveMs
+  );
+  const fittedInterval = (totalDurationMs - fixedDuration) / launchGapCount;
+  return Math.max(0, Math.min(defaultIntervalMs, fittedInterval));
+};
+
+export const advanceBeadProgress = (
+  pattern: BeadPatternData,
+  progress: BeadProgress,
+  amount: number,
+): BeadProgress => ({
+  patternId: pattern.id,
+  collected: Math.min(
+    orderedBeads(pattern).length,
+    Math.max(0, Math.floor(progress.collected)) + Math.max(0, Math.floor(amount)),
+  ),
+});

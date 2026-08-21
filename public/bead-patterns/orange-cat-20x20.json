@@ -1,0 +1,24 @@
+{
+  "data": [
+    [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, "#FF8A00", null, null, null, null, null, null, null, null, null, null, null, null, "#FF8A00", null, null, null],
+    [null, null, "#FF8A00", "#FF8A00", "#FF8A00", null, null, null, null, null, null, null, null, null, null, "#FF8A00", "#FF8A00", "#FF8A00", null, null],
+    [null, null, "#FF8A00", "#FF82A8", "#FF8A00", "#FF8A00", null, null, null, null, null, null, null, null, "#FF8A00", "#FF8A00", "#FF82A8", "#FF8A00", null, null],
+    [null, null, "#FF8A00", "#FF82A8", "#FF82A8", "#FF82A8", "#FF8A00", "#D95200", "#D95200", "#D95200", "#D95200", "#D95200", "#D95200", "#FF8A00", "#FF82A8", "#FF82A8", "#FF82A8", "#FF8A00", null, null],
+    [null, null, "#FF8A00", "#FF82A8", "#FF82A8", "#FF8A00", "#FF8A00", "#D95200", "#D95200", "#D95200", "#D95200", "#D95200", "#D95200", "#FF8A00", "#FF8A00", "#FF82A8", "#FF82A8", "#FF8A00", null, null],
+    [null, null, "#FF8A00", "#FF82A8", "#FF8A00", "#FF8A00", "#FF8A00", "#FF8A00", "#D95200", "#D95200", "#D95200", "#D95200", "#FF8A00", "#FF8A00", "#FF8A00", "#FF8A00", "#FF82A8", "#FF8A00", null, null],
+    [null, null, "#FF8A00", "#FF8A00", "#FF8A00", "#FF8A00", "#FF8A00", "#FF8A00", "#FF8A00", "#FF8A00", "#FF8A00", "#FF8A00", "#FF8A00", "#FF8A00", "#FF8A00", "#FF8A00", "#FF8A00", "#FF8A00", null, null],
+    [null, null, null, "#FF8A00", "#FF8A00", "#FF8A00", "#D95200", "#FF8A00", "#FF8A00", "#FF8A00", "#FF8A00", "#FF8A00", "#FF8A00", "#D95200", "#FF8A00", "#FF8A00", "#FF8A00", null, null, null],
+    [null, null, "#D95200", "#FF8A00", "#FF8A00", "#FF8A00", "#080808", "#FF8A00", "#FF8A00", "#FF8A00", "#FF8A00", "#FF8A00", "#FF8A00", "#080808", "#FF8A00", "#FF8A00", "#FF8A00", "#D95200", null, null],
+    [null, "#D95200", "#D95200", "#D95200", "#FF8A00", "#080808", "#FFFFFF", "#FF8A00", "#FF8A00", "#FF8A00", "#FF8A00", "#FF8A00", "#FF8A00", "#FFFFFF", "#080808", "#FF8A00", "#D95200", "#D95200", "#D95200", null],
+    [null, "#D95200", "#D95200", "#FF8A00", "#FF8A00", "#080808", "#080808", "#FF8A00", "#FF8A00", "#FF8A00", "#FF8A00", "#FF8A00", "#FF8A00", "#080808", "#080808", "#FF8A00", "#FF8A00", "#D95200", "#D95200", null],
+    [null, "#FF8A00", "#FF8A00", "#FF8A00", "#FF8A00", "#FF8A00", "#080808", "#FFE6B3", "#FFE6B3", "#FF82A8", "#FF82A8", "#FFE6B3", "#FFE6B3", "#080808", "#FF8A00", "#FF8A00", "#FF8A00", "#FF8A00", "#FF8A00", null],
+    [null, "#D95200", "#D95200", "#FF8A00", "#FF8A00", "#FF8A00", "#FF8A00", "#FFE6B3", "#FFE6B3", "#FF82A8", "#FF82A8", "#FFE6B3", "#FFE6B3", "#FF8A00", "#FF8A00", "#FF8A00", "#FF8A00", "#D95200", "#D95200", null],
+    [null, null, "#FF8A00", "#FF8A00", "#FF8A00", "#FF8A00", "#542800", "#FFE6B3", "#080808", "#FFE6B3", "#FFE6B3", "#080808", "#FFE6B3", "#542800", "#FF8A00", "#FF8A00", "#FF8A00", "#FF8A00", null, null],
+    [null, null, null, "#FF8A00", "#FF8A00", "#FF8A00", "#FFE6B3", "#FFE6B3", "#FFE6B3", "#FFE6B3", "#FFE6B3", "#FFE6B3", "#FFE6B3", "#FFE6B3", "#FF8A00", "#FF8A00", "#FF8A00", null, null, null],
+    [null, null, null, "#D95200", "#FF8A00", "#FF8A00", "#FF8A00", "#FFE6B3", "#FFE6B3", "#FFE6B3", "#FFE6B3", "#FFE6B3", "#FFE6B3", "#FF8A00", "#FF8A00", "#FF8A00", "#D95200", null, null, null],
+    [null, null, null, null, null, "#D95200", "#FF8A00", "#FF8A00", "#FF8A00", "#FF8A00", "#FF8A00", "#FF8A00", "#FF8A00", "#FF8A00", "#D95200", null, null, null, null, null],
+    [null, null, null, null, null, null, "#D95200", "#FF8A00", "#FF8A00", "#FF8A00", "#FF8A00", "#FF8A00", "#FF8A00", "#D95200", null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]
+  ]
+}

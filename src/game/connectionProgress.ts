@@ -1,0 +1,697 @@
+import type { PathCompletionRequest, PathCompletionSolver } from './pathCompletionSolver';
+
+export type ConnectionFailure =
+  | 'hidden-start'
+  | 'start-order'
+  | 'non-consecutive'
+  | 'no-completion'
+  | 'direction-change'
+  | 'click-order';
+
+export type ConnectionAction =
+  | { type: 'started'; index: number }
+  | { type: 'advanced'; index: number; added: boolean; progress: number; complete: boolean }
+  | { type: 'wrong'; index: number; reason: ConnectionFailure }
+  | { type: 'ignored' };
+
+export interface ConnectionHint {
+  index: number;
+  consecutive: boolean;
+}
+
+type Direction = -1 | 1;
+type SwapChoice = 'authored' | 'swapped';
+
+const ASCENDING_DIRECTION: Direction = 1;
+
+interface SwapSegment {
+  firstIndex: number;
+  secondIndex: number;
+  choice?: SwapChoice;
+}
+
+interface TransitionOption {
+  direction: Direction;
+  segment?: SwapSegment;
+  choice?: SwapChoice;
+}
+
+interface ConnectionStepSnapshot {
+  edgeKey: string;
+  active?: number;
+  previous?: number;
+  direction?: Direction;
+  clickAnchor?: number;
+  solutionOrder: number[];
+  swapChoices: Array<SwapChoice | undefined>;
+}
+
+export interface ConnectionCompletionSnapshot {
+  fixedPositions: Array<readonly [number, number]>;
+  requiredEdges: Array<readonly [number, number]>;
+  solutionOrder: number[];
+}
+
+const edgeKey = (left: number, right: number): string =>
+  left < right ? `${left}:${right}` : `${right}:${left}`;
+
+export class ConnectionProgress {
+  private readonly connectedEdges = new Map<string, readonly [number, number]>();
+  private readonly connectedNodes = new Set<number>();
+  private readonly visibleIndices: Set<number>;
+  private readonly persistentVisibleIndices: Set<number>;
+  private readonly swapSegments: SwapSegment[];
+  private readonly stepHistory: ConnectionStepSnapshot[] = [];
+  private active?: number;
+  private previous?: number;
+  private direction?: Direction;
+  private clickAnchor?: number;
+  private readonly fixedPositions = new Map<number, number>();
+  private readonly persistentFixedPositions = new Map<number, number>();
+  private solutionOrder: number[];
+
+  public constructor(
+    private readonly totalNodes: number,
+    initiallyVisible: Iterable<number>,
+    swappableHiddenPairs: Iterable<readonly [number, number]> = [],
+    private readonly completionSolver?: PathCompletionSolver,
+  ) {
+    this.persistentVisibleIndices = new Set(initiallyVisible);
+    this.visibleIndices = new Set(this.persistentVisibleIndices);
+    this.persistentVisibleIndices.forEach((index) => {
+      this.persistentFixedPositions.set(index, index);
+      this.fixedPositions.set(index, index);
+    });
+    this.solutionOrder = Array.from({ length: totalNodes }, (_, index) => index);
+    this.swapSegments = [...swappableHiddenPairs]
+      .filter(([firstIndex, secondIndex]) => (
+        Number.isInteger(firstIndex)
+        && secondIndex === firstIndex + 1
+        && firstIndex > 0
+        && secondIndex < totalNodes - 1
+      ))
+      .map(([firstIndex, secondIndex]) => ({ firstIndex, secondIndex }));
+  }
+
+  public get activeIndex(): number | undefined { return this.active; }
+  public get progress(): number { return this.connectedEdges.size === 0 ? 0 : this.connectedEdges.size + 1; }
+  public get complete(): boolean {
+    return this.totalNodes > 1 && this.connectedEdges.size === this.totalNodes - 1;
+  }
+  public get canUndoStep(): boolean { return this.stepHistory.length > 0; }
+  public get currentClickIndex(): number | undefined {
+    const orderedIndices = this.orderedIndices();
+    this.syncClickAnchor(orderedIndices);
+    return this.clickAnchor ?? orderedIndices[0];
+  }
+
+  public begin(index: number, allowHidden = false): ConnectionAction {
+    if (!this.inBounds(index) || this.complete) return { type: 'ignored' };
+    if (index !== this.requiredStartIndex()) {
+      return { type: 'wrong', index, reason: 'start-order' };
+    }
+    if (!allowHidden && !this.visibleIndices.has(index)) {
+      return { type: 'wrong', index, reason: 'hidden-start' };
+    }
+    const segmentDirection = this.segmentStartDirection(index);
+    if (segmentDirection === null) return { type: 'ignored' };
+    this.visibleIndices.add(index);
+    this.active = index;
+    this.previous = undefined;
+    this.direction = ASCENDING_DIRECTION;
+    return { type: 'started', index };
+  }
+
+  public extend(index: number): ConnectionAction {
+    if (this.active === undefined || !this.inBounds(index) || this.complete || index === this.active) {
+      return { type: 'ignored' };
+    }
+    if (index === this.previous) return { type: 'ignored' };
+
+    const targetAlreadyConnected = this.isNodeConnected(index);
+    if (this.completionSolver) {
+      return this.extendWithCompletionSolver(index, targetAlreadyConnected);
+    }
+    const options = this.transitionOptions(this.active, index);
+    if (options.length === 0) {
+      if (targetAlreadyConnected) return { type: 'ignored' };
+      return { type: 'wrong', index, reason: 'non-consecutive' };
+    }
+    const connectionKey = edgeKey(this.active, index);
+    if (this.connectedEdges.has(connectionKey)) return { type: 'ignored' };
+
+    const validOptions = this.direction === undefined
+      ? options
+      : options.filter(({ direction }) => direction === this.direction);
+    if (validOptions.length === 0) {
+      if (targetAlreadyConnected) return { type: 'ignored' };
+      return { type: 'wrong', index, reason: 'direction-change' };
+    }
+
+    const selected = validOptions[0];
+    const snapshot = this.createStepSnapshot(connectionKey);
+    if (selected.segment && selected.choice) selected.segment.choice = selected.choice;
+    this.direction = selected.direction;
+    const from = this.active;
+    this.connectedEdges.set(
+      connectionKey,
+      from < index ? [from, index] : [index, from],
+    );
+    this.connectedNodes.add(from);
+    this.connectedNodes.add(index);
+    this.visibleIndices.add(from);
+    this.visibleIndices.add(index);
+    this.previous = from;
+    this.active = index;
+    this.stepHistory.push(snapshot);
+    return { type: 'advanced', index, added: true, progress: this.progress, complete: this.complete };
+  }
+
+  public clickForward(index: number): ConnectionAction[] {
+    if (!this.inBounds(index) || this.complete) return [{ type: 'ignored' }];
+
+    const orderedIndices = this.orderedIndices();
+    this.syncClickAnchor(orderedIndices);
+    this.clickAnchor ??= orderedIndices[0];
+    if (index === this.clickAnchor) return [{ type: 'ignored' }];
+
+    const actions: ConnectionAction[] = [];
+    if (this.active !== this.clickAnchor) {
+      const started = this.begin(this.clickAnchor, true);
+      actions.push(started);
+      if (started.type === 'wrong') return actions;
+    }
+
+    if (this.followConnectedClickEdge(index)) {
+      this.clickAnchor = index;
+      return actions.length > 0 ? actions : [{ type: 'ignored' }];
+    }
+
+    const action = this.extend(index);
+    if (action.type === 'wrong') {
+      actions.push({
+        type: 'wrong',
+        index,
+        reason: action.reason === 'no-completion' ? 'no-completion' : 'click-order',
+      });
+      return actions;
+    }
+    actions.push(action);
+    if (action.type === 'advanced' && (this.active === index || this.complete)) this.clickAnchor = index;
+    return actions.length > 0 ? actions : [{ type: 'ignored' }];
+  }
+
+  public async clickForwardAsync(
+    index: number,
+    findCompletion: (request: PathCompletionRequest) => Promise<number[] | null>,
+  ): Promise<ConnectionAction[]> {
+    if (!this.inBounds(index) || this.complete) return [{ type: 'ignored' }];
+    const orderedIndices = this.orderedIndices();
+    this.syncClickAnchor(orderedIndices);
+    this.clickAnchor ??= orderedIndices[0];
+    if (index === this.clickAnchor) return [{ type: 'ignored' }];
+
+    const actions: ConnectionAction[] = [];
+    if (this.active !== this.clickAnchor) {
+      const started = this.begin(this.clickAnchor, true);
+      actions.push(started);
+      if (started.type === 'wrong') return actions;
+    }
+    if (this.followConnectedClickEdge(index)) {
+      this.clickAnchor = index;
+      return actions.length > 0 ? actions : [{ type: 'ignored' }];
+    }
+    const action = await this.extendAsync(index, findCompletion);
+    if (action.type === 'wrong') {
+      actions.push({
+        type: 'wrong',
+        index,
+        reason: action.reason === 'no-completion' ? 'no-completion' : 'click-order',
+      });
+      return actions;
+    }
+    actions.push(action);
+    if (action.type === 'advanced' && (this.active === index || this.complete)) this.clickAnchor = index;
+    return actions.length > 0 ? actions : [{ type: 'ignored' }];
+  }
+
+  public nextVisibleClickIndex(): number | undefined {
+    const nextIndex = this.nextClickIndex();
+    return nextIndex !== undefined && this.visibleIndices.has(nextIndex) ? nextIndex : undefined;
+  }
+
+  public enableClickMode(): void {
+    const firstIndex = this.orderedIndices()[0];
+    if (firstIndex !== undefined) this.visibleIndices.add(firstIndex);
+  }
+
+  public endStroke(): void {
+    this.active = undefined;
+    this.previous = undefined;
+    this.direction = undefined;
+  }
+
+  public undoLastStep(): number | undefined {
+    const snapshot = this.stepHistory.pop();
+    if (!snapshot) return undefined;
+
+    const currentOrder = [...this.solutionOrder];
+    this.connectedEdges.delete(snapshot.edgeKey);
+    this.active = snapshot.active;
+    this.previous = snapshot.previous;
+    this.direction = snapshot.direction;
+    this.clickAnchor = snapshot.clickAnchor;
+    this.swapSegments.forEach((segment, index) => {
+      segment.choice = snapshot.swapChoices[index];
+    });
+    this.rebuildConnectedNodes();
+
+    if (this.completionSolver) {
+      const snapshotFixedPositions = this.fixedPositionsForOrder(snapshot.solutionOrder);
+      if (this.orderSupportsCurrentState(snapshot.solutionOrder, snapshotFixedPositions)) {
+        this.solutionOrder = [...snapshot.solutionOrder];
+      } else {
+        const currentFixedPositions = this.fixedPositionsForOrder(currentOrder);
+        this.solutionOrder = this.completionSolver.findCompletion({
+          fixedPositions: currentFixedPositions,
+          requiredEdges: [...this.connectedEdges.values()],
+        }) ?? currentOrder;
+      }
+    } else {
+      this.solutionOrder = [...snapshot.solutionOrder];
+    }
+
+    this.rebuildVisibleAndFixedPositions();
+    return this.progress;
+  }
+
+  public revealIndices(indices: Iterable<number>): number {
+    const revealed = new Set<number>();
+    for (const index of indices) {
+      if (!this.inBounds(index) || this.visibleIndices.has(index)) continue;
+      this.visibleIndices.add(index);
+      this.persistentVisibleIndices.add(index);
+      if (this.completionSolver) {
+        const position = this.solutionOrder.indexOf(index);
+        if (position >= 0) {
+          this.persistentFixedPositions.set(index, position);
+          this.fixedPositions.set(index, position);
+        }
+      }
+      revealed.add(index);
+    }
+    if (revealed.size === 0) return 0;
+
+    for (let index = this.swapSegments.length - 1; index >= 0; index -= 1) {
+      const segment = this.swapSegments[index];
+      if (
+        segment.choice === undefined
+        && (revealed.has(segment.firstIndex) || revealed.has(segment.secondIndex))
+      ) {
+        this.swapSegments.splice(index, 1);
+      }
+    }
+    return revealed.size;
+  }
+
+  public isVisible(index: number): boolean { return this.visibleIndices.has(index); }
+  public isEdgeConnected(index: number): boolean {
+    return this.connectedEdges.has(edgeKey(index, index + 1));
+  }
+  public connectedNodePairs(): Array<readonly [number, number]> {
+    return [...this.connectedEdges.values()];
+  }
+  public displayNumber(index: number): number {
+    const position = this.orderedIndices().indexOf(index);
+    return position < 0 ? index + 1 : position + 1;
+  }
+  public isNodeConnected(index: number): boolean {
+    return this.connectedNodes.has(index);
+  }
+  public completionSnapshot(): ConnectionCompletionSnapshot {
+    return {
+      fixedPositions: [...this.fixedPositions.entries()],
+      requiredEdges: [...this.connectedEdges.values()],
+      solutionOrder: [...this.solutionOrder],
+    };
+  }
+
+  public canCompleteAfterStep(from: number, to: number): boolean {
+    if (!this.inBounds(from) || !this.inBounds(to) || from === to) return false;
+    if (from !== this.requiredStartIndex()) return false;
+    if (!this.completionSolver) return true;
+    const connectionKey = edgeKey(from, to);
+    if (this.connectedEdges.has(connectionKey)) return true;
+    const fromPosition = this.solutionOrder.indexOf(from);
+    if (this.solutionOrder[fromPosition + ASCENDING_DIRECTION] === to) return true;
+
+    return this.completionSolver.findCompletion({
+      fixedPositions: this.fixedPositions,
+      requiredEdges: [
+        ...this.connectedEdges.values(),
+        [from, to],
+      ],
+      directedStep: {
+        from,
+        to,
+        direction: ASCENDING_DIRECTION,
+      },
+    }) !== null;
+  }
+
+  public canExtendWithoutSearch(index: number): boolean {
+    if (this.active === undefined || !this.inBounds(index)) return false;
+    const fromPosition = this.solutionOrder.indexOf(this.active);
+    const toPosition = this.solutionOrder.indexOf(index);
+    const direction = Math.sign(toPosition - fromPosition) as Direction;
+    return fromPosition >= 0
+      && Math.abs(toPosition - fromPosition) === 1
+      && (this.direction === undefined || direction === this.direction);
+  }
+
+  public async extendAsync(
+    index: number,
+    findCompletion: (request: PathCompletionRequest) => Promise<number[] | null>,
+  ): Promise<ConnectionAction> {
+    if (!this.completionSolver || this.canExtendWithoutSearch(index)) return this.extend(index);
+    if (this.active === undefined || !this.inBounds(index) || this.complete || index === this.active) {
+      return { type: 'ignored' };
+    }
+    if (index === this.previous) return { type: 'ignored' };
+
+    const from = this.active;
+    const targetAlreadyConnected = this.isNodeConnected(index);
+    const connectionKey = edgeKey(from, index);
+    if (this.connectedEdges.has(connectionKey)) return { type: 'ignored' };
+    const requiredEdges = [...this.connectedEdges.values(), [from, index] as const];
+    const completion = await findCompletion({
+      fixedPositions: new Map(this.fixedPositions),
+      requiredEdges,
+      directedStep: { from, to: index, direction: this.direction },
+    });
+    if (this.active !== from || this.connectedEdges.has(connectionKey)) return { type: 'ignored' };
+    return this.applyCompletionExtension(index, targetAlreadyConnected, completion);
+  }
+
+  public suggestedNextHint(): ConnectionHint | undefined {
+    if (this.active === undefined) return undefined;
+    const orderedIndices = this.orderedIndices();
+    const activePosition = orderedIndices.indexOf(this.active);
+    if (activePosition < 0) return undefined;
+    let position = activePosition + ASCENDING_DIRECTION;
+    while (this.inBounds(position)) {
+      const index = orderedIndices[position];
+      if (this.visibleIndices.has(index)) {
+        return { index, consecutive: position - activePosition === 1 };
+      }
+      position += ASCENDING_DIRECTION;
+    }
+    return undefined;
+  }
+
+  public suggestedNextIndex(): number | undefined {
+    return this.suggestedNextHint()?.index;
+  }
+
+  private inBounds(index: number): boolean {
+    return Number.isInteger(index) && index >= 0 && index < this.totalNodes;
+  }
+
+  private nextClickIndex(): number | undefined {
+    const orderedIndices = this.orderedIndices();
+    this.syncClickAnchor(orderedIndices);
+    const anchor = this.clickAnchor ?? orderedIndices[0];
+    const anchorPosition = anchor === undefined ? -1 : orderedIndices.indexOf(anchor);
+    return anchorPosition < 0 ? undefined : orderedIndices[anchorPosition + 1];
+  }
+
+  private requiredStartIndex(): number | undefined {
+    const orderedIndices = this.orderedIndices();
+    return orderedIndices[this.connectedPrefixEndPosition(orderedIndices)];
+  }
+
+  private connectedPrefixEndPosition(orderedIndices: ReadonlyArray<number>): number {
+    let position = 0;
+    while (
+      position < orderedIndices.length - 1
+      && this.connectedEdges.has(edgeKey(orderedIndices[position], orderedIndices[position + 1]))
+    ) {
+      position += 1;
+    }
+    return position;
+  }
+
+  private syncClickAnchor(orderedIndices: ReadonlyArray<number>): void {
+    const position = this.connectedPrefixEndPosition(orderedIndices);
+    if (position === 0) return;
+    const currentPosition = this.clickAnchor === undefined
+      ? -1
+      : orderedIndices.indexOf(this.clickAnchor);
+    if (position > currentPosition) this.clickAnchor = orderedIndices[position];
+  }
+
+  private followConnectedClickEdge(index: number): boolean {
+    if (this.active === undefined || !this.connectedEdges.has(edgeKey(this.active, index))) return false;
+    if (this.completionSolver) {
+      const fromPosition = this.solutionOrder.indexOf(this.active);
+      const toPosition = this.solutionOrder.indexOf(index);
+      const direction = Math.sign(toPosition - fromPosition) as Direction;
+      if (
+        fromPosition < 0
+        || Math.abs(toPosition - fromPosition) !== 1
+        || (this.direction !== undefined && direction !== this.direction)
+      ) {
+        return false;
+      }
+      const from = this.active;
+      this.direction = direction;
+      this.previous = from;
+      this.active = index;
+      this.visibleIndices.add(index);
+      return true;
+    }
+    const options = this.transitionOptions(this.active, index);
+    const selected = options.find((option) => this.direction === undefined || option.direction === this.direction);
+    if (!selected) return false;
+    if (selected.segment && selected.choice) selected.segment.choice = selected.choice;
+    const from = this.active;
+    this.direction = selected.direction;
+    this.previous = from;
+    this.active = index;
+    this.visibleIndices.add(index);
+    return true;
+  }
+
+  private segmentStartDirection(index: number): Direction | null | undefined {
+    const connectedNeighbors = [...this.connectedEdges.values()].flatMap(([left, right]) => {
+      if (left === index) return [right];
+      if (right === index) return [left];
+      return [];
+    });
+    if (connectedNeighbors.length === 0) return undefined;
+    if (connectedNeighbors.length > 1) return null;
+
+    const orderedIndices = this.orderedIndices();
+    const position = orderedIndices.indexOf(index);
+    const neighborPosition = orderedIndices.indexOf(connectedNeighbors[0]);
+    if (neighborPosition < position) return 1;
+    if (neighborPosition > position) return -1;
+    return undefined;
+  }
+
+  private transitionOptions(from: number, to: number): TransitionOption[] {
+    const connectionKey = edgeKey(from, to);
+
+    for (const segment of this.swapSegments) {
+      const authoredOrder = [
+        segment.firstIndex - 1,
+        segment.firstIndex,
+        segment.secondIndex,
+        segment.secondIndex + 1,
+      ];
+      const swappedOrder = [
+        segment.firstIndex - 1,
+        segment.secondIndex,
+        segment.firstIndex,
+        segment.secondIndex + 1,
+      ];
+      const controlledEdges = new Set([
+        ...this.orderEdgeKeys(authoredOrder),
+        ...this.orderEdgeKeys(swappedOrder),
+      ]);
+      if (!controlledEdges.has(connectionKey)) continue;
+
+      const choices: SwapChoice[] = segment.choice
+        ? [segment.choice]
+        : ['authored', 'swapped'];
+      return choices.flatMap((choice): TransitionOption[] => {
+        const order = choice === 'authored' ? authoredOrder : swappedOrder;
+        const fromPosition = order.indexOf(from);
+        const toPosition = order.indexOf(to);
+        if (fromPosition < 0 || Math.abs(toPosition - fromPosition) !== 1) return [];
+        return [{
+          direction: Math.sign(toPosition - fromPosition) as Direction,
+          segment,
+          choice,
+        }];
+      });
+    }
+
+    if (Math.abs(to - from) !== 1) return [];
+    return [{ direction: Math.sign(to - from) as Direction }];
+  }
+
+  private orderEdgeKeys(order: ReadonlyArray<number>): string[] {
+    return order.slice(0, -1).map((value, index) => edgeKey(value, order[index + 1]));
+  }
+
+  private orderedIndices(): number[] {
+    if (this.completionSolver) return [...this.solutionOrder];
+    const result = Array.from({ length: this.totalNodes }, (_, index) => index);
+    this.swapSegments.forEach((segment) => {
+      if (segment.choice !== 'swapped') return;
+      [result[segment.firstIndex], result[segment.secondIndex]] = [
+        result[segment.secondIndex],
+        result[segment.firstIndex],
+      ];
+    });
+    return result;
+  }
+
+  private createStepSnapshot(connectionKey: string): ConnectionStepSnapshot {
+    return {
+      edgeKey: connectionKey,
+      active: this.active,
+      previous: this.previous,
+      direction: this.direction,
+      clickAnchor: this.clickAnchor,
+      solutionOrder: [...this.solutionOrder],
+      swapChoices: this.swapSegments.map(({ choice }) => choice),
+    };
+  }
+
+  private rebuildConnectedNodes(): void {
+    this.connectedNodes.clear();
+    this.connectedEdges.forEach(([left, right]) => {
+      this.connectedNodes.add(left);
+      this.connectedNodes.add(right);
+    });
+  }
+
+  private fixedPositionsForOrder(order: ReadonlyArray<number>): Map<number, number> {
+    const result = new Map(this.persistentFixedPositions);
+    this.connectedNodes.forEach((node) => {
+      const position = order.indexOf(node);
+      if (position >= 0 && !result.has(node)) result.set(node, position);
+    });
+    return result;
+  }
+
+  private orderSupportsCurrentState(
+    order: ReadonlyArray<number>,
+    fixedPositions: ReadonlyMap<number, number>,
+  ): boolean {
+    if (order.length !== this.totalNodes || new Set(order).size !== this.totalNodes) return false;
+    for (const [node, position] of fixedPositions) {
+      if (order[position] !== node) return false;
+    }
+    const positions = new Map(order.map((node, position) => [node, position]));
+    return [...this.connectedEdges.values()].every(([left, right]) => (
+      Math.abs((positions.get(left) ?? -2) - (positions.get(right) ?? 2)) === 1
+    ));
+  }
+
+  private rebuildVisibleAndFixedPositions(): void {
+    this.visibleIndices.clear();
+    this.persistentVisibleIndices.forEach((index) => this.visibleIndices.add(index));
+    this.connectedNodes.forEach((index) => this.visibleIndices.add(index));
+
+    this.fixedPositions.clear();
+    this.persistentFixedPositions.forEach((position, index) => {
+      this.fixedPositions.set(index, position);
+    });
+    this.connectedNodes.forEach((node) => {
+      const position = this.solutionOrder.indexOf(node);
+      if (position >= 0 && !this.fixedPositions.has(node)) this.fixedPositions.set(node, position);
+    });
+  }
+
+  private extendWithCompletionSolver(
+    index: number,
+    targetAlreadyConnected: boolean,
+  ): ConnectionAction {
+    if (this.active === undefined || !this.completionSolver) return { type: 'ignored' };
+    const from = this.active;
+    const connectionKey = edgeKey(from, index);
+    if (this.connectedEdges.has(connectionKey)) return { type: 'ignored' };
+
+    const requiredEdges = [
+      ...this.connectedEdges.values(),
+      [from, index] as const,
+    ];
+    const currentFromPosition = this.solutionOrder.indexOf(from);
+    const currentToPosition = this.solutionOrder.indexOf(index);
+    const currentDirection = Math.sign(currentToPosition - currentFromPosition) as Direction;
+    const followsCurrentCompletion = (
+      currentFromPosition >= 0
+      && Math.abs(currentToPosition - currentFromPosition) === 1
+      && (this.direction === undefined || currentDirection === this.direction)
+    );
+    const completion = followsCurrentCompletion
+      ? [...this.solutionOrder]
+      : this.completionSolver.findCompletion({
+          fixedPositions: this.fixedPositions,
+          requiredEdges,
+          directedStep: {
+            from,
+            to: index,
+            direction: this.direction,
+          },
+        });
+    return this.applyCompletionExtension(index, targetAlreadyConnected, completion);
+  }
+
+  private applyCompletionExtension(
+    index: number,
+    targetAlreadyConnected: boolean,
+    completion: number[] | null,
+  ): ConnectionAction {
+    if (this.active === undefined) return { type: 'ignored' };
+    const from = this.active;
+    const connectionKey = edgeKey(from, index);
+    if (!completion) {
+      if (targetAlreadyConnected) return { type: 'ignored' };
+      return {
+        type: 'wrong',
+        index,
+        reason: 'no-completion',
+      };
+    }
+
+    const snapshot = this.createStepSnapshot(connectionKey);
+    const fromPosition = completion.indexOf(from);
+    const toPosition = completion.indexOf(index);
+    const direction = Math.sign(toPosition - fromPosition) as Direction;
+    this.solutionOrder = completion;
+    this.direction = direction;
+    this.connectedEdges.set(
+      connectionKey,
+      from < index ? [from, index] : [index, from],
+    );
+    this.connectedNodes.add(from);
+    this.connectedNodes.add(index);
+    this.visibleIndices.add(from);
+    this.visibleIndices.add(index);
+    this.rebuildVisibleAndFixedPositions();
+    this.previous = from;
+    this.active = index;
+    this.stepHistory.push(snapshot);
+    return {
+      type: 'advanced',
+      index,
+      added: true,
+      progress: this.progress,
+      complete: this.complete,
+    };
+  }
+}

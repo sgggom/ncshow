@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="default">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#f4f7fc" />
+    <meta name="description" content="Number Connect — 一笔连接所有数字的浏览器益智游戏" />
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="preload" as="image" href="./ui/coins/coin-spin-strip.png" />
+    <link rel="preload" as="image" href="./ui/number-connect-slices/set-1/bj.png" />
+    <link rel="preload" as="image" href="./ui/number-connect-slices/set-1/LOGO.png" />
+    <title>Number Connect · Puzzle</title>
+  </head>
+  <body>
+    <main id="app" class="app-shell" data-primary-tab="lobby">
+      <section id="lobby-screen" class="screen lobby-screen" aria-label="Number Connect 大厅">
+        <div class="lobby-theme-panel lobby-theme-panel--default">
+          <header class="reference-lobby-header">
+            <div class="reference-lobby-coins" role="status" aria-live="polite" aria-label="金币 0">
+              <img src="./ui/number-connect-slices/set-7/icon_jinbi.png" alt="" />
+              <strong id="lobby-coin-count">0</strong>
+            </div>
+            <div class="reference-lobby-tools">
+              <button id="default-gallery-button" class="default-gallery-button" type="button" aria-label="打开图鉴">
+                <img src="./ui/number-connect-slices/set-7/icon_tujian.png" alt="" />
+                <img class="reference-lobby-notification" src="./ui/number-connect-slices/set-7/hongdian.png" alt="" />
+              </button>
+              <button id="default-lobby-settings-button" class="default-settings-button" type="button" aria-label="打开设置">
+                <img src="./ui/number-connect-slices/set-7/shezhi.png" alt="" />
+              </button>
+            </div>
+          </header>
+
+          <div class="default-feature-grid" aria-label="特色玩法">
+            <button id="default-bead-mode-button" class="default-feature-card default-feature-card--bead" type="button" aria-label="进入拼豆模式">
+              <strong>PERLER BEADS</strong>
+              <span class="default-feature-artwork" aria-hidden="true">
+                <img src="./ui/number-connect-slices/set-7/pindou.png" alt="" />
+              </span>
+              <span class="reference-feature-meta reference-feature-meta--countdown"><img src="./ui/number-connect-slices/set-7/pindou_daojishi.png" alt="" /><b>2d 10:15</b></span>
+              <span class="reference-feature-play">Play</span>
+            </button>
+            <button id="default-daily-challenge-button" class="default-feature-card default-feature-card--daily" type="button" aria-label="打开每日挑战">
+              <strong>DAILY CHALLENGE</strong>
+              <span class="default-feature-artwork" aria-hidden="true">
+                <img src="./ui/number-connect-slices/set-7/tiaozhan.png" alt="" />
+              </span>
+              <span id="lobby-daily-date" class="reference-feature-meta">Today</span>
+              <span class="reference-feature-play">Play</span>
+            </button>
+          </div>
+
+          <div class="default-brand-lockup" aria-label="Number Connect">
+            <img src="./ui/number-connect-slices/set-7/logo.png" alt="" />
+          </div>
+
+          <button id="default-start-button" class="default-start-button" type="button">
+            <span>New Game</span>
+            <b id="default-level-number" hidden>1</b>
+          </button>
+
+        </div>
+
+      </section>
+
+      <section id="play-screen" class="screen play-screen" hidden aria-label="游戏界面">
+        <div id="play-coin-frame" class="play-coin-frame" role="status" aria-live="polite" aria-label="金币 0">
+          <img src="./ui/coins/coin.png" alt="" draggable="false" />
+          <strong id="play-coin-count">0</strong>
+        </div>
+        <div class="play-top-zone">
+          <header class="game-header">
+            <button id="play-back-button" class="play-back-button" type="button" aria-label="退出本关并返回">
+              <img src="./ui/number-connect-slices/set-2/fanhui.png" alt="" draggable="false" />
+            </button>
+            <div class="game-heading">
+              <button id="play-level-button" class="play-level-button" type="button" aria-haspopup="dialog" aria-controls="level-picker-dialog"><span id="play-level-label">Level 1-1</span></button>
+              <span id="play-lives" class="life-counter" role="status" aria-live="polite" aria-label="生命值 3" hidden>♥♥♥</span>
+              <div id="daily-play-progress" class="daily-play-progress" role="progressbar" aria-label="每日挑战关卡进度" aria-valuemin="0" aria-valuemax="0" aria-valuenow="0" hidden>
+                <span class="daily-play-progress-track" aria-hidden="true"><i id="daily-play-progress-fill"></i></span>
+                <b id="daily-play-progress-current" class="daily-play-progress-ball daily-play-progress-ball--current" aria-hidden="true">1</b>
+                <b id="daily-play-progress-end" class="daily-play-progress-ball daily-play-progress-ball--end" aria-hidden="true">0</b>
+              </div>
+              <p id="hold-score-formula" class="hold-score-formula is-inactive" role="status" aria-live="polite" aria-hidden="true">
+                <span class="hold-score-summary">
+                  <span class="hold-score-total">总分 <b id="hold-score-total">0</b></span>
+                  <span aria-hidden="true">=</span>
+                  <span class="hold-score-choice">不可行选择 <b id="hold-score-choice">0</b></span>
+                  <span aria-hidden="true">×</span>
+                  <span class="hold-score-distance">距离 <b id="hold-score-distance">0</b></span>
+                  <span aria-hidden="true">×</span>
+                  <span class="hold-score-branch">分支分 <b id="hold-score-branch">0</b></span>
+                </span>
+                <span class="hold-score-breakdown">
+                  <span class="hold-score-badge">角标 <b id="hold-score-badge">0</b></span>
+                  <span aria-hidden="true">=</span>
+                  <span class="hold-score-digits">总分位数 <b id="hold-score-digits">0</b></span>
+                  <span aria-hidden="true">+</span>
+                  <span class="hold-score-extra">
+                    额外分 <b id="hold-score-extra">0</b>
+                    <small>（（可行选择 <b id="hold-score-feasible">0</b> − 1）× 0.2）</small>
+                  </span>
+                </span>
+              </p>
+            </div>
+            <button id="play-settings-button" class="header-settings-image-button play-settings-image-button" type="button" aria-label="打开设置"><img src="./ui/number-connect-slices/set-7/shezhi.png" alt="" draggable="false" /></button>
+          </header>
+          <div class="play-top-spacer">
+            <figure class="play-bead-showcase">
+              <div id="play-bead-showcase-art" class="play-bead-showcase__art" role="img"></div>
+            </figure>
+            <figure class="play-puzzle-showcase" hidden>
+              <div id="play-puzzle-showcase-art" class="play-puzzle-showcase__art" role="img"></div>
+            </figure>
+            <div id="play-puzzle-rotation-handle" class="play-puzzle-rotation-handle" role="group" aria-label="拼图三轴旋转手柄" hidden>
+              <i class="play-puzzle-rotation-origin" aria-hidden="true"></i>
+              <button class="play-puzzle-axis play-puzzle-axis--x" data-puzzle-axis="x" type="button" aria-label="拖动调整 X 轴旋转，双击重置 X 轴">X</button>
+              <button class="play-puzzle-axis play-puzzle-axis--y" data-puzzle-axis="y" type="button" aria-label="拖动调整 Y 轴旋转，双击重置 Y 轴">Y</button>
+              <button class="play-puzzle-axis play-puzzle-axis--z" data-puzzle-axis="z" type="button" aria-label="拖动调整 Z 轴旋转，双击重置 Z 轴">Z</button>
+            </div>
+          </div>
+        </div>
+        <div id="game-host" class="game-host" aria-label="数字连接棋盘">
+          <div id="play-puzzle-progress" class="play-puzzle-progress" role="progressbar" aria-label="当前数字进度" aria-valuemin="1" aria-valuemax="4" aria-valuenow="1" hidden>
+            <i id="play-puzzle-progress-fill"></i>
+            <b id="play-progress-start" class="play-progress-ball play-progress-ball--start" aria-hidden="true">1</b>
+            <b id="play-progress-current" class="play-progress-ball play-progress-ball--current" aria-hidden="true" hidden>1</b>
+            <b id="play-progress-end" class="play-progress-ball play-progress-ball--end" aria-hidden="true">4</b>
+          </div>
+        </div>
+        <footer id="power-up-bar" class="power-up-bar" aria-label="关卡道具">
+          <p id="power-up-status" class="power-up-status" role="status" aria-live="polite">道具可重复使用</p>
+          <div class="power-up-actions">
+            <button id="watercolor-brush-button" class="power-up-button power-up-button--brush" type="button" aria-describedby="power-up-status">
+              <span class="power-up-icon" aria-hidden="true"><img src="./ui/number-connect-slices/set-2/icon_tishi.png" alt="" draggable="false" /></span>
+              <small>提示</small>
+            </button>
+            <button id="paint-bucket-button" class="power-up-button power-up-button--bucket" type="button" aria-describedby="power-up-status" aria-pressed="false">
+              <span class="power-up-icon" aria-hidden="true"><img src="./ui/number-connect-slices/set-2/icon_fanwei.png" alt="" draggable="false" /></span>
+              <small>范围提示</small>
+            </button>
+          </div>
+        </footer>
+        <aside id="touch-preview" class="touch-preview" aria-label="关卡小窗，可按住任意位置拖动" hidden>
+          <div id="touch-preview-surface" class="touch-preview-surface">
+            <div id="touch-preview-board" class="touch-preview-board" role="img" aria-label="等待关卡载入">
+              <svg id="touch-preview-lines" class="touch-preview-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                <g id="touch-preview-path-lines"></g>
+                <line id="touch-preview-pointer-line" class="touch-preview-pointer-line" hidden></line>
+              </svg>
+              <div id="touch-preview-cells" class="touch-preview-cells" aria-hidden="true"></div>
+              <div id="touch-preview-viewport" class="touch-preview-viewport" aria-hidden="true" hidden></div>
+            </div>
+          </div>
+        </aside>
+        <div id="result-overlay" class="result-overlay" hidden>
+          <div class="result-card">
+            <h2 id="result-title">漂亮的一笔！</h2>
+            <p id="result-message">你已连接棋盘上的所有数字。</p>
+            <div id="result-reward" class="result-reward" hidden>♥ +1</div>
+            <div id="result-actions" class="result-actions">
+              <button id="restart-button" class="button button--secondary">重新挑战</button>
+              <button id="next-button" class="button button--primary">下一关</button>
+            </div>
+            <button id="result-lobby-button" class="text-button">返回大厅</button>
+          </div>
+        </div>
+        <div id="play-puzzle-finale" class="play-puzzle-finale" role="dialog" aria-modal="true" aria-labelledby="play-puzzle-finale-title" hidden>
+          <div class="play-puzzle-finale__mask" aria-hidden="true"></div>
+          <div class="play-puzzle-finale__stage">
+            <h2 id="play-puzzle-finale-title">Well done!</h2>
+            <div id="play-puzzle-finale-art" class="play-puzzle-finale__art" role="img"></div>
+            <div class="play-puzzle-finale__summary" aria-label="本局统计">
+              <p><span>Time:</span><strong id="play-puzzle-finale-time">00:00</strong></p>
+              <p><span>Mistakes:</span><strong id="play-puzzle-finale-mistakes">0</strong></p>
+              <p><span>Today's Level:</span><strong id="play-puzzle-finale-level">Level 1</strong></p>
+            </div>
+            <button id="play-puzzle-finale-button" class="button button--primary play-puzzle-finale__button" type="button" hidden>Level 2</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="collection-screen" class="screen collection-screen" hidden aria-labelledby="collection-screen-title">
+        <header class="collection-screen-header">
+          <button id="collection-back-button" class="icon-button" type="button" aria-label="返回大厅">←</button>
+          <div>
+            <h2 id="collection-screen-title">收集玩法</h2>
+          </div>
+          <button id="collection-gallery-button" class="icon-button" type="button" aria-label="打开拼豆图鉴">▦</button>
+        </header>
+        <div class="collection-map-scroll">
+          <div class="collection-map-heading">
+            <div><h3>沿着路线逐关前进</h3></div>
+            <strong id="collection-route-progress">0 / 7</strong>
+          </div>
+          <div id="collection-route" class="collection-route" aria-label="收集玩法关卡路线">
+            <svg id="collection-route-lines" class="collection-route-lines" aria-hidden="true" focusable="false">
+              <path id="collection-route-base"></path>
+              <path id="collection-route-complete"></path>
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <section id="daily-screen" class="screen daily-screen" hidden aria-labelledby="daily-screen-title">
+        <section class="daily-hero" aria-label="每日挑战奖杯">
+          <img class="daily-hero-effect" src="./ui/number-connect-slices/set-6/texiao.png" alt="" draggable="false" />
+          <header class="daily-screen-header">
+            <button id="daily-back-button" class="daily-back-button" type="button" aria-label="返回大厅">
+              <img src="./ui/number-connect-slices/set-6/fanhui.png" alt="" draggable="false" />
+            </button>
+            <h2 id="daily-screen-title">Daily Challenge</h2>
+            <span class="daily-trophy-mark" aria-hidden="true"><img src="./ui/number-connect-slices/set-6/icon_jiangbei.png" alt="" draggable="false" /></span>
+          </header>
+          <button id="daily-previous-month" class="daily-month-arrow daily-month-arrow--previous" type="button" aria-label="上个月">
+            <img src="./ui/number-connect-slices/set-6/fanhui.png" alt="" draggable="false" />
+          </button>
+          <img class="daily-trophy" src="./ui/number-connect-slices/set-6/Game_icon_%20jin7.png" alt="" draggable="false" />
+          <button id="daily-next-month" class="daily-month-arrow daily-month-arrow--next" type="button" aria-label="下个月">
+            <img src="./ui/number-connect-slices/set-6/fanhui2.png" alt="" draggable="false" />
+          </button>
+        </section>
+
+        <div class="daily-screen-stage">
+          <button id="daily-today-button" class="daily-today-button" type="button">回到今天</button>
+          <section class="daily-calendar-card" aria-label="每日挑战日历">
+            <header class="daily-calendar-toolbar">
+              <h3 id="daily-month-label">2026/7/1</h3>
+              <div class="daily-month-progress">
+                <strong id="daily-complete-count" aria-label="本月已完成 0 天"><img src="./ui/number-connect-slices/set-6/huizhang.png" alt="" draggable="false" /><b>0</b></strong>
+                <span aria-hidden="true">/</span>
+                <strong id="daily-month-total">31</strong>
+                <span id="daily-progress-track" class="daily-progress-track" role="progressbar" aria-label="本月挑战进度" aria-valuemin="0" aria-valuemax="31" aria-valuenow="0"><i id="daily-progress-fill"></i></span>
+              </div>
+            </header>
+            <div class="daily-weekdays" aria-hidden="true"><span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span></div>
+            <div id="daily-calendar-grid" class="daily-calendar-grid" role="grid" aria-labelledby="daily-month-label"></div>
+          </section>
+
+          <button id="daily-play-button" class="daily-play-button" type="button">Play Now</button>
+        </div>
+        <button id="daily-settings-button" type="button" aria-label="打开设置" hidden></button>
+      </section>
+
+      <section id="endless-screen" class="screen endless-hub-screen" hidden aria-labelledby="endless-screen-title">
+        <header class="hub-screen-header endless-screen-header">
+          <article class="endless-header-best" aria-label="历史最高阶段">
+            <span aria-hidden="true">♛</span><small>历史最高阶段</small><strong id="endless-best-stage">1</strong>
+          </article>
+          <div><h2 id="endless-screen-title">无尽模式</h2></div>
+          <button id="endless-settings-button" class="header-settings-image-button" type="button" aria-label="打开设置"><img src="./theme-default/settings.png" alt="" draggable="false" /></button>
+        </header>
+        <div class="endless-hub-stage">
+          <div class="endless-stat-grid" aria-label="无尽模式状态">
+            <article class="endless-stat endless-stat--stage"><small>当前阶段</small><strong id="endless-current-stage">1</strong></article>
+            <article class="endless-stat endless-stat--lives"><strong id="endless-current-lives" aria-live="polite" aria-label="当前生命 3">♥♥♥</strong></article>
+          </div>
+          <button id="endless-start-button" class="endless-start-button" type="button"><span>开始游戏</span></button>
+        </div>
+      </section>
+
+      <section id="favorites-screen" class="screen favorites-screen" hidden aria-labelledby="favorites-screen-title">
+        <header class="hub-screen-header favorites-screen-header">
+          <button id="favorites-back-button" class="icon-button" type="button" aria-label="返回大厅">←</button>
+          <div><h2 id="favorites-screen-title">图鉴</h2></div>
+        </header>
+        <div class="favorites-stage">
+          <div class="favorites-tabs" role="tablist" aria-label="收藏类型">
+            <button id="favorites-album-tab" class="is-active" type="button" role="tab" aria-selected="true" aria-controls="favorites-album-panel">画册收集</button>
+            <button id="favorites-bead-tab" type="button" role="tab" aria-selected="false" aria-controls="favorites-bead-panel">拼豆收集</button>
+          </div>
+          <div class="favorites-summary"><div><h3 id="favorites-summary-title">旅途画册</h3></div><strong id="favorites-summary-count">0 / 0</strong></div>
+          <div id="favorites-album-panel" class="favorites-panel" role="tabpanel" aria-labelledby="favorites-album-tab"><div id="favorites-album-grid" class="favorites-grid" role="list"></div></div>
+          <div id="favorites-bead-panel" class="favorites-panel" role="tabpanel" aria-labelledby="favorites-bead-tab" hidden><div id="favorites-bead-grid" class="favorites-grid" role="list"></div></div>
+        </div>
+      </section>
+
+      <section id="bead-screen" class="screen bead-screen" hidden aria-labelledby="bead-screen-title">
+        <div id="bead-placement-overlay" class="bead-placement-overlay" aria-hidden="true" hidden></div>
+        <header class="bead-screen-header">
+          <button id="bead-back-button" class="icon-button" type="button" aria-label="返回大厅">←</button>
+          <div>
+            <h2 id="bead-screen-title">拼豆模式</h2>
+          </div>
+          <button id="bead-gallery-button" class="icon-button bead-gallery-entry" type="button" aria-label="打开拼豆图鉴">
+            <span aria-hidden="true">▦</span><b id="bead-gallery-count">0</b>
+          </button>
+        </header>
+        <div class="bead-screen-stage">
+          <div class="bead-pattern-heading">
+            <div>
+              <h3 id="bead-pattern-name">橙色小猫</h3>
+            </div>
+            <strong id="bead-progress-text" class="bead-visually-hidden">0 / 0</strong>
+          </div>
+          <div class="bead-workbench">
+            <div class="bead-board-frame">
+              <div id="bead-pattern-board" class="bead-pattern-board" role="img" aria-label="20乘20拼豆图纸"></div>
+            </div>
+            <div class="bead-progress-panel">
+              <div class="bead-progress-track" role="progressbar" aria-label="拼豆完成进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="bead-progress-fill"></i></div>
+              <p id="bead-screen-status" class="bead-screen-status bead-visually-hidden" aria-live="polite">正在读取拼豆图纸…</p>
+            </div>
+          </div>
+          <button id="bead-jar-button" class="bead-jar-button" type="button" aria-label="拼豆瓶是空的" disabled>
+            <span id="bead-jar-contents" class="bead-jar-contents" aria-hidden="true"></span>
+            <img src="./ui/beads/open-glass-jar.svg" alt="" draggable="false" />
+            <span class="bead-jar-sparkles" aria-hidden="true">
+              <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            </span>
+            <strong><b id="bead-jar-count">0</b> 颗</strong>
+            <small>点击放 1 颗 · 长按连续放置</small>
+          </button>
+          <button id="bead-start-button" class="button bead-start-button" type="button">进入普通关卡</button>
+        </div>
+      </section>
+
+      <button id="primary-action-button" class="primary-action-button" type="button" data-action-theme="lobby" aria-label="开始第 1 关">
+        <span id="primary-action-label">第 1 关</span>
+      </button>
+
+    </main>
+
+    <dialog id="bead-gallery-dialog" class="bead-gallery-dialog" aria-labelledby="bead-gallery-title">
+      <section class="bead-gallery-card">
+        <header class="bead-gallery-header">
+          <div><h2 id="bead-gallery-title">拼豆图鉴</h2></div>
+          <button id="bead-gallery-close" class="icon-button" type="button" aria-label="关闭图鉴">×</button>
+        </header>
+        <div id="bead-gallery-list-view" class="bead-gallery-list-view">
+          <p class="bead-gallery-summary">已收藏 <strong id="bead-gallery-total">0 / 0</strong></p>
+          <div id="bead-gallery-empty" class="bead-gallery-empty">
+            <span aria-hidden="true">◇</span>
+            <strong>图鉴还是空的</strong>
+            <p>完成第一个拼豆图案后，作品会收藏在这里。</p>
+          </div>
+          <div id="bead-gallery-grid" class="bead-gallery-grid" role="list"></div>
+        </div>
+        <div id="bead-gallery-detail" class="bead-gallery-detail" hidden>
+          <button id="bead-gallery-detail-back" class="bead-gallery-detail-back" type="button">← 返回图鉴</button>
+          <div class="bead-gallery-detail-heading">
+            <h3 id="bead-gallery-detail-name"></h3>
+            <span id="bead-gallery-detail-size"></span>
+          </div>
+          <div class="bead-gallery-detail-art"><img id="bead-gallery-detail-image" alt="" /></div>
+        </div>
+      </section>
+    </dialog>
+
+    <dialog id="level-picker-dialog" class="level-picker-dialog" aria-labelledby="level-picker-title">
+      <form method="dialog" class="level-picker-card">
+        <header><h2 id="level-picker-title">选择关卡</h2><button id="level-picker-close-button" class="icon-button" value="cancel" aria-label="关闭">×</button></header>
+        <div id="level-picker-grid" class="level-picker-grid" role="list"></div>
+      </form>
+    </dialog>
+
+    <dialog id="settings-dialog" class="settings-dialog">
+      <form method="dialog" class="settings-card">
+        <header><div><h2>游戏设置</h2></div><button id="settings-close-button" class="icon-button" value="cancel" aria-label="关闭">×</button></header>
+        <div class="settings-list">
+          <label class="setting-row"><span><b>游戏声音</b><small>连击、错误和胜利反馈</small></span><input id="settings-sound" class="switch" type="checkbox" checked /></label>
+          <label id="settings-solution-row" class="setting-row" hidden><span><b>显示答案</b><small>显示隐藏数字和完整连线</small></span><input id="solution-toggle" class="switch" type="checkbox" /></label>
+          <div class="setting-row setting-row--preview-size"><span><b>关卡小窗</b><small>选择局部小窗，或放大棋盘并使用全局缩略图</small></span><div id="touch-preview-size" class="setting-segmented" role="radiogroup" aria-label="关卡小窗模式"><label><input type="radio" name="touch-preview-size" value="off" checked /><span>关闭</span></label><label><input type="radio" name="touch-preview-size" value="small" /><span>小</span></label><label><input type="radio" name="touch-preview-size" value="medium" /><span>中</span></label><label><input type="radio" name="touch-preview-size" value="large" /><span>大</span></label><label><input type="radio" name="touch-preview-size" value="zoom" /><span>放大</span></label></div></div>
+          <label class="setting-row"><span><b>小窗跟手</b><small>让关卡小窗始终显示在触摸位置上方</small></span><input id="settings-touch-preview-follow" class="switch" type="checkbox" /></label>
+          <button id="settings-quick-complete-row" class="setting-row setting-row--button setting-row--quick-complete" type="button" hidden><span><b>快速完成</b><small>自动沿正确路径连接所有格子</small></span><strong>立即完成 ›</strong></button>
+          <button id="video-stats-button" class="setting-row setting-row--button" type="button"><span><b>视频统计</b><small>查看奖励视频的触发点位</small></span><strong id="video-stats-count">0 次 ›</strong></button>
+          <button id="settings-clear-data-button" class="setting-row setting-row--button setting-row--danger" type="button"><span><b>清除数据</b><small>删除全部进度、设置和统计数据</small></span><strong>全部清除 ›</strong></button>
+        </div>
+        <footer id="settings-actions" class="settings-actions" hidden>
+          <button id="settings-lobby-button" class="button button--secondary" type="button">返回大厅</button>
+          <button id="settings-restart-button" class="button button--secondary" type="button">重玩</button>
+        </footer>
+      </form>
+    </dialog>
+
+    <dialog id="video-stats-dialog" class="video-stats-dialog">
+      <form method="dialog" class="video-stats-card">
+        <header><div><h2>视频统计</h2></div><button class="icon-button" value="cancel" aria-label="关闭视频统计">×</button></header>
+        <div class="video-stats-summary"><strong id="video-stats-total">0</strong><span>累计观看次数</span></div>
+        <p id="video-stats-empty" class="video-stats-empty">还没有观看记录。</p>
+        <ol id="video-stats-list" class="video-stats-list" aria-label="广告点位统计"></ol>
+        <footer><button id="video-stats-reset" class="button button--secondary" type="button">重置统计</button><button class="button button--primary" value="confirm">完成</button></footer>
+      </form>
+    </dialog>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

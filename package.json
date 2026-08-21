@@ -1,0 +1,24 @@
+{
+  "name": "number-connect-core-puzzle",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "tsc -b && vite build",
+    "build:html": "npm run build && node scripts/build-standalone-html.mjs",
+    "preview": "vite preview --host 0.0.0.0",
+    "test": "vitest run",
+    "heatmaps": "node scripts/generate-difficulty-heatmaps.mjs",
+    "bead-patterns": "node scripts/generate-bead-patterns.mjs"
+  },
+  "dependencies": {
+    "phaser": "^3.90.0",
+    "read-excel-file": "^9.3.5"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5",
+    "vitest": "^3.2.4"
+  }
+}
