@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "build": "tsc -b && vite build",
-    "build:html": "npm run build && node scripts/build-standalone-html.mjs",
     "preview": "vite preview --host 0.0.0.0",
     "test": "vitest run",
     "heatmaps": "node scripts/generate-difficulty-heatmaps.mjs",
