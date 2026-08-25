@@ -33,13 +33,18 @@ import {
 import {
   BoardShape,
   cellKey,
+  comboSoundBracketGroupRange,
+  isComboSoundArrangement,
+  isComboSoundPattern,
   isLobbyTheme,
   isTouchPreviewSize,
+  remapComboSoundArrangementAfterRemoval,
   usesClickInput,
   type BoardNeighborhoodPreview,
   type BoardHoldScore,
   type BoardSessionInput,
   type Cell,
+  type ComboSoundSet,
   type EndlessStageSettings,
   type GameMode,
   type GameSettings,
@@ -162,7 +167,19 @@ const COLLECTION_MIN_LEVELS = 7;
 const COLLECTION_PROGRESS_KEY = 'number-connect.collection-route.v1';
 const DAILY_COMPLETION_KEY = 'number-connect.daily-completed.v1';
 const ENDLESS_RUN_KEY = 'number-connect.endless-run.v1';
+const FIRST_LEVEL_RATING_PROMPT_KEY = 'number-connect.first-level-rating-prompt.v1';
+const RATING_VALUE_KEY = 'number-connect.rating-value.v1';
 const NORMAL_LIFE_LIMIT = 3;
+const SOUND_DEBUG_COMBO_SETS: ReadonlyArray<{
+  id: ComboSoundSet;
+  label: string;
+  badge: string;
+  filePrefix: string;
+  tone: string;
+}> = [
+  { id: 'combo1', label: 'Combo 1', badge: 'Original', filePrefix: 'combo_', tone: 'blue' },
+  { id: 'combo2', label: 'Combo 2', badge: 'New', filePrefix: 'combo2_', tone: 'purple' },
+] as const;
 
 const loadCollectionCompletedCount = (): number => {
   try {
@@ -367,8 +384,7 @@ class NumberConnectApp {
   private readonly playPuzzleFinaleArt = query<HTMLElement>('#play-puzzle-finale-art');
   private readonly playPuzzleFinaleButton = query<HTMLButtonElement>('#play-puzzle-finale-button');
   private readonly playPuzzleFinaleTime = query<HTMLElement>('#play-puzzle-finale-time');
-  private readonly playPuzzleFinaleMistakes = query<HTMLElement>('#play-puzzle-finale-mistakes');
-  private readonly playPuzzleFinaleLevel = query<HTMLElement>('#play-puzzle-finale-level');
+  private readonly playPuzzleFinaleRewardProgress = query<HTMLElement>('#play-puzzle-finale-reward-progress');
   private readonly playLevelButton = query<HTMLButtonElement>('#play-level-button');
   private readonly levelLabel = query<HTMLElement>('#play-level-label');
   private readonly holdScoreFormula = query<HTMLElement>('#hold-score-formula');
@@ -409,6 +425,17 @@ class NumberConnectApp {
   private readonly levelPickerGrid = query<HTMLElement>('#level-picker-grid');
   private readonly settingsDialog = query<HTMLDialogElement>('#settings-dialog');
   private readonly settingsRestartButton = query<HTMLButtonElement>('#settings-restart-button');
+  private readonly soundDebugPanel = query<HTMLElement>('#sound-debug-panel');
+  private readonly soundDebugToggle = query<HTMLButtonElement>('#sound-debug-toggle');
+  private readonly soundDebugComboSet = query<HTMLSelectElement>('#sound-debug-combo-set');
+  private readonly soundDebugComboGroup = query<HTMLElement>('#sound-debug-combo-group');
+  private readonly soundDebugComboBadge = query<HTMLElement>('#sound-debug-combo-badge');
+  private readonly soundDebugPatternList = query<HTMLElement>('#sound-debug-pattern-list');
+  private readonly soundDebugPatternAdd = query<HTMLButtonElement>('#sound-debug-pattern-add');
+  private readonly soundDebugArrangement = query<HTMLInputElement>('#sound-debug-arrangement');
+  private readonly soundDebugArrangementBrackets = query<HTMLButtonElement>('#sound-debug-arrangement-brackets');
+  private readonly ratingDialog = query<HTMLDialogElement>('#rating-dialog');
+  private readonly ratingSubmitButton = query<HTMLButtonElement>('#rating-submit-button');
   private readonly videoStatsDialog = query<HTMLDialogElement>('#video-stats-dialog');
   private readonly videoStatsCount = query<HTMLElement>('#video-stats-count');
   private readonly videoStatsTotal = query<HTMLElement>('#video-stats-total');
@@ -499,6 +526,7 @@ class NumberConnectApp {
   private currentProgress = 0;
   private currentTotal = 0;
   private settingsContext: 'lobby' | 'play' = 'lobby';
+  private soundDebugAudio?: HTMLAudioElement;
   private resultContext: ResultContext = 'normal';
   private resultActionBusy = false;
   private solutionRevealed = false;
@@ -530,6 +558,7 @@ class NumberConnectApp {
     startValue: number;
   };
   private playPuzzleFinaleBusy = false;
+  private selectedRating = 0;
   private playPuzzleCornerPressTimer?: number;
   private readonly playPuzzlePieceFloatTimers = new Set<number>();
   private beadJar: BeadJarItem[] = [];
@@ -578,6 +607,11 @@ class NumberConnectApp {
 
   public constructor() {
     this.applyLobbyTheme(this.settings.lobbyTheme);
+    this.boardScene.setComboSoundSet(this.settings.comboSoundSet);
+    this.boardScene.setConnectionSoundComposition(
+      this.settings.comboSoundPatterns,
+      this.settings.comboSoundArrangement,
+    );
     this.renderCoinBalance();
     this.applyPlayPuzzleRotation();
     this.boardScene.registerArtworkTextures(PLAY_PUZZLE_PATTERNS.map((pattern) => ({
@@ -726,6 +760,10 @@ class NumberConnectApp {
     this.bindTouchPreviewViewportDrag();
     this.bindPlayPuzzleRotationHandle();
     this.playPuzzleFinaleButton.addEventListener('click', () => void this.completePlayPuzzleFinale());
+    this.ratingDialog.querySelectorAll<HTMLButtonElement>('[data-rating]').forEach((button) => {
+      button.addEventListener('click', () => this.selectRating(Number(button.dataset.rating)));
+    });
+    this.ratingSubmitButton.addEventListener('click', () => this.submitRating());
     this.restartButton.addEventListener('click', () => this.handleResultPrimary());
     this.nextButton.addEventListener('click', () => this.handleResultSecondary());
     this.resultLobbyButton.addEventListener('click', () => this.leavePlayScreen());
@@ -1636,7 +1674,41 @@ class NumberConnectApp {
   }
 
   private bindSettings(): void {
+    // The debug surface belongs to the live game HUD, not to the modal. Move it
+    // out of the dialog so it remains visible and interactive after settings closes.
+    document.body.append(this.soundDebugPanel);
+    this.populateSoundDebugComboSets();
     this.settingsDialog.addEventListener('change', () => this.applySettingsChange());
+    this.soundDebugToggle.addEventListener('click', () => {
+      if (!this.soundDebugPanel.hidden) {
+        this.setSoundDebugPanelOpen(false);
+        return;
+      }
+      this.settingsDialog.close();
+      this.setSoundDebugPanelOpen(true);
+    });
+    query('#sound-debug-close').addEventListener('click', () => this.setSoundDebugPanelOpen(false));
+    this.soundDebugComboSet.addEventListener('change', () => {
+      this.stopSoundDebug();
+      this.renderSoundDebugComboSet();
+    });
+    this.soundDebugPatternAdd.addEventListener('click', () => this.addSoundDebugPattern());
+    this.soundDebugArrangement.addEventListener('input', () => this.updateSoundDebugArrangement());
+    this.soundDebugArrangement.addEventListener('keydown', (event) => {
+      this.handleSoundDebugArrangementDelete(event);
+    });
+    this.soundDebugArrangement.addEventListener('blur', () => {
+      if (!isComboSoundArrangement(this.soundDebugArrangement.value, this.settings.comboSoundPatterns.length)) {
+        this.soundDebugArrangement.value = this.settings.comboSoundArrangement;
+        this.soundDebugArrangement.removeAttribute('aria-invalid');
+      }
+    });
+    this.soundDebugArrangementBrackets.addEventListener('pointerdown', (event) => event.preventDefault());
+    this.soundDebugArrangementBrackets.addEventListener('click', () => this.insertSoundDebugArrangementGroup());
+    this.soundDebugPanel.querySelectorAll<HTMLButtonElement>('[data-debug-sound]').forEach((button) => {
+      button.addEventListener('click', () => this.playSoundDebug(button));
+    });
+    window.addEventListener('resize', () => this.positionSoundDebugPanel());
     query('#video-stats-button').addEventListener('click', () => this.openVideoStats());
     query('#video-stats-reset').addEventListener('click', () => this.resetVideoStats());
     query('#settings-clear-data-button').addEventListener('click', () => this.clearAllLocalData());
@@ -1659,6 +1731,296 @@ class NumberConnectApp {
         this.renderPowerUps();
       }
     });
+  }
+
+  private populateSoundDebugComboSets(): void {
+    const options = SOUND_DEBUG_COMBO_SETS.map((set) => {
+      const option = document.createElement('option');
+      option.value = set.id;
+      option.textContent = set.label;
+      return option;
+    });
+    this.soundDebugComboSet.replaceChildren(...options);
+    this.soundDebugComboSet.value = this.settings.comboSoundSet;
+    this.soundDebugArrangement.value = this.settings.comboSoundArrangement;
+    this.renderSoundDebugPatterns();
+    this.renderSoundDebugComboSet();
+  }
+
+  private renderSoundDebugPatterns(): void {
+    const rows = this.settings.comboSoundPatterns.map((pattern, index) => {
+      const row = document.createElement('div');
+      const active = index === this.settings.comboSoundPatternIndex;
+      row.className = 'sound-debug-pattern-row';
+      row.classList.toggle('is-active', active);
+      row.setAttribute('role', 'listitem');
+
+      const select = document.createElement('button');
+      select.type = 'button';
+      select.className = 'sound-debug-pattern-select';
+      select.textContent = String(index + 1);
+      select.setAttribute('aria-label', `选中旋律 ${index + 1}`);
+      select.setAttribute('aria-pressed', String(active));
+      select.addEventListener('click', () => this.selectSoundDebugPattern(index));
+
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.inputMode = 'text';
+      input.maxLength = 64;
+      input.value = pattern;
+      input.autocomplete = 'off';
+      input.spellcheck = false;
+      input.setAttribute('aria-label', `旋律 ${index + 1}`);
+      input.addEventListener('focus', () => this.selectSoundDebugPattern(index, false));
+      input.addEventListener('keydown', (event) => this.handleSoundDebugPatternDelete(index, input, event));
+      input.addEventListener('input', () => this.updateSoundDebugPattern(index, input));
+      input.addEventListener('blur', () => {
+        if (!isComboSoundPattern(input.value)) {
+          input.value = this.settings.comboSoundPatterns[index] ?? '12345678';
+          input.removeAttribute('aria-invalid');
+        }
+      });
+
+      const remove = document.createElement('button');
+      remove.type = 'button';
+      remove.className = 'sound-debug-pattern-remove';
+      remove.textContent = '×';
+      remove.disabled = this.settings.comboSoundPatterns.length === 1;
+      remove.setAttribute('aria-label', `删除旋律 ${index + 1}`);
+      remove.addEventListener('click', () => this.removeSoundDebugPattern(index));
+
+      const addRandomGroup = document.createElement('button');
+      addRandomGroup.type = 'button';
+      addRandomGroup.className = 'sound-debug-pattern-brackets';
+      addRandomGroup.textContent = '＋[]';
+      addRandomGroup.setAttribute('aria-label', `在旋律 ${index + 1} 中添加随机音节括号`);
+      addRandomGroup.addEventListener('pointerdown', (event) => event.preventDefault());
+      addRandomGroup.addEventListener('click', () => this.insertSoundDebugRandomGroup(index, input));
+      row.append(select, input, remove, addRandomGroup);
+      return row;
+    });
+    this.soundDebugPatternList.replaceChildren(...rows);
+    this.soundDebugPatternAdd.disabled = this.settings.comboSoundPatterns.length >= 32;
+  }
+
+  private addSoundDebugPattern(): void {
+    if (this.settings.comboSoundPatterns.length >= 32) return;
+    this.settings.comboSoundPatterns.push('12345678');
+    this.settings.comboSoundPatternIndex = this.settings.comboSoundPatterns.length - 1;
+    this.syncActiveSoundDebugPattern();
+    this.renderSoundDebugPatterns();
+    this.soundDebugPatternList.querySelector<HTMLInputElement>('.sound-debug-pattern-row:last-child input')?.focus();
+  }
+
+  private removeSoundDebugPattern(index: number): void {
+    if (this.settings.comboSoundPatterns.length <= 1) return;
+    this.settings.comboSoundPatterns.splice(index, 1);
+    this.settings.comboSoundArrangement = remapComboSoundArrangementAfterRemoval(
+      this.settings.comboSoundArrangement,
+      index + 1,
+    );
+    this.soundDebugArrangement.value = this.settings.comboSoundArrangement;
+    if (index < this.settings.comboSoundPatternIndex) this.settings.comboSoundPatternIndex -= 1;
+    else if (index === this.settings.comboSoundPatternIndex) {
+      this.settings.comboSoundPatternIndex = Math.min(index, this.settings.comboSoundPatterns.length - 1);
+    }
+    this.syncActiveSoundDebugPattern();
+    this.renderSoundDebugPatterns();
+  }
+
+  private selectSoundDebugPattern(index: number, render = true): void {
+    if (!this.settings.comboSoundPatterns[index]) return;
+    this.settings.comboSoundPatternIndex = index;
+    this.syncActiveSoundDebugPattern();
+    if (render) this.renderSoundDebugPatterns();
+    else {
+      this.soundDebugPatternList.querySelectorAll<HTMLElement>('.sound-debug-pattern-row').forEach((row, rowIndex) => {
+        row.classList.toggle('is-active', rowIndex === index);
+        row.querySelector('.sound-debug-pattern-select')?.setAttribute('aria-pressed', String(rowIndex === index));
+      });
+    }
+  }
+
+  private updateSoundDebugPattern(index: number, input: HTMLInputElement): void {
+    const sanitized = input.value.replace(/[^1-8[\]]/g, '').slice(0, 64);
+    if (input.value !== sanitized) input.value = sanitized;
+    if (!isComboSoundPattern(sanitized)) {
+      input.setAttribute('aria-invalid', 'true');
+      return;
+    }
+    input.removeAttribute('aria-invalid');
+    this.settings.comboSoundPatterns[index] = sanitized;
+    this.syncActiveSoundDebugPattern();
+  }
+
+  private insertSoundDebugRandomGroup(index: number, input: HTMLInputElement): void {
+    const selectionStart = input.selectionStart ?? input.value.length;
+    const selectionEnd = input.selectionEnd ?? selectionStart;
+    const nextValue = `${input.value.slice(0, selectionStart)}[]${input.value.slice(selectionEnd)}`;
+    if (nextValue.length > input.maxLength) return;
+    input.value = nextValue;
+    this.updateSoundDebugPattern(index, input);
+    input.focus();
+    input.setSelectionRange(selectionStart + 1, selectionStart + 1);
+  }
+
+  private handleSoundDebugPatternDelete(
+    index: number,
+    input: HTMLInputElement,
+    event: KeyboardEvent,
+  ): void {
+    if (event.key !== 'Backspace' && event.key !== 'Delete') return;
+    const selectionStart = input.selectionStart ?? 0;
+    const selectionEnd = input.selectionEnd ?? selectionStart;
+    let deleteStart = selectionStart;
+    let deleteEnd = selectionEnd;
+
+    if (selectionStart === selectionEnd) {
+      const targetIndex = event.key === 'Backspace' ? selectionStart - 1 : selectionStart;
+      const group = comboSoundBracketGroupRange(input.value, targetIndex);
+      if (!group) return;
+      deleteStart = group.start;
+      deleteEnd = group.end;
+    } else {
+      let touchesBracket = false;
+      for (let position = selectionStart; position < selectionEnd; position += 1) {
+        const group = comboSoundBracketGroupRange(input.value, position);
+        if (!group) continue;
+        touchesBracket = true;
+        deleteStart = Math.min(deleteStart, group.start);
+        deleteEnd = Math.max(deleteEnd, group.end);
+      }
+      if (!touchesBracket) return;
+    }
+
+    event.preventDefault();
+    input.value = `${input.value.slice(0, deleteStart)}${input.value.slice(deleteEnd)}`;
+    this.updateSoundDebugPattern(index, input);
+    input.setSelectionRange(deleteStart, deleteStart);
+  }
+
+  private syncActiveSoundDebugPattern(): void {
+    const pattern = this.settings.comboSoundPatterns[this.settings.comboSoundPatternIndex] ?? '12345678';
+    this.settings.comboSoundPattern = pattern;
+    saveSettings(this.settings);
+    this.boardScene.setConnectionSoundComposition(
+      this.settings.comboSoundPatterns,
+      this.settings.comboSoundArrangement,
+    );
+  }
+
+  private updateSoundDebugArrangement(): void {
+    const sanitized = this.soundDebugArrangement.value.replace(/[^0-9,[\]]/g, '').slice(0, 128);
+    if (this.soundDebugArrangement.value !== sanitized) this.soundDebugArrangement.value = sanitized;
+    if (!isComboSoundArrangement(sanitized, this.settings.comboSoundPatterns.length)) {
+      this.soundDebugArrangement.setAttribute('aria-invalid', 'true');
+      return;
+    }
+    this.soundDebugArrangement.removeAttribute('aria-invalid');
+    this.settings.comboSoundArrangement = sanitized;
+    this.syncActiveSoundDebugPattern();
+  }
+
+  private insertSoundDebugArrangementGroup(): void {
+    const input = this.soundDebugArrangement;
+    const selectionStart = input.selectionStart ?? input.value.length;
+    const selectionEnd = input.selectionEnd ?? selectionStart;
+    const prefix = selectionStart > 0 && input.value[selectionStart - 1] !== ',' ? ',' : '';
+    const suffix = selectionEnd < input.value.length && input.value[selectionEnd] !== ',' ? ',' : '';
+    const insertion = `${prefix}[]${suffix}`;
+    const nextValue = `${input.value.slice(0, selectionStart)}${insertion}${input.value.slice(selectionEnd)}`;
+    if (nextValue.length > input.maxLength) return;
+    input.value = nextValue;
+    this.updateSoundDebugArrangement();
+    input.focus();
+    const caret = selectionStart + prefix.length + 1;
+    input.setSelectionRange(caret, caret);
+  }
+
+  private handleSoundDebugArrangementDelete(event: KeyboardEvent): void {
+    if (event.key !== 'Backspace' && event.key !== 'Delete') return;
+    const input = this.soundDebugArrangement;
+    const selectionStart = input.selectionStart ?? 0;
+    const selectionEnd = input.selectionEnd ?? selectionStart;
+    const targetIndex = selectionStart === selectionEnd
+      ? event.key === 'Backspace' ? selectionStart - 1 : selectionStart
+      : [...Array(selectionEnd - selectionStart).keys()]
+          .map((offset) => selectionStart + offset)
+          .find((position) => input.value[position] === '[' || input.value[position] === ']');
+    if (targetIndex === undefined) return;
+    const group = comboSoundBracketGroupRange(input.value, targetIndex);
+    if (!group) return;
+    event.preventDefault();
+    let deleteStart = group.start;
+    let deleteEnd = group.end;
+    if (input.value[deleteEnd] === ',') deleteEnd += 1;
+    else if (deleteStart > 0 && input.value[deleteStart - 1] === ',') deleteStart -= 1;
+    input.value = `${input.value.slice(0, deleteStart)}${input.value.slice(deleteEnd)}`;
+    this.updateSoundDebugArrangement();
+    input.setSelectionRange(deleteStart, deleteStart);
+  }
+
+  private renderSoundDebugComboSet(): void {
+    const selected = SOUND_DEBUG_COMBO_SETS.find((set) => set.id === this.soundDebugComboSet.value)
+      ?? SOUND_DEBUG_COMBO_SETS[0];
+    this.settings.comboSoundSet = selected.id;
+    saveSettings(this.settings);
+    this.boardScene.setComboSoundSet(selected.id);
+    this.soundDebugComboGroup.dataset.tone = selected.tone;
+    this.soundDebugComboBadge.textContent = selected.badge;
+    this.soundDebugComboGroup.querySelectorAll<HTMLButtonElement>('[data-debug-combo-step]').forEach((button) => {
+      const step = button.dataset.debugComboStep;
+      button.dataset.debugSound = `${selected.filePrefix}${step}.mp3`;
+    });
+  }
+
+  private setSoundDebugPanelOpen(open: boolean): void {
+    if (open) this.positionSoundDebugPanel();
+    this.soundDebugPanel.hidden = !open;
+    this.soundDebugToggle.setAttribute('aria-expanded', String(open));
+    const action = this.soundDebugToggle.querySelector('strong');
+    if (action) action.textContent = open ? '已打开 ‹' : '打开 ›';
+    if (!open) this.stopSoundDebug();
+  }
+
+  private positionSoundDebugPanel(): void {
+    const gameBounds = this.appShell.getBoundingClientRect();
+    const visualScale = this.uiVisualScale();
+    const viewportMargin = 18;
+    const gameGap = 18 * visualScale;
+    const availableWidth = gameBounds.left - gameGap - viewportMargin;
+    const useOverlay = window.innerWidth <= 760 || availableWidth < 260 * visualScale;
+    this.soundDebugPanel.dataset.layout = useOverlay ? 'overlay' : 'side';
+    if (useOverlay) return;
+    this.soundDebugPanel.style.setProperty('--sound-debug-left', `${viewportMargin}px`);
+    this.soundDebugPanel.style.setProperty('--sound-debug-top', `${gameBounds.top}px`);
+    this.soundDebugPanel.style.setProperty('--sound-debug-width', `${availableWidth / visualScale}px`);
+    this.soundDebugPanel.style.setProperty('--sound-debug-height', `${gameBounds.height / visualScale}px`);
+  }
+
+  private playSoundDebug(button: HTMLButtonElement): void {
+    const file = button.dataset.debugSound;
+    if (!file) return;
+    this.stopSoundDebug();
+    const audio = new Audio(`./audio/${file}`);
+    this.soundDebugAudio = audio;
+    audio.volume = 0.72;
+    this.soundDebugPanel.querySelectorAll('[data-debug-sound]').forEach((item) => item.classList.remove('is-playing'));
+    button.classList.add('is-playing');
+    const finish = (): void => {
+      if (this.soundDebugAudio !== audio) return;
+      button.classList.remove('is-playing');
+      this.soundDebugAudio = undefined;
+    };
+    audio.addEventListener('ended', finish, { once: true });
+    audio.addEventListener('error', finish, { once: true });
+    void audio.play().catch(finish);
+  }
+
+  private stopSoundDebug(): void {
+    this.soundDebugAudio?.pause();
+    this.soundDebugAudio = undefined;
+    this.soundDebugPanel.querySelectorAll('[data-debug-sound]').forEach((item) => item.classList.remove('is-playing'));
   }
 
   private refreshLevels(): void {
@@ -3090,8 +3452,13 @@ class NumberConnectApp {
     const elapsedSeconds = Math.max(0, Math.floor((Date.now() - this.currentBoardStartedAt) / 1000));
     const elapsedMinutes = Math.floor(elapsedSeconds / 60);
     this.playPuzzleFinaleTime.textContent = `${String(elapsedMinutes).padStart(2, '0')}:${String(elapsedSeconds % 60).padStart(2, '0')}`;
-    this.playPuzzleFinaleMistakes.textContent = String(this.currentBoardMistakes);
-    this.playPuzzleFinaleLevel.textContent = `Level ${this.settings.puzzleMainLevelId}`;
+    const completedRewardSteps = (this.settings.puzzleMainLevelId - 1) % 5 + 1;
+    this.playPuzzleFinaleRewardProgress.setAttribute('aria-valuenow', String(completedRewardSteps));
+    this.playPuzzleFinaleRewardProgress.setAttribute('aria-valuetext', `${completedRewardSteps}/5 关`);
+    this.playPuzzleFinaleRewardProgress.classList.toggle('is-complete', completedRewardSteps === 5);
+    this.playPuzzleFinaleRewardProgress.querySelectorAll<HTMLElement>('[data-reward-step]').forEach((segment) => {
+      segment.classList.toggle('is-filled', Number(segment.dataset.rewardStep) <= completedRewardSteps);
+    });
     this.playPuzzleFinaleButton.textContent = `Level ${this.settings.puzzleMainLevelId + 1}`;
     this.playPuzzleFinale.classList.remove('is-visible', 'is-floating', 'is-assembling', 'is-assembled', 'is-leaving');
     this.playPuzzleFinaleButton.hidden = true;
@@ -3123,6 +3490,39 @@ class NumberConnectApp {
       this.startPlayPuzzleCornerPresses();
     }
     this.playPuzzleFinaleButton.focus();
+    this.showFirstLevelRatingPrompt();
+  }
+
+  private showFirstLevelRatingPrompt(): void {
+    if (this.settings.puzzleMainLevelId !== 1 || this.ratingDialog.open) return;
+    try {
+      if (window.localStorage.getItem(FIRST_LEVEL_RATING_PROMPT_KEY) === 'shown') return;
+      window.localStorage.setItem(FIRST_LEVEL_RATING_PROMPT_KEY, 'shown');
+    } catch {
+      // Storage can be unavailable in private browsing; the current session can still show the prompt.
+    }
+    this.selectRating(0);
+    this.ratingDialog.showModal();
+  }
+
+  private selectRating(rating: number): void {
+    this.selectedRating = Math.max(0, Math.min(5, Math.floor(rating)));
+    this.ratingDialog.querySelectorAll<HTMLButtonElement>('[data-rating]').forEach((button) => {
+      const isSelected = Number(button.dataset.rating) <= this.selectedRating;
+      button.classList.toggle('is-selected', isSelected);
+      button.setAttribute('aria-pressed', String(Number(button.dataset.rating) === this.selectedRating));
+    });
+    this.ratingSubmitButton.disabled = this.selectedRating === 0;
+  }
+
+  private submitRating(): void {
+    if (this.selectedRating === 0) return;
+    try {
+      window.localStorage.setItem(RATING_VALUE_KEY, String(this.selectedRating));
+    } catch {
+      // The interaction still completes when persistent storage is unavailable.
+    }
+    this.ratingDialog.close('submit');
   }
 
   private startPlayPuzzleCornerPresses(): void {

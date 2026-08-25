@@ -169,10 +169,18 @@
           <div class="play-puzzle-finale__stage">
             <h2 id="play-puzzle-finale-title">Well done!</h2>
             <div id="play-puzzle-finale-art" class="play-puzzle-finale__art" role="img"></div>
-            <div class="play-puzzle-finale__summary" aria-label="本局统计">
+            <div class="play-puzzle-finale__summary" aria-label="本局用时">
               <p><span>Time:</span><strong id="play-puzzle-finale-time">00:00</strong></p>
-              <p><span>Mistakes:</span><strong id="play-puzzle-finale-mistakes">0</strong></p>
-              <p><span>Today's Level:</span><strong id="play-puzzle-finale-level">Level 1</strong></p>
+            </div>
+            <div id="play-puzzle-finale-reward-progress" class="play-puzzle-finale__reward-progress" role="progressbar" aria-label="宝箱进度" aria-valuemin="0" aria-valuemax="5" aria-valuenow="0">
+              <div class="play-puzzle-finale__reward-segments" aria-hidden="true">
+                <span data-reward-step="1"></span>
+                <span data-reward-step="2"></span>
+                <span data-reward-step="3"></span>
+                <span data-reward-step="4"></span>
+                <span data-reward-step="5"></span>
+              </div>
+              <span class="play-puzzle-finale__reward-chest" role="img" aria-label="宝箱"></span>
             </div>
             <button id="play-puzzle-finale-button" class="button button--primary play-puzzle-finale__button" type="button" hidden>Level 2</button>
           </div>
@@ -354,11 +362,46 @@
     </dialog>
 
     <dialog id="settings-dialog" class="settings-dialog">
+      <aside id="sound-debug-panel" class="sound-debug-panel" aria-labelledby="sound-debug-title" hidden>
+        <header class="sound-debug-panel__header">
+          <div><small>Audio Lab</small><h3 id="sound-debug-title">音效调试</h3></div>
+          <button id="sound-debug-close" class="sound-debug-panel__close" type="button" aria-label="关闭音效调试面板">×</button>
+        </header>
+        <div class="sound-debug-panel__body">
+          <section id="sound-debug-combo-group" class="sound-debug-group" aria-labelledby="sound-debug-combo-title" data-tone="blue">
+            <label class="sound-debug-combo-picker" for="sound-debug-combo-set">
+              <span><b id="sound-debug-combo-title">连击音阶</b><small id="sound-debug-combo-badge">Original</small></span>
+              <select id="sound-debug-combo-set" aria-label="选择连击音效套组"></select>
+            </label>
+            <div class="sound-debug-combo-grid">
+              <button type="button" data-debug-combo-step="1"><span>1</span></button>
+              <button type="button" data-debug-combo-step="2"><span>2</span></button>
+              <button type="button" data-debug-combo-step="3"><span>3</span></button>
+              <button type="button" data-debug-combo-step="4"><span>4</span></button>
+              <button type="button" data-debug-combo-step="5"><span>5</span></button>
+              <button type="button" data-debug-combo-step="6"><span>6</span></button>
+              <button type="button" data-debug-combo-step="7"><span>7</span></button>
+              <button type="button" data-debug-combo-step="8"><span>8</span></button>
+            </div>
+            <section class="sound-debug-composer" aria-labelledby="sound-debug-composer-title">
+              <label class="sound-debug-arrangement" for="sound-debug-arrangement">
+                <span><b>组曲配置</b><small>按旋律序号依次播放</small></span>
+                <div><input id="sound-debug-arrangement" type="text" inputmode="text" maxlength="128" value="1" autocomplete="off" spellcheck="false" /><button id="sound-debug-arrangement-brackets" type="button" aria-label="添加随机旋律括号">＋[]</button></div>
+                <small>用逗号分隔，例如：1,2,[3,4],12</small>
+              </label>
+              <header><div><b id="sound-debug-composer-title">旋律列表</b><small>编号对应组曲中的数字</small></div><button id="sound-debug-pattern-add" type="button">＋ 新增</button></header>
+              <div id="sound-debug-pattern-list" class="sound-debug-pattern-list" role="list" aria-label="旋律列表"></div>
+              <small class="sound-debug-pattern-hint">旋律支持 1–8；[123] 表示随机音节</small>
+            </section>
+          </section>
+        </div>
+      </aside>
       <form method="dialog" class="settings-card">
         <header><div><h2>游戏设置</h2></div><button id="settings-close-button" class="icon-button" value="cancel" aria-label="关闭">×</button></header>
         <div class="settings-list">
           <div class="setting-row"><span><b>大厅主题</b><small>切换大厅背景、Logo 和开始按钮</small></span><div id="lobby-theme" class="setting-segmented setting-theme-control" role="radiogroup" aria-label="大厅主题"><label><input type="radio" name="lobby-theme" value="cool" checked /><span>冷色</span></label><label><input type="radio" name="lobby-theme" value="warm" /><span>暖色</span></label></div></div>
           <label class="setting-row"><span><b>游戏声音</b><small>连击、错误和胜利反馈</small></span><input id="settings-sound" class="switch" type="checkbox" checked /></label>
+          <button id="sound-debug-toggle" class="setting-row setting-row--button setting-row--sound-debug" type="button" aria-controls="sound-debug-panel" aria-expanded="false"><span><b>音效调试面板</b><small>逐个试听游戏内的反馈音效</small></span><strong>打开 ›</strong></button>
           <label id="settings-solution-row" class="setting-row" hidden><span><b>显示答案</b><small>显示隐藏数字和完整连线</small></span><input id="solution-toggle" class="switch" type="checkbox" /></label>
           <div class="setting-row setting-row--preview-size"><span><b>关卡小窗</b><small>选择局部小窗，或放大棋盘并使用全局缩略图</small></span><div id="touch-preview-size" class="setting-segmented" role="radiogroup" aria-label="关卡小窗模式"><label><input type="radio" name="touch-preview-size" value="off" checked /><span>关闭</span></label><label><input type="radio" name="touch-preview-size" value="small" /><span>小</span></label><label><input type="radio" name="touch-preview-size" value="medium" /><span>中</span></label><label><input type="radio" name="touch-preview-size" value="large" /><span>大</span></label><label><input type="radio" name="touch-preview-size" value="zoom" /><span>放大</span></label></div></div>
           <label class="setting-row"><span><b>小窗跟手</b><small>让关卡小窗始终显示在触摸位置上方</small></span><input id="settings-touch-preview-follow" class="switch" type="checkbox" /></label>
@@ -370,6 +413,23 @@
           <button id="settings-lobby-button" class="button button--secondary" type="button">返回大厅</button>
           <button id="settings-restart-button" class="button button--secondary" type="button">重玩</button>
         </footer>
+      </form>
+    </dialog>
+
+    <dialog id="rating-dialog" class="rating-dialog" aria-labelledby="rating-dialog-title">
+      <form method="dialog" class="rating-card">
+        <div class="rating-card__icon" aria-hidden="true">★</div>
+        <h2 id="rating-dialog-title">喜欢 Number Connect 吗？</h2>
+        <p>为刚刚完成的关卡打个分吧</p>
+        <div id="rating-stars" class="rating-stars" role="group" aria-label="选择评分">
+          <button type="button" data-rating="1" aria-label="1 星" aria-pressed="false">★</button>
+          <button type="button" data-rating="2" aria-label="2 星" aria-pressed="false">★</button>
+          <button type="button" data-rating="3" aria-label="3 星" aria-pressed="false">★</button>
+          <button type="button" data-rating="4" aria-label="4 星" aria-pressed="false">★</button>
+          <button type="button" data-rating="5" aria-label="5 星" aria-pressed="false">★</button>
+        </div>
+        <button id="rating-submit-button" class="button button--primary rating-submit-button" type="button" disabled>提交评价</button>
+        <button id="rating-later-button" class="rating-later-button" value="cancel">稍后再说</button>
       </form>
     </dialog>
 

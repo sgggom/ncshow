@@ -34,11 +34,14 @@ import {
   BoardShape,
   backgroundUrl,
   cellKey,
+  parseComboSoundArrangement,
+  parseComboSoundPattern,
   usesClickInput,
   type BoardArtworkInput,
   type BoardHoldScore,
   type BoardSessionInput,
   type Cell,
+  type ComboSoundSet,
 } from './types';
 import { levelBallColor } from './levelTheme';
 
@@ -243,7 +246,12 @@ export class BoardScene extends Phaser.Scene {
   private raisedConnectedCellIndex?: number;
   private pendingStepReward?: PendingStepRewardFeedback;
   private completionCheckPending = false;
-  private connectionComboCount = 0;
+  private connectionRewardComboCount = 0;
+  private connectionSoundArrangementIndex = 0;
+  private connectionSoundMelodyIndex?: number;
+  private connectionSoundNoteIndex = 0;
+  private connectionSoundMelodies: ReadonlyArray<ReadonlyArray<readonly number[]>> = [[[1], [2], [3], [4], [5], [6], [7], [8]]];
+  private connectionSoundArrangement: ReadonlyArray<readonly number[]> = [[1]];
   private readonly heldScoreRequests = new Map<string, Promise<BoardHoldScore | undefined>>();
   private heldScoreDisplayToken = 0;
   private paused = true;
@@ -255,6 +263,7 @@ export class BoardScene extends Phaser.Scene {
   private boardViewportScroll = { x: 0.5, y: 0.5 };
   private readonly artworkTextures = new Map<string, string>();
   private readonly artworkColorCache = new Map<string, readonly number[]>();
+  private comboSoundSet: ComboSoundSet = 'combo1';
 
   public constructor() {
     super('board');
@@ -268,9 +277,32 @@ export class BoardScene extends Phaser.Scene {
     textures.forEach(({ key, url }) => this.artworkTextures.set(key, url));
   }
 
+  public setComboSoundSet(set: ComboSoundSet): void {
+    this.comboSoundSet = set;
+  }
+
+  public setConnectionSoundComposition(patterns: readonly string[], arrangement: string): void {
+    const melodies = patterns.flatMap((pattern) => {
+      const parsed = parseComboSoundPattern(pattern);
+      return parsed ? [parsed] : [];
+    });
+    this.connectionSoundMelodies = melodies.length > 0
+      ? melodies
+      : [[[1], [2], [3], [4], [5], [6], [7], [8]]];
+    const arrangementTokens = parseComboSoundArrangement(arrangement);
+    const validArrangement = arrangementTokens?.map((choices) => (
+      choices.filter((melodyNumber) => melodyNumber <= this.connectionSoundMelodies.length)
+    )).filter((choices) => choices.length > 0);
+    this.connectionSoundArrangement = validArrangement && validArrangement.length > 0
+      ? validArrangement
+      : [[1]];
+    this.resetConnectionSoundComposition();
+  }
+
   public preload(): void {
     for (let index = 1; index <= 8; index += 1) {
-      this.load.audio(`combo-${index}`, `./audio/combo_${index}.mp3`);
+      this.load.audio(`combo1-${index}`, `./audio/combo_${index}.mp3`);
+      this.load.audio(`combo2-${index}`, `./audio/combo2_${index}.mp3`);
     }
     this.load.audio('wrong', './audio/wrong_move.mp3');
     this.load.audio('victory', './audio/victory_bgm.mp3');
@@ -310,7 +342,8 @@ export class BoardScene extends Phaser.Scene {
   };
 
   public setBoard(session: BoardSessionInput): void {
-    this.resetConnectionComboEdge();
+    this.resetConnectionRewardCombo();
+    this.resetConnectionSoundComposition();
     this.cancelAutoClickSequence();
     this.cancelBoardEntrance();
     this.clearNeighborhoodPreview();
@@ -693,7 +726,7 @@ export class BoardScene extends Phaser.Scene {
     );
 
     this.session = session;
-    this.resetConnectionComboEdge();
+    this.resetConnectionRewardCombo();
     this.connection = this.createConnectionProgress(session);
     this.boardViewportScroll = { x: 0.5, y: 0.5 };
     this.isDrawing = false;
@@ -2066,7 +2099,7 @@ export class BoardScene extends Phaser.Scene {
     if (!this.session || !usesClickInput(this.session.inputMode)) this.connection?.endStroke();
     this.view?.pointerLine.clear();
     if (this.connection?.complete !== true) this.lowerRaisedConnectedCell();
-    if (wasDrawing && this.connection?.complete !== true) this.resetConnectionComboEdge();
+    if (wasDrawing && this.connection?.complete !== true) this.resetConnectionRewardCombo();
     if (wasDrawing || hadActiveConnectionBackdrops) this.refreshView();
     this.clearNeighborhoodPreview();
   }
@@ -2369,7 +2402,7 @@ export class BoardScene extends Phaser.Scene {
       this.wrongFeedbackActive = true;
       const shouldLoseLife = !this.wrongCellIndexes.has(action.index);
       this.flashWrong(action.index);
-      this.resetConnectionComboEdge();
+      this.resetConnectionRewardCombo();
       this.playSound('wrong');
       this.cancelAutoClickSequence();
       this.pendingStepReward = undefined;
@@ -2390,6 +2423,7 @@ export class BoardScene extends Phaser.Scene {
       if (playFeedback) {
         this.playConnectedCellBounce(action.index);
         this.playConnectionBackdropPop(action.index);
+        this.playNextConnectionSound();
       }
       return;
     }
@@ -2422,8 +2456,8 @@ export class BoardScene extends Phaser.Scene {
       });
       this.playConnectionBackdropPop(action.index);
       completionWaitsForLanding = action.complete && feedbackStarted;
-      const comboLevel = this.advanceConnectionComboEdge(action.index);
-      if (comboLevel !== undefined) this.playSound(`combo-${comboLevel}`);
+      this.advanceConnectionRewardCombo();
+      this.playNextConnectionSound();
     }
     this.session.onProgress(action.progress, this.session.level.solutionPath.length);
 
@@ -2772,23 +2806,47 @@ export class BoardScene extends Phaser.Scene {
     }
   }
 
-  private advanceConnectionComboEdge(_index: number): number | undefined {
-    this.connectionComboCount += 1;
-    if (this.connectionComboCount < 2) return undefined;
-    const comboProgress = this.connectionComboCount - 1;
-    const soundLevel = Phaser.Math.Clamp(comboProgress, 1, 8);
+  private advanceConnectionRewardCombo(): void {
+    this.connectionRewardComboCount += 1;
+    if (this.connectionRewardComboCount < 2) return;
+    const comboProgress = this.connectionRewardComboCount - 1;
     const numberCount = this.session?.level.solutionPath.length ?? 0;
     const totalComboProgress = Math.max(10, Math.ceil(numberCount / 4));
     const progress = Math.min(1, comboProgress / totalComboProgress);
     if (progress >= 1) {
-      this.connectionComboCount = 0;
+      this.connectionRewardComboCount = 0;
       this.session?.onComboComplete?.();
     }
-    return soundLevel;
   }
 
-  private resetConnectionComboEdge(): void {
-    this.connectionComboCount = 0;
+  private resetConnectionRewardCombo(): void {
+    this.connectionRewardComboCount = 0;
+  }
+
+  private playNextConnectionSound(): void {
+    if (this.connectionSoundMelodyIndex === undefined) {
+      const melodyChoices = this.connectionSoundArrangement[this.connectionSoundArrangementIndex] ?? [1];
+      const melodyNumber = melodyChoices[Math.floor(Math.random() * melodyChoices.length)] ?? 1;
+      this.connectionSoundMelodyIndex = Math.max(0, melodyNumber - 1);
+      this.connectionSoundNoteIndex = 0;
+      this.connectionSoundArrangementIndex = (
+        this.connectionSoundArrangementIndex + 1
+      ) % this.connectionSoundArrangement.length;
+    }
+    const melody = this.connectionSoundMelodies[this.connectionSoundMelodyIndex]
+      ?? this.connectionSoundMelodies[0]
+      ?? [[1]];
+    const choices = melody[this.connectionSoundNoteIndex] ?? [1];
+    const level = choices[Math.floor(Math.random() * choices.length)] ?? 1;
+    this.connectionSoundNoteIndex += 1;
+    if (this.connectionSoundNoteIndex >= melody.length) this.connectionSoundMelodyIndex = undefined;
+    this.playSound(`${this.comboSoundSet}-${level}`);
+  }
+
+  private resetConnectionSoundComposition(): void {
+    this.connectionSoundArrangementIndex = 0;
+    this.connectionSoundMelodyIndex = undefined;
+    this.connectionSoundNoteIndex = 0;
   }
 
   private disableViewInput(view: BoardView): void {

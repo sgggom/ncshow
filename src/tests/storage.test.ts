@@ -168,6 +168,53 @@ describe('game settings migration', () => {
     }
   });
 
+  it('loads a valid combo sound set and falls back from an invalid one', () => {
+    const getItem = vi.fn()
+      .mockReturnValueOnce(JSON.stringify({ comboSoundSet: 'combo2' }))
+      .mockReturnValueOnce(JSON.stringify({ comboSoundSet: 'missing' }));
+    vi.stubGlobal('window', { localStorage: { getItem } });
+
+    try {
+      expect(loadSettings().comboSoundSet).toBe('combo2');
+      expect(loadSettings().comboSoundSet).toBe(DEFAULT_SETTINGS.comboSoundSet);
+    } finally {
+      vi.unstubAllGlobals();
+    }
+  });
+
+  it('loads a valid connection sound pattern and rejects invalid notes', () => {
+    const getItem = vi.fn()
+      .mockReturnValueOnce(JSON.stringify({ comboSoundPattern: '13587642' }))
+      .mockReturnValueOnce(JSON.stringify({ comboSoundPattern: '1290' }));
+    vi.stubGlobal('window', { localStorage: { getItem } });
+
+    try {
+      expect(loadSettings().comboSoundPattern).toBe('13587642');
+      expect(loadSettings().comboSoundPattern).toBe(DEFAULT_SETTINGS.comboSoundPattern);
+    } finally {
+      vi.unstubAllGlobals();
+    }
+  });
+
+  it('loads a connection sound pattern list and its active entry', () => {
+    const getItem = vi.fn(() => JSON.stringify({
+      comboSoundPatterns: ['12', '876', '90'],
+      comboSoundPatternIndex: 1,
+      comboSoundArrangement: '1,[1,2],2',
+    }));
+    vi.stubGlobal('window', { localStorage: { getItem } });
+
+    try {
+      const settings = loadSettings();
+      expect(settings.comboSoundPatterns).toEqual(['12', '876']);
+      expect(settings.comboSoundPatternIndex).toBe(1);
+      expect(settings.comboSoundPattern).toBe('876');
+      expect(settings.comboSoundArrangement).toBe('1,[1,2],2');
+    } finally {
+      vi.unstubAllGlobals();
+    }
+  });
+
   it('keeps the five main gameplay selections and level progress independent', () => {
     const getItem = vi.fn(() => JSON.stringify({
       mainGameplay: 'mode5',

@@ -49,7 +49,6 @@ describe('migrated product scope', () => {
   it('includes the puzzle finale result summary', () => {
     expect(indexMarkup).toContain('class="play-puzzle-finale__mask"');
     expect(indexMarkup).toContain('id="play-puzzle-finale-time"');
-    expect(indexMarkup).toContain('id="play-puzzle-finale-mistakes"');
-    expect(indexMarkup).toContain('id="play-puzzle-finale-level"');
+    expect(indexMarkup).toContain('id="play-puzzle-finale-reward-progress"');
   });
 });

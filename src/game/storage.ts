@@ -1,6 +1,9 @@
 import {
   BoardShape,
   DEFAULT_SETTINGS,
+  isComboSoundPattern,
+  isComboSoundArrangement,
+  isComboSoundSet,
   isInputMode,
   isLobbyTheme,
   isMainGameplay,
@@ -71,10 +74,32 @@ export const loadSettings = (): GameSettings => {
     const mode5MainLevelId = Number.isInteger(stored.mode5MainLevelId) && Number(stored.mode5MainLevelId) > 0
       ? Number(stored.mode5MainLevelId)
       : legacyLevelId;
+    const storedComboPatterns = Array.isArray(stored.comboSoundPatterns)
+      ? stored.comboSoundPatterns.filter(isComboSoundPattern).slice(0, 32)
+      : [];
+    const legacyComboPattern = isComboSoundPattern(stored.comboSoundPattern)
+      ? stored.comboSoundPattern
+      : DEFAULT_SETTINGS.comboSoundPattern;
+    const comboSoundPatterns = storedComboPatterns.length > 0
+      ? storedComboPatterns
+      : [legacyComboPattern];
+    const comboSoundPatternIndex = Number.isInteger(stored.comboSoundPatternIndex)
+      ? Math.max(0, Math.min(comboSoundPatterns.length - 1, Number(stored.comboSoundPatternIndex)))
+      : Math.max(0, comboSoundPatterns.indexOf(legacyComboPattern));
+    const comboSoundArrangement = isComboSoundArrangement(stored.comboSoundArrangement, comboSoundPatterns.length)
+      ? stored.comboSoundArrangement
+      : DEFAULT_SETTINGS.comboSoundArrangement;
     return {
       ...DEFAULT_SETTINGS,
       ...currentSettings,
       inputMode,
+      comboSoundSet: isComboSoundSet(stored.comboSoundSet)
+        ? stored.comboSoundSet
+        : DEFAULT_SETTINGS.comboSoundSet,
+      comboSoundPattern: comboSoundPatterns[comboSoundPatternIndex],
+      comboSoundPatterns,
+      comboSoundPatternIndex,
+      comboSoundArrangement,
       mainGameplay,
       mainGameplayDifficulty,
       lobbyTheme: isLobbyTheme(stored.lobbyTheme) ? stored.lobbyTheme : DEFAULT_SETTINGS.lobbyTheme,
