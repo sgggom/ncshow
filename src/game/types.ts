@@ -55,14 +55,14 @@ export const parseComboSoundPattern = (value: unknown): ComboSoundPatternToken[]
       const closeIndex = normalized.indexOf(']', index + 1);
       if (closeIndex < 0) return undefined;
       const choices = normalized.slice(index + 1, closeIndex);
-      if (!/^[1-8](,[1-8])*$/.test(choices)) return undefined;
+      if (!/^(?:1[01]|[1-9])(?:,(?:1[01]|[1-9]))*$/.test(choices)) return undefined;
       tokens.push(choices.split(',').map(Number));
       index = closeIndex + 1;
     } else {
-      const note = normalized[index];
-      if (!/^[1-8]$/.test(note)) return undefined;
-      tokens.push([Number(note)]);
-      index += 1;
+      const match = normalized.slice(index).match(/^(?:1[01]|[1-9])/);
+      if (!match) return undefined;
+      tokens.push([Number(match[0])]);
+      index += match[0].length;
     }
     if (index === normalized.length) break;
     if (normalized[index] !== ',' || index === normalized.length - 1) return undefined;

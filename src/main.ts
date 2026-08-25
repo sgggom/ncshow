@@ -178,10 +178,11 @@ const SOUND_DEBUG_COMBO_SETS: ReadonlyArray<{
   label: string;
   badge: string;
   filePrefix: string;
+  noteCount: number;
   tone: string;
 }> = [
-  { id: 'combo1', label: 'Combo 1', badge: 'Original', filePrefix: 'combo_', tone: 'blue' },
-  { id: 'combo2', label: 'Combo 2', badge: 'New', filePrefix: 'combo2_', tone: 'purple' },
+  { id: 'combo1', label: 'Combo 1', badge: 'Original', filePrefix: 'combo_', noteCount: 8, tone: 'blue' },
+  { id: 'combo2', label: 'Combo 2', badge: 'New', filePrefix: 'combo2_', noteCount: 11, tone: 'purple' },
 ] as const;
 
 const loadCollectionCompletedCount = (): number => {
@@ -1862,7 +1863,7 @@ class NumberConnectApp {
   }
 
   private updateSoundDebugPattern(index: number, input: HTMLInputElement): void {
-    const sanitized = normalizeComboSoundCommas(input.value).replace(/[^1-8,[\]]/g, '').slice(0, 64);
+    const sanitized = normalizeComboSoundCommas(input.value).replace(/[^0-9,[\]]/g, '').slice(0, 64);
     if (input.value !== sanitized) input.value = sanitized;
     if (!isComboSoundPattern(sanitized)) {
       input.setAttribute('aria-invalid', 'true');
@@ -2066,6 +2067,7 @@ class NumberConnectApp {
     this.soundDebugComboGroup.querySelectorAll<HTMLButtonElement>('[data-debug-combo-step]').forEach((button) => {
       const step = button.dataset.debugComboStep;
       button.dataset.debugSound = `${selected.filePrefix}${step}.mp3`;
+      button.hidden = Number(step) > selected.noteCount;
     });
   }
 

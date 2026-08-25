@@ -16,6 +16,7 @@ describe('connection sound composition syntax', () => {
   it('parses fixed notes and random-choice groups as sequence tokens', () => {
     expect(parseComboSoundPattern('1,[2,3,4],5,8')).toEqual([[1], [2, 3, 4], [5], [8]]);
     expect(parseComboSoundPattern('[1,2,3]')).toEqual([[1, 2, 3]]);
+    expect(parseComboSoundPattern('9,10,[10,11]')).toEqual([[9], [10], [10, 11]]);
     expect(parseComboSoundPattern('1，[2，3]，8')).toEqual([[1], [2, 3], [8]]);
   });
 
@@ -33,7 +34,8 @@ describe('connection sound composition syntax', () => {
     expect(isComboSoundPattern('1,[],2')).toBe(false);
     expect(isComboSoundPattern('1,[2,3')).toBe(false);
     expect(isComboSoundPattern('1,[[2,3]]')).toBe(false);
-    expect(isComboSoundPattern('1,[2,9]')).toBe(false);
+    expect(isComboSoundPattern('1,[2,9]')).toBe(true);
+    expect(isComboSoundPattern('1,[9,12]')).toBe(false);
   });
 
   it('resolves either bracket to the complete random-choice group', () => {

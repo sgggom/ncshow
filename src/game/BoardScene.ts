@@ -311,6 +311,8 @@ export class BoardScene extends Phaser.Scene {
   public preload(): void {
     for (let index = 1; index <= 8; index += 1) {
       this.load.audio(`combo1-${index}`, `./audio/combo_${index}.mp3`);
+    }
+    for (let index = 1; index <= 11; index += 1) {
       this.load.audio(`combo2-${index}`, `./audio/combo2_${index}.mp3`);
     }
     this.load.audio('wrong', './audio/wrong_move.mp3');
@@ -2847,7 +2849,9 @@ export class BoardScene extends Phaser.Scene {
       ?? this.connectionSoundMelodies[0]
       ?? [[1]];
     const choices = melody[this.connectionSoundNoteIndex] ?? [1];
-    const level = choices[Math.floor(Math.random() * choices.length)] ?? 1;
+    const maxLevel = this.comboSoundSet === 'combo2' ? 11 : 8;
+    const availableChoices = choices.filter((level) => level <= maxLevel);
+    const level = availableChoices[Math.floor(Math.random() * availableChoices.length)] ?? 1;
     this.connectionSoundNoteIndex += 1;
     if (this.connectionSoundNoteIndex >= melody.length) this.connectionSoundMelodyIndex = undefined;
     this.playSound(`${this.comboSoundSet}-${level}`);
