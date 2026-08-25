@@ -1,10 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import {
   comboSoundBracketGroupRange,
+  encodeComboSoundCompositionConfig,
   isComboSoundArrangement,
   isComboSoundPattern,
   normalizeComboSoundPattern,
   parseComboSoundArrangement,
+  parseComboSoundCompositionConfig,
   parseComboSoundPattern,
   remapComboSoundArrangementAfterRemoval,
 } from '../game/types';
@@ -55,5 +57,43 @@ describe('connection sound arrangement syntax', () => {
   it('removes deleted melodies and renumbers later melody references', () => {
     expect(remapComboSoundArrangementAfterRemoval('1,2,[3,4],12', 2)).toBe('1,[2,3],11');
     expect(remapComboSoundArrangementAfterRemoval('[2],1', 2)).toBe('1');
+  });
+});
+
+describe('connection sound composition clipboard config', () => {
+  it('round-trips the suite and every melody with versioned JSON', () => {
+    const encoded = encodeComboSoundCompositionConfig(
+      ['1,2,3', '8,[6,7],5'],
+      '1,[1,2],2',
+    );
+    expect(parseComboSoundCompositionConfig(encoded)).toEqual({
+      arrangement: '1,[1,2],2',
+      patterns: ['1,2,3', '8,[6,7],5'],
+    });
+  });
+
+  it('normalizes Chinese commas and legacy melody syntax while importing', () => {
+    expect(parseComboSoundCompositionConfig(JSON.stringify({
+      type: 'number-connect-sound-composition',
+      version: 1,
+      arrangement: '1，2',
+      melodies: ['123', '8[67]5'],
+    }))).toEqual({
+      arrangement: '1,2',
+      patterns: ['1,2,3', '8,[6,7],5'],
+    });
+  });
+
+  it('rejects unrelated, malformed, or out-of-range clipboard data', () => {
+    expect(parseComboSoundCompositionConfig('not json')).toBeUndefined();
+    expect(parseComboSoundCompositionConfig(JSON.stringify({
+      type: 'other', version: 1, arrangement: '1', melodies: ['1,2'],
+    }))).toBeUndefined();
+    expect(parseComboSoundCompositionConfig(JSON.stringify({
+      type: 'number-connect-sound-composition', version: 2, arrangement: '1', melodies: ['1,2'],
+    }))).toBeUndefined();
+    expect(parseComboSoundCompositionConfig(JSON.stringify({
+      type: 'number-connect-sound-composition', version: 1, arrangement: '2', melodies: ['1,2'],
+    }))).toBeUndefined();
   });
 });

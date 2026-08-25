@@ -2702,6 +2702,14 @@ input[type="range"] { width: 100%; accent-color: var(--green); }
 .sound-debug-arrangement input { width: 100%; min-width: 0; height: 34px; padding: 0 9px; border: 1px solid rgba(118,80,184,.14); border-radius: 9px; color: #62439b; background: #fff; font-size: .72rem; font-weight: 850; letter-spacing: .04em; }
 .sound-debug-arrangement input[aria-invalid="true"] { border-color: #d94f62; box-shadow: inset 0 0 0 1px #d94f62; }
 .sound-debug-arrangement button { width: 44px; height: 34px; display: grid; place-items: center; border-radius: 9px; color: #7650b8; background: #eadff6; font-size: .62rem; font-weight: 900; }
+.sound-debug-config-actions { display: grid; gap: 5px; }
+.sound-debug-config-actions > div { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.sound-debug-config-actions button { min-height: 32px; border: 1px solid rgba(57,121,184,.12); border-radius: 9px; color: #3979b8; background: #eaf3fb; font-size: .62rem; font-weight: 900; }
+.sound-debug-config-actions button:last-child { color: #7650b8; border-color: rgba(118,80,184,.12); background: #f0e9f9; }
+.sound-debug-config-actions button:disabled { opacity: .5; cursor: wait; }
+.sound-debug-config-actions > small { min-height: 14px; color: var(--muted); font-size: .55rem; font-weight: 750; }
+.sound-debug-config-actions > small[data-tone="success"] { color: #2f987b; }
+.sound-debug-config-actions > small[data-tone="error"] { color: #c44f60; }
 .sound-debug-pattern-list { max-height: 230px; padding-right: 4px; display: grid; gap: 7px; overflow-y: auto; overscroll-behavior: contain; scrollbar-gutter: stable; }
 .sound-debug-pattern-row { min-height: 44px; padding: 4px; display: grid; grid-template-columns: 34px minmax(0, 1fr) 32px 44px; gap: 5px; align-items: center; border: 1px solid rgba(74,101,130,.12); border-radius: 13px; background: #f3f6f9; transition: border-color .16s ease, background-color .16s ease, box-shadow .16s ease; }
 .sound-debug-pattern-row.is-active { border-color: rgba(57,121,184,.35); background: #edf5fc; box-shadow: 0 0 0 2px rgba(57,121,184,.08); }

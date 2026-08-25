@@ -34,9 +34,11 @@ import {
   BoardShape,
   cellKey,
   comboSoundBracketGroupRange,
+  encodeComboSoundCompositionConfig,
   isComboSoundArrangement,
   isComboSoundPattern,
   isLobbyTheme,
+  parseComboSoundCompositionConfig,
   isTouchPreviewSize,
   remapComboSoundArrangementAfterRemoval,
   usesClickInput,
@@ -434,6 +436,9 @@ class NumberConnectApp {
   private readonly soundDebugPatternAdd = query<HTMLButtonElement>('#sound-debug-pattern-add');
   private readonly soundDebugArrangement = query<HTMLInputElement>('#sound-debug-arrangement');
   private readonly soundDebugArrangementBrackets = query<HTMLButtonElement>('#sound-debug-arrangement-brackets');
+  private readonly soundDebugConfigExport = query<HTMLButtonElement>('#sound-debug-config-export');
+  private readonly soundDebugConfigImport = query<HTMLButtonElement>('#sound-debug-config-import');
+  private readonly soundDebugConfigStatus = query<HTMLElement>('#sound-debug-config-status');
   private readonly ratingDialog = query<HTMLDialogElement>('#rating-dialog');
   private readonly ratingSubmitButton = query<HTMLButtonElement>('#rating-submit-button');
   private readonly videoStatsDialog = query<HTMLDialogElement>('#video-stats-dialog');
@@ -1705,6 +1710,8 @@ class NumberConnectApp {
     });
     this.soundDebugArrangementBrackets.addEventListener('pointerdown', (event) => event.preventDefault());
     this.soundDebugArrangementBrackets.addEventListener('click', () => this.insertSoundDebugArrangementGroup());
+    this.soundDebugConfigExport.addEventListener('click', () => void this.exportSoundDebugConfig());
+    this.soundDebugConfigImport.addEventListener('click', () => void this.importSoundDebugConfig());
     this.soundDebugPanel.querySelectorAll<HTMLButtonElement>('[data-debug-sound]').forEach((button) => {
       button.addEventListener('click', () => this.playSoundDebug(button));
     });
@@ -1964,6 +1971,73 @@ class NumberConnectApp {
     input.value = `${input.value.slice(0, deleteStart)}${input.value.slice(deleteEnd)}`;
     this.updateSoundDebugArrangement();
     input.setSelectionRange(deleteStart, deleteStart);
+  }
+
+  private setSoundDebugConfigStatus(message: string, tone: 'normal' | 'success' | 'error' = 'normal'): void {
+    this.soundDebugConfigStatus.textContent = message;
+    this.soundDebugConfigStatus.dataset.tone = tone;
+  }
+
+  private async writeSoundDebugConfigToClipboard(value: string): Promise<void> {
+    if (navigator.clipboard?.writeText) {
+      try {
+        await navigator.clipboard.writeText(value);
+        return;
+      } catch {
+        // Fall through to the selection-based copy path.
+      }
+    }
+    const textarea = document.createElement('textarea');
+    textarea.value = value;
+    textarea.setAttribute('readonly', '');
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    document.body.append(textarea);
+    textarea.select();
+    const copied = document.execCommand('copy');
+    textarea.remove();
+    if (!copied) throw new Error('copy-failed');
+  }
+
+  private async exportSoundDebugConfig(): Promise<void> {
+    const value = encodeComboSoundCompositionConfig(
+      this.settings.comboSoundPatterns,
+      this.settings.comboSoundArrangement,
+    );
+    this.soundDebugConfigExport.disabled = true;
+    try {
+      await this.writeSoundDebugConfigToClipboard(value);
+      this.setSoundDebugConfigStatus(`已导出 ${this.settings.comboSoundPatterns.length} 条旋律到剪贴板`, 'success');
+    } catch {
+      this.setSoundDebugConfigStatus('导出失败：浏览器未允许写入剪贴板', 'error');
+    } finally {
+      this.soundDebugConfigExport.disabled = false;
+    }
+  }
+
+  private async importSoundDebugConfig(): Promise<void> {
+    this.soundDebugConfigImport.disabled = true;
+    this.setSoundDebugConfigStatus('正在读取剪贴板…');
+    try {
+      if (!navigator.clipboard?.readText) throw new Error('clipboard-unavailable');
+      const config = parseComboSoundCompositionConfig(await navigator.clipboard.readText());
+      if (!config) throw new Error('invalid-config');
+      this.settings.comboSoundPatterns = [...config.patterns];
+      this.settings.comboSoundPatternIndex = Math.min(
+        this.settings.comboSoundPatternIndex,
+        this.settings.comboSoundPatterns.length - 1,
+      );
+      this.settings.comboSoundArrangement = config.arrangement;
+      this.soundDebugArrangement.value = config.arrangement;
+      this.soundDebugArrangement.removeAttribute('aria-invalid');
+      this.syncActiveSoundDebugPattern();
+      this.renderSoundDebugPatterns();
+      this.setSoundDebugConfigStatus(`已读取 ${config.patterns.length} 条旋律，游戏内已生效`, 'success');
+    } catch {
+      this.setSoundDebugConfigStatus('读取失败：剪贴板内容不是有效的组曲配置', 'error');
+    } finally {
+      this.soundDebugConfigImport.disabled = false;
+    }
   }
 
   private renderSoundDebugComboSet(): void {

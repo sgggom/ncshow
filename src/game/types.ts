@@ -146,6 +146,49 @@ export const isComboSoundArrangement = (value: unknown, melodyCount: number): va
   ));
 };
 
+export interface ComboSoundCompositionConfig {
+  arrangement: string;
+  patterns: string[];
+}
+
+export const encodeComboSoundCompositionConfig = (
+  patterns: readonly string[],
+  arrangement: string,
+): string => JSON.stringify({
+  type: 'number-connect-sound-composition',
+  version: 1,
+  arrangement,
+  melodies: patterns,
+}, null, 2);
+
+export const parseComboSoundCompositionConfig = (
+  value: unknown,
+): ComboSoundCompositionConfig | undefined => {
+  if (typeof value !== 'string' || value.length === 0 || value.length > 8192) return undefined;
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(value);
+  } catch {
+    return undefined;
+  }
+  if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return undefined;
+  const record = parsed as Record<string, unknown>;
+  if (record.type !== 'number-connect-sound-composition' || record.version !== 1) return undefined;
+  if (!Array.isArray(record.melodies) || record.melodies.length === 0 || record.melodies.length > 32) {
+    return undefined;
+  }
+  const patterns = record.melodies.flatMap((pattern) => {
+    const normalized = normalizeComboSoundPattern(pattern);
+    return normalized ? [normalized] : [];
+  });
+  if (patterns.length !== record.melodies.length || typeof record.arrangement !== 'string') {
+    return undefined;
+  }
+  const arrangement = record.arrangement.replace(/，/g, ',');
+  if (!isComboSoundArrangement(arrangement, patterns.length)) return undefined;
+  return { arrangement, patterns };
+};
+
 export const remapComboSoundArrangementAfterRemoval = (
   value: string,
   removedMelodyNumber: number,
