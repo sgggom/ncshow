@@ -4,6 +4,7 @@ import {
   encodeComboSoundCompositionConfig,
   isComboSoundArrangement,
   isComboSoundPattern,
+  normalizeComboSoundCommas,
   normalizeComboSoundPattern,
   parseComboSoundArrangement,
   parseComboSoundCompositionConfig,
@@ -20,6 +21,9 @@ describe('connection sound composition syntax', () => {
 
   it('normalizes Chinese commas and migrates compact legacy patterns', () => {
     expect(normalizeComboSoundPattern('1，[2，3]，8')).toBe('1,[2,3],8');
+    expect(normalizeComboSoundCommas('1，，2')).toBe('1,2');
+    expect(normalizeComboSoundCommas('1，,2')).toBe('1,2');
+    expect(parseComboSoundPattern('1，，[2，3]')).toEqual([[1], [2, 3]]);
     expect(normalizeComboSoundPattern('1[234]58')).toBe('1,[2,3,4],5,8');
   });
 
@@ -47,7 +51,7 @@ describe('connection sound arrangement syntax', () => {
 
   it('rejects malformed separators, groups, and melody numbers', () => {
     expect(parseComboSoundArrangement('1 2')).toBeUndefined();
-    expect(parseComboSoundArrangement('1,,2')).toBeUndefined();
+    expect(parseComboSoundArrangement('1,,2')).toEqual([[1], [2]]);
     expect(parseComboSoundArrangement('[1,]')).toBeUndefined();
     expect(parseComboSoundArrangement('0,1')).toBeUndefined();
     expect(parseComboSoundArrangement('1,[2,3')).toBeUndefined();

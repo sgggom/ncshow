@@ -38,6 +38,7 @@ import {
   isComboSoundArrangement,
   isComboSoundPattern,
   isLobbyTheme,
+  normalizeComboSoundCommas,
   parseComboSoundCompositionConfig,
   isTouchPreviewSize,
   remapComboSoundArrangementAfterRemoval,
@@ -1698,7 +1699,13 @@ class NumberConnectApp {
       this.renderSoundDebugComboSet();
     });
     this.soundDebugPatternAdd.addEventListener('click', () => this.addSoundDebugPattern());
-    this.soundDebugArrangement.addEventListener('input', () => this.updateSoundDebugArrangement());
+    this.soundDebugArrangement.addEventListener('input', (event) => {
+      if ((event as InputEvent).isComposing) return;
+      this.updateSoundDebugArrangement();
+    });
+    this.soundDebugArrangement.addEventListener('compositionend', () => {
+      this.updateSoundDebugArrangement();
+    });
     this.soundDebugArrangement.addEventListener('keydown', (event) => {
       this.handleSoundDebugArrangementDelete(event);
     });
@@ -1780,7 +1787,13 @@ class NumberConnectApp {
       input.setAttribute('aria-label', `旋律 ${index + 1}`);
       input.addEventListener('focus', () => this.selectSoundDebugPattern(index, false));
       input.addEventListener('keydown', (event) => this.handleSoundDebugPatternDelete(index, input, event));
-      input.addEventListener('input', () => this.updateSoundDebugPattern(index, input));
+      input.addEventListener('input', (event) => {
+        if ((event as InputEvent).isComposing) return;
+        this.updateSoundDebugPattern(index, input);
+      });
+      input.addEventListener('compositionend', () => {
+        this.updateSoundDebugPattern(index, input);
+      });
       input.addEventListener('blur', () => {
         if (!isComboSoundPattern(input.value)) {
           input.value = this.settings.comboSoundPatterns[index] ?? '1,2,3,4,5,6,7,8';
@@ -1849,7 +1862,7 @@ class NumberConnectApp {
   }
 
   private updateSoundDebugPattern(index: number, input: HTMLInputElement): void {
-    const sanitized = input.value.replace(/，/g, ',').replace(/[^1-8,[\]]/g, '').slice(0, 64);
+    const sanitized = normalizeComboSoundCommas(input.value).replace(/[^1-8,[\]]/g, '').slice(0, 64);
     if (input.value !== sanitized) input.value = sanitized;
     if (!isComboSoundPattern(sanitized)) {
       input.setAttribute('aria-invalid', 'true');
@@ -1923,7 +1936,9 @@ class NumberConnectApp {
   }
 
   private updateSoundDebugArrangement(): void {
-    const sanitized = this.soundDebugArrangement.value.replace(/，/g, ',').replace(/[^0-9,[\]]/g, '').slice(0, 128);
+    const sanitized = normalizeComboSoundCommas(this.soundDebugArrangement.value)
+      .replace(/[^0-9,[\]]/g, '')
+      .slice(0, 128);
     if (this.soundDebugArrangement.value !== sanitized) this.soundDebugArrangement.value = sanitized;
     if (!isComboSoundArrangement(sanitized, this.settings.comboSoundPatterns.length)) {
       this.soundDebugArrangement.setAttribute('aria-invalid', 'true');

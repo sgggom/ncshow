@@ -42,9 +42,13 @@ export const isComboSoundSet = (value: unknown): value is ComboSoundSet => (
 
 export type ComboSoundPatternToken = readonly number[];
 
+export const normalizeComboSoundCommas = (value: string): string => (
+  value.replace(/[，,]+/g, ',')
+);
+
 export const parseComboSoundPattern = (value: unknown): ComboSoundPatternToken[] | undefined => {
   if (typeof value !== 'string' || value.length === 0 || value.length > 64) return undefined;
-  const normalized = value.replace(/，/g, ',');
+  const normalized = normalizeComboSoundCommas(value);
   const tokens: ComboSoundPatternToken[] = [];
   for (let index = 0; index < normalized.length;) {
     if (normalized[index] === '[') {
@@ -69,7 +73,7 @@ export const parseComboSoundPattern = (value: unknown): ComboSoundPatternToken[]
 
 export const normalizeComboSoundPattern = (value: unknown): string | undefined => {
   if (typeof value !== 'string' || value.length === 0 || value.length > 64) return undefined;
-  const normalizedCommas = value.replace(/，/g, ',');
+  const normalizedCommas = normalizeComboSoundCommas(value);
   const parsed = parseComboSoundPattern(normalizedCommas);
   if (parsed) return parsed.map((choices) => (
     choices.length === 1 ? String(choices[0]) : `[${choices.join(',')}]`
@@ -117,23 +121,24 @@ export const comboSoundBracketGroupRange = (
 
 export const parseComboSoundArrangement = (value: unknown): ComboSoundPatternToken[] | undefined => {
   if (typeof value !== 'string' || value.length === 0 || value.length > 128) return undefined;
+  const normalized = normalizeComboSoundCommas(value);
   const tokens: ComboSoundPatternToken[] = [];
-  for (let index = 0; index < value.length;) {
-    if (value[index] === '[') {
-      const closeIndex = value.indexOf(']', index + 1);
+  for (let index = 0; index < normalized.length;) {
+    if (normalized[index] === '[') {
+      const closeIndex = normalized.indexOf(']', index + 1);
       if (closeIndex < 0) return undefined;
-      const choices = value.slice(index + 1, closeIndex);
+      const choices = normalized.slice(index + 1, closeIndex);
       if (!/^[1-9]\d*(,[1-9]\d*)*$/.test(choices)) return undefined;
       tokens.push(choices.split(',').map(Number));
       index = closeIndex + 1;
     } else {
-      const match = value.slice(index).match(/^[1-9]\d*/);
+      const match = normalized.slice(index).match(/^[1-9]\d*/);
       if (!match) return undefined;
       tokens.push([Number(match[0])]);
       index += match[0].length;
     }
-    if (index === value.length) break;
-    if (value[index] !== ',' || index === value.length - 1) return undefined;
+    if (index === normalized.length) break;
+    if (normalized[index] !== ',' || index === normalized.length - 1) return undefined;
     index += 1;
   }
   return tokens.length > 0 ? tokens : undefined;
@@ -184,7 +189,7 @@ export const parseComboSoundCompositionConfig = (
   if (patterns.length !== record.melodies.length || typeof record.arrangement !== 'string') {
     return undefined;
   }
-  const arrangement = record.arrangement.replace(/，/g, ',');
+  const arrangement = normalizeComboSoundCommas(record.arrangement);
   if (!isComboSoundArrangement(arrangement, patterns.length)) return undefined;
   return { arrangement, patterns };
 };
