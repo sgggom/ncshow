@@ -1776,7 +1776,7 @@ class NumberConnectApp {
       input.addEventListener('input', () => this.updateSoundDebugPattern(index, input));
       input.addEventListener('blur', () => {
         if (!isComboSoundPattern(input.value)) {
-          input.value = this.settings.comboSoundPatterns[index] ?? '12345678';
+          input.value = this.settings.comboSoundPatterns[index] ?? '1,2,3,4,5,6,7,8';
           input.removeAttribute('aria-invalid');
         }
       });
@@ -1805,7 +1805,7 @@ class NumberConnectApp {
 
   private addSoundDebugPattern(): void {
     if (this.settings.comboSoundPatterns.length >= 32) return;
-    this.settings.comboSoundPatterns.push('12345678');
+    this.settings.comboSoundPatterns.push('1,2,3,4,5,6,7,8');
     this.settings.comboSoundPatternIndex = this.settings.comboSoundPatterns.length - 1;
     this.syncActiveSoundDebugPattern();
     this.renderSoundDebugPatterns();
@@ -1842,7 +1842,7 @@ class NumberConnectApp {
   }
 
   private updateSoundDebugPattern(index: number, input: HTMLInputElement): void {
-    const sanitized = input.value.replace(/[^1-8[\]]/g, '').slice(0, 64);
+    const sanitized = input.value.replace(/，/g, ',').replace(/[^1-8,[\]]/g, '').slice(0, 64);
     if (input.value !== sanitized) input.value = sanitized;
     if (!isComboSoundPattern(sanitized)) {
       input.setAttribute('aria-invalid', 'true');
@@ -1856,12 +1856,16 @@ class NumberConnectApp {
   private insertSoundDebugRandomGroup(index: number, input: HTMLInputElement): void {
     const selectionStart = input.selectionStart ?? input.value.length;
     const selectionEnd = input.selectionEnd ?? selectionStart;
-    const nextValue = `${input.value.slice(0, selectionStart)}[]${input.value.slice(selectionEnd)}`;
+    const prefix = selectionStart > 0 && input.value[selectionStart - 1] !== ',' ? ',' : '';
+    const suffix = selectionEnd < input.value.length && input.value[selectionEnd] !== ',' ? ',' : '';
+    const insertion = `${prefix}[]${suffix}`;
+    const nextValue = `${input.value.slice(0, selectionStart)}${insertion}${input.value.slice(selectionEnd)}`;
     if (nextValue.length > input.maxLength) return;
     input.value = nextValue;
     this.updateSoundDebugPattern(index, input);
     input.focus();
-    input.setSelectionRange(selectionStart + 1, selectionStart + 1);
+    const caret = selectionStart + prefix.length + 1;
+    input.setSelectionRange(caret, caret);
   }
 
   private handleSoundDebugPatternDelete(
@@ -1894,13 +1898,15 @@ class NumberConnectApp {
     }
 
     event.preventDefault();
+    if (input.value[deleteEnd] === ',') deleteEnd += 1;
+    else if (deleteStart > 0 && input.value[deleteStart - 1] === ',') deleteStart -= 1;
     input.value = `${input.value.slice(0, deleteStart)}${input.value.slice(deleteEnd)}`;
     this.updateSoundDebugPattern(index, input);
     input.setSelectionRange(deleteStart, deleteStart);
   }
 
   private syncActiveSoundDebugPattern(): void {
-    const pattern = this.settings.comboSoundPatterns[this.settings.comboSoundPatternIndex] ?? '12345678';
+    const pattern = this.settings.comboSoundPatterns[this.settings.comboSoundPatternIndex] ?? '1,2,3,4,5,6,7,8';
     this.settings.comboSoundPattern = pattern;
     saveSettings(this.settings);
     this.boardScene.setConnectionSoundComposition(
@@ -1910,7 +1916,7 @@ class NumberConnectApp {
   }
 
   private updateSoundDebugArrangement(): void {
-    const sanitized = this.soundDebugArrangement.value.replace(/[^0-9,[\]]/g, '').slice(0, 128);
+    const sanitized = this.soundDebugArrangement.value.replace(/，/g, ',').replace(/[^0-9,[\]]/g, '').slice(0, 128);
     if (this.soundDebugArrangement.value !== sanitized) this.soundDebugArrangement.value = sanitized;
     if (!isComboSoundArrangement(sanitized, this.settings.comboSoundPatterns.length)) {
       this.soundDebugArrangement.setAttribute('aria-invalid', 'true');
@@ -3082,6 +3088,7 @@ class NumberConnectApp {
 
   private handleLifeDepleted(): void {
     if (this.isAdaptiveGameplaySession()) this.currentAdaptiveLifeDepleted = true;
+    this.boardScene.playFailureSound();
     this.cancelPowerUpTargeting();
     this.renderPowerUps();
     this.boardScene.setPaused(true);

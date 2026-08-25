@@ -281,6 +281,15 @@ export class BoardScene extends Phaser.Scene {
     this.comboSoundSet = set;
   }
 
+  public playFailureSound(): void {
+    try {
+      this.sound.stopByKey('wrong');
+    } catch {
+      // The sound manager may not be ready while the browser is unlocking audio.
+    }
+    this.playSound('failure');
+  }
+
   public setConnectionSoundComposition(patterns: readonly string[], arrangement: string): void {
     const melodies = patterns.flatMap((pattern) => {
       const parsed = parseComboSoundPattern(pattern);
@@ -306,6 +315,7 @@ export class BoardScene extends Phaser.Scene {
     }
     this.load.audio('wrong', './audio/wrong_move.mp3');
     this.load.audio('victory', './audio/victory_bgm.mp3');
+    this.load.audio('failure', './audio/failure.mp3');
     this.load.image('board-number-fill-slice', './ui/number-connect-slices/set-2/shuzi_di.png');
     this.load.image('bead-gem', './ui/beads/bead-gem.png');
     this.load.svg('bead-jar', './ui/beads/open-glass-jar.svg', { width: 512, height: 512 });

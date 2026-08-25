@@ -3,6 +3,7 @@ import {
   comboSoundBracketGroupRange,
   isComboSoundArrangement,
   isComboSoundPattern,
+  normalizeComboSoundPattern,
   parseComboSoundArrangement,
   parseComboSoundPattern,
   remapComboSoundArrangementAfterRemoval,
@@ -10,22 +11,29 @@ import {
 
 describe('connection sound composition syntax', () => {
   it('parses fixed notes and random-choice groups as sequence tokens', () => {
-    expect(parseComboSoundPattern('1[234]58')).toEqual([[1], [2, 3, 4], [5], [8]]);
-    expect(parseComboSoundPattern('[123]')).toEqual([[1, 2, 3]]);
+    expect(parseComboSoundPattern('1,[2,3,4],5,8')).toEqual([[1], [2, 3, 4], [5], [8]]);
+    expect(parseComboSoundPattern('[1,2,3]')).toEqual([[1, 2, 3]]);
+    expect(parseComboSoundPattern('1，[2，3]，8')).toEqual([[1], [2, 3], [8]]);
+  });
+
+  it('normalizes Chinese commas and migrates compact legacy patterns', () => {
+    expect(normalizeComboSoundPattern('1，[2，3]，8')).toBe('1,[2,3],8');
+    expect(normalizeComboSoundPattern('1[234]58')).toBe('1,[2,3,4],5,8');
   });
 
   it('rejects empty, incomplete, nested, and out-of-range groups', () => {
     expect(isComboSoundPattern('')).toBe(false);
-    expect(isComboSoundPattern('1[]2')).toBe(false);
-    expect(isComboSoundPattern('1[23')).toBe(false);
-    expect(isComboSoundPattern('1[[23]]')).toBe(false);
-    expect(isComboSoundPattern('1[29]')).toBe(false);
+    expect(isComboSoundPattern('12')).toBe(false);
+    expect(isComboSoundPattern('1,[],2')).toBe(false);
+    expect(isComboSoundPattern('1,[2,3')).toBe(false);
+    expect(isComboSoundPattern('1,[[2,3]]')).toBe(false);
+    expect(isComboSoundPattern('1,[2,9]')).toBe(false);
   });
 
   it('resolves either bracket to the complete random-choice group', () => {
-    expect(comboSoundBracketGroupRange('1[234]58', 1)).toEqual({ start: 1, end: 6 });
-    expect(comboSoundBracketGroupRange('1[234]58', 5)).toEqual({ start: 1, end: 6 });
-    expect(comboSoundBracketGroupRange('1[234]58', 3)).toBeUndefined();
+    expect(comboSoundBracketGroupRange('1,[2,3,4],5,8', 2)).toEqual({ start: 2, end: 9 });
+    expect(comboSoundBracketGroupRange('1,[2,3,4],5,8', 8)).toEqual({ start: 2, end: 9 });
+    expect(comboSoundBracketGroupRange('1,[2,3,4],5,8', 5)).toBeUndefined();
   });
 });
 

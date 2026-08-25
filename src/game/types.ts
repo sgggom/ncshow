@@ -44,11 +44,42 @@ export type ComboSoundPatternToken = readonly number[];
 
 export const parseComboSoundPattern = (value: unknown): ComboSoundPatternToken[] | undefined => {
   if (typeof value !== 'string' || value.length === 0 || value.length > 64) return undefined;
+  const normalized = value.replace(/，/g, ',');
   const tokens: ComboSoundPatternToken[] = [];
+  for (let index = 0; index < normalized.length;) {
+    if (normalized[index] === '[') {
+      const closeIndex = normalized.indexOf(']', index + 1);
+      if (closeIndex < 0) return undefined;
+      const choices = normalized.slice(index + 1, closeIndex);
+      if (!/^[1-8](,[1-8])*$/.test(choices)) return undefined;
+      tokens.push(choices.split(',').map(Number));
+      index = closeIndex + 1;
+    } else {
+      const note = normalized[index];
+      if (!/^[1-8]$/.test(note)) return undefined;
+      tokens.push([Number(note)]);
+      index += 1;
+    }
+    if (index === normalized.length) break;
+    if (normalized[index] !== ',' || index === normalized.length - 1) return undefined;
+    index += 1;
+  }
+  return tokens.length > 0 ? tokens : undefined;
+};
+
+export const normalizeComboSoundPattern = (value: unknown): string | undefined => {
+  if (typeof value !== 'string' || value.length === 0 || value.length > 64) return undefined;
+  const normalizedCommas = value.replace(/，/g, ',');
+  const parsed = parseComboSoundPattern(normalizedCommas);
+  if (parsed) return parsed.map((choices) => (
+    choices.length === 1 ? String(choices[0]) : `[${choices.join(',')}]`
+  )).join(',');
+
+  const legacyTokens: ComboSoundPatternToken[] = [];
   for (let index = 0; index < value.length;) {
     const character = value[index];
     if (/^[1-8]$/.test(character)) {
-      tokens.push([Number(character)]);
+      legacyTokens.push([Number(character)]);
       index += 1;
       continue;
     }
@@ -56,11 +87,13 @@ export const parseComboSoundPattern = (value: unknown): ComboSoundPatternToken[]
     const closeIndex = value.indexOf(']', index + 1);
     if (closeIndex < 0) return undefined;
     const choices = value.slice(index + 1, closeIndex);
-    if (choices.length === 0 || !/^[1-8]+$/.test(choices)) return undefined;
-    tokens.push([...choices].map(Number));
+    if (!/^[1-8]+$/.test(choices)) return undefined;
+    legacyTokens.push([...choices].map(Number));
     index = closeIndex + 1;
   }
-  return tokens.length > 0 ? tokens : undefined;
+  return legacyTokens.length > 0 ? legacyTokens.map((choices) => (
+    choices.length === 1 ? String(choices[0]) : `[${choices.join(',')}]`
+  )).join(',') : undefined;
 };
 
 export const isComboSoundPattern = (value: unknown): value is string => (
@@ -325,8 +358,8 @@ export const DEFAULT_SETTINGS: GameSettings = {
   showDifficultyScore: false,
   soundEnabled: true,
   comboSoundSet: 'combo1',
-  comboSoundPattern: '12345678',
-  comboSoundPatterns: ['12345678'],
+  comboSoundPattern: '1,2,3,4,5,6,7,8',
+  comboSoundPatterns: ['1,2,3,4,5,6,7,8'],
   comboSoundPatternIndex: 0,
   comboSoundArrangement: '1',
   lobbyTheme: 'cool',

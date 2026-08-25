@@ -1,7 +1,6 @@
 import {
   BoardShape,
   DEFAULT_SETTINGS,
-  isComboSoundPattern,
   isComboSoundArrangement,
   isComboSoundSet,
   isInputMode,
@@ -9,6 +8,7 @@ import {
   isMainGameplay,
   isMainGameplayDifficulty,
   isTouchPreviewSize,
+  normalizeComboSoundPattern,
   type GameSettings,
   type LevelData,
 } from './types';
@@ -75,11 +75,13 @@ export const loadSettings = (): GameSettings => {
       ? Number(stored.mode5MainLevelId)
       : legacyLevelId;
     const storedComboPatterns = Array.isArray(stored.comboSoundPatterns)
-      ? stored.comboSoundPatterns.filter(isComboSoundPattern).slice(0, 32)
+      ? stored.comboSoundPatterns.flatMap((pattern) => {
+        const normalized = normalizeComboSoundPattern(pattern);
+        return normalized ? [normalized] : [];
+      }).slice(0, 32)
       : [];
-    const legacyComboPattern = isComboSoundPattern(stored.comboSoundPattern)
-      ? stored.comboSoundPattern
-      : DEFAULT_SETTINGS.comboSoundPattern;
+    const legacyComboPattern = normalizeComboSoundPattern(stored.comboSoundPattern)
+      ?? DEFAULT_SETTINGS.comboSoundPattern;
     const comboSoundPatterns = storedComboPatterns.length > 0
       ? storedComboPatterns
       : [legacyComboPattern];
