@@ -167,6 +167,18 @@ describe('connection progress', () => {
     });
   });
 
+  it('resolves the immediate next displayed number from the current path order', () => {
+    const progress = new ConnectionProgress(4, [0, 3], [[1, 2]]);
+
+    expect(progress.immediateNextIndex(0)).toBe(1);
+    progress.begin(0);
+    progress.extend(2);
+    expect(progress.displayNumber(2)).toBe(2);
+    expect(progress.immediateNextIndex(0)).toBe(2);
+    expect(progress.immediateNextIndex(2)).toBe(1);
+    expect(progress.immediateNextIndex(3)).toBeUndefined();
+  });
+
   it('rejects an adjacent connection when no complete one-stroke solution remains', () => {
     const cells = [
       { x: 0, y: 0 },

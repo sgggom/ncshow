@@ -60,10 +60,13 @@ interface CellView {
   circle: CellShape;
   hollowRing: CellShape;
   glow: CellShape;
+  glowSecond: CellShape;
+  glowThird: CellShape;
   label: Phaser.GameObjects.Text;
   underline: Phaser.GameObjects.Rectangle;
   questionMark: Phaser.GameObjects.Text;
   questionShown: boolean;
+  questionColorTween?: Phaser.Tweens.Tween;
 }
 
 interface ArtworkColorTileView {
@@ -127,7 +130,6 @@ const COLORS = {
   revealedHiddenText: '#bdd0e7',
   selectedText: '#ffffff',
   hint: 0x6bb6ff,
-  consecutiveHint: 0x57d88b,
   powerUpTarget: 0xf0a23a,
   powerUpReveal: 0x55c7ef,
   wrongRipple: 0xe60012,
@@ -146,8 +148,9 @@ const BOARD_ZOOM_SCALE = 1.5;
 const BOARD_ZOOM_EDGE_INSET = 16;
 const HIDDEN_QUESTION_ALPHA = 0.28;
 const HIDDEN_QUESTION_MIN_SCALE = 0.55;
-const HIDDEN_QUESTION_SHOW_DURATION_MS = 170;
-const HIDDEN_QUESTION_HIDE_DURATION_MS = 120;
+const HIDDEN_QUESTION_FINAL_SCALE = 1.25;
+const HIDDEN_QUESTION_SHOW_DURATION_MS = 360;
+const HIDDEN_QUESTION_HIDE_DURATION_MS = 150;
 const NUMBER_FILL_RADIUS_SCALE = 49 / 64;
 const NUMBER_FILL_DISPLAY_SCALE = 0.95;
 const CONNECTED_NUMBER_BACKDROP_SCALE = 1.2;
@@ -239,7 +242,7 @@ export class BoardScene extends Phaser.Scene {
   private locked = true;
   private transitioning = false;
   private solutionRevealed = false;
-  private hintTween?: Phaser.Tweens.Tween;
+  private hintTweens: Phaser.Tweens.Tween[] = [];
   private hintCell?: CellView;
   private neighborhoodPreviewIndex?: number;
   private pointerLineTarget?: { x: number; y: number };
@@ -1589,6 +1592,14 @@ export class BoardScene extends Phaser.Scene {
         ? this.add.polygon(position.x, position.y, hexagonPoints(glowRadius), COLORS.hint, 0)
         : this.add.circle(position.x, position.y, glowRadius, COLORS.hint, 0);
       glow.setStrokeStyle(CELL_GLOW_STROKE_WIDTH, COLORS.hint, 0);
+      const glowSecond: CellShape = isHex
+        ? this.add.polygon(position.x, position.y, hexagonPoints(glowRadius), COLORS.hint, 0)
+        : this.add.circle(position.x, position.y, glowRadius, COLORS.hint, 0);
+      glowSecond.setStrokeStyle(CELL_GLOW_STROKE_WIDTH, COLORS.hint, 0);
+      const glowThird: CellShape = isHex
+        ? this.add.polygon(position.x, position.y, hexagonPoints(glowRadius), COLORS.hint, 0)
+        : this.add.circle(position.x, position.y, glowRadius, COLORS.hint, 0);
+      glowThird.setStrokeStyle(CELL_GLOW_STROKE_WIDTH, COLORS.hint, 0);
       const slot = this.add.image(
         position.x,
         position.y,
@@ -1669,8 +1680,16 @@ export class BoardScene extends Phaser.Scene {
         .setAlpha(0)
         .setScale(HIDDEN_QUESTION_MIN_SCALE);
       circle.on('pointerdown', (pointer: Phaser.Input.Pointer) => this.handleCellDown(index, pointer));
-      cellUnderlays.push(glow, slot);
-      cellForegrounds.push(liquidRing, circle, hollowRing, numberFill, label, underline, questionMark);
+      cellUnderlays.push(glow, glowSecond, glowThird, slot);
+      cellForegrounds.push(
+        liquidRing,
+        circle,
+        hollowRing,
+        numberFill,
+        label,
+        underline,
+        questionMark,
+      );
       cells.set(cellKey(cell), {
         cell,
         index,
@@ -1683,6 +1702,8 @@ export class BoardScene extends Phaser.Scene {
         circle,
         hollowRing,
         glow,
+        glowSecond,
+        glowThird,
         label,
         underline,
         questionMark,
@@ -1753,15 +1774,19 @@ export class BoardScene extends Phaser.Scene {
     this.drawConnectedBridges();
     if (!this.isDrawing) this.view.pointerLine.clear();
 
-    const clickInput = usesClickInput(this.session.inputMode);
-    const nextHint = this.session.showNextNumber && !clickInput && !selectingCell
-      ? this.connection?.suggestedNextHint()
-      : undefined;
-    const currentClickIndex = clickInput && !selectingCell
+    const currentProgressIndex = !selectingCell
       ? this.connection?.currentClickIndex
       : undefined;
-    const dragQuestionCenter = this.isDrawing && this.connection?.activeIndex !== undefined
-      ? path[this.connection.activeIndex]
+    const selectedIndex = this.isDrawing
+      ? this.connection?.activeIndex ?? currentProgressIndex
+      : currentProgressIndex;
+    const immediateNextIndex = !this.isDrawing || selectedIndex === undefined
+      ? undefined
+      : this.connection?.immediateNextIndex(selectedIndex);
+    const immediateNextVisible = immediateNextIndex !== undefined
+      && (this.solutionRevealed || this.connection?.isVisible(immediateNextIndex) === true);
+    const hiddenNextQuestionCenter = immediateNextIndex !== undefined && !immediateNextVisible
+      ? path[selectedIndex!]
       : undefined;
     const artworkEnabled = this.view.artworkEnabled;
     let activeHintCell: CellView | undefined;
@@ -1774,7 +1799,7 @@ export class BoardScene extends Phaser.Scene {
         && this.session!.hiddenCells.has(key);
       const concealed = this.session!.hiddenCells.has(key) && !numberVisible;
       const showQuestion = shouldShowDragQuestion(
-        dragQuestionCenter,
+        hiddenNextQuestionCenter,
         cellView.cell,
         concealed,
       );
@@ -1842,7 +1867,9 @@ export class BoardScene extends Phaser.Scene {
         .setAlpha(1);
       cellView.label.setStroke('rgba(0,0,0,0)', 0);
       cellView.label.setFontStyle(revealedHidden ? 'italic 900' : '900');
-      cellView.questionMark.setColor(colorHex(cellColor));
+      if (!cellView.questionColorTween?.isPlaying()) {
+        cellView.questionMark.setColor(colorHex(cellColor));
+      }
       if (artworkEnabled) {
         cellView.questionMark.setStroke(
           contrastTextForColor(cellColor),
@@ -1850,24 +1877,36 @@ export class BoardScene extends Phaser.Scene {
         );
       }
       this.setQuestionMarkVisible(cellView, showQuestion && !isWrongCell);
-      const hint = cellView.index === nextHint?.index;
-      const clickCurrent = cellView.index === currentClickIndex;
-      const hintColor = nextHint?.consecutive ? COLORS.consecutiveHint : COLORS.hint;
+      const nextHint = immediateNextVisible && cellView.index === immediateNextIndex;
+      const currentHint = !this.isDrawing && cellView.index === currentProgressIndex;
+      const hint = nextHint || currentHint;
       const glowColor = selectingCell
         ? COLORS.powerUpTarget
-        : clickCurrent
-          ? cellColor
-          : hintColor;
+        : numberFillColor;
       cellView.glow.setFillStyle(
         glowColor,
-        selectingCell ? 0.13 : clickCurrent ? 0.12 : hint ? 0.2 : 0,
+        selectingCell ? 0.13 : 0,
       );
       cellView.glow.setStrokeStyle(
-        CELL_GLOW_STROKE_WIDTH,
+        hint ? CELL_GLOW_STROKE_WIDTH * 1.75 : CELL_GLOW_STROKE_WIDTH,
         glowColor,
-        selectingCell ? 0.72 : clickCurrent ? 0.92 : hint ? 0.9 : 0,
+        selectingCell ? 0.72 : hint ? 0.9 : 0,
       );
-      if (hint || clickCurrent) activeHintCell = cellView;
+      cellView.glowSecond
+        .setFillStyle(glowColor, 0)
+        .setStrokeStyle(
+          CELL_GLOW_STROKE_WIDTH * 1.75,
+          glowColor,
+          hint ? 0.9 : 0,
+        );
+      cellView.glowThird
+        .setFillStyle(glowColor, 0)
+        .setStrokeStyle(
+          CELL_GLOW_STROKE_WIDTH * 1.75,
+          glowColor,
+          hint ? 0.9 : 0,
+        );
+      if (hint) activeHintCell = cellView;
     });
 
     this.startHintPulse(activeHintCell);
@@ -1880,29 +1919,64 @@ export class BoardScene extends Phaser.Scene {
     if (cell.questionShown === visible) return;
     cell.questionShown = visible;
     this.tweens.killTweensOf(cell.questionMark);
+    cell.questionColorTween?.stop();
+    cell.questionColorTween = undefined;
+    const restingY = cell.y;
+    const entryOffset = Math.max(10, (this.view?.radius ?? 20) * 0.72);
+    const normalQuestionColor = this.view?.ballColor ?? cell.color;
 
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       cell.questionMark
         .setVisible(visible)
+        .setY(restingY)
+        .setColor(colorHex(normalQuestionColor))
         .setAlpha(visible ? HIDDEN_QUESTION_ALPHA : 0)
-        .setScale(visible ? 1 : HIDDEN_QUESTION_MIN_SCALE);
+        .setScale(visible ? HIDDEN_QUESTION_FINAL_SCALE : HIDDEN_QUESTION_MIN_SCALE);
       return;
     }
 
     if (visible) {
       if (!cell.questionMark.visible) {
         cell.questionMark
+          .setY(restingY + entryOffset)
           .setAlpha(0)
           .setScale(HIDDEN_QUESTION_MIN_SCALE);
       }
-      cell.questionMark.setVisible(true);
+      cell.questionMark.setVisible(true).setColor('#ffb52e');
+      cell.questionColorTween = this.tweens.addCounter({
+        from: 0,
+        to: 1,
+        delay: 90,
+        duration: 370,
+        ease: 'Sine.easeInOut',
+        onUpdate: (tween) => {
+          const progress = tween.getValue() ?? 0;
+          const startRed = 0xff;
+          const startGreen = 0xb5;
+          const startBlue = 0x2e;
+          const endRed = (normalQuestionColor >> 16) & 0xff;
+          const endGreen = (normalQuestionColor >> 8) & 0xff;
+          const endBlue = normalQuestionColor & 0xff;
+          cell.questionMark.setColor(colorHex(Phaser.Display.Color.GetColor(
+            Math.round(Phaser.Math.Linear(startRed, endRed, progress)),
+            Math.round(Phaser.Math.Linear(startGreen, endGreen, progress)),
+            Math.round(Phaser.Math.Linear(startBlue, endBlue, progress)),
+          )));
+        },
+        onComplete: () => {
+          cell.questionMark.setColor(colorHex(normalQuestionColor));
+          cell.questionColorTween = undefined;
+        },
+      });
       this.tweens.add({
         targets: cell.questionMark,
+        y: restingY,
         alpha: HIDDEN_QUESTION_ALPHA,
-        scaleX: 1,
-        scaleY: 1,
+        scaleX: HIDDEN_QUESTION_FINAL_SCALE,
+        scaleY: HIDDEN_QUESTION_FINAL_SCALE,
         duration: HIDDEN_QUESTION_SHOW_DURATION_MS,
         ease: 'Back.easeOut',
+        easeParams: [3.2],
       });
       return;
     }
@@ -1913,15 +1987,19 @@ export class BoardScene extends Phaser.Scene {
         .setScale(HIDDEN_QUESTION_MIN_SCALE);
       return;
     }
+    cell.questionMark.setColor(colorHex(normalQuestionColor));
     this.tweens.add({
       targets: cell.questionMark,
+      y: restingY + entryOffset * 0.3,
       alpha: 0,
       scaleX: HIDDEN_QUESTION_MIN_SCALE,
       scaleY: HIDDEN_QUESTION_MIN_SCALE,
       duration: HIDDEN_QUESTION_HIDE_DURATION_MS,
-      ease: 'Cubic.easeIn',
+      ease: 'Back.easeIn',
       onComplete: () => {
-        if (!cell.questionShown) cell.questionMark.setVisible(false);
+        if (!cell.questionShown) {
+          cell.questionMark.setVisible(false).setY(restingY);
+        }
       },
     });
   }
@@ -1963,32 +2041,53 @@ export class BoardScene extends Phaser.Scene {
   }
 
   private startHintPulse(cell?: CellView): void {
-    if (this.hintCell === cell && this.hintTween?.isPlaying()) return;
+    if (this.hintCell === cell && this.hintTweens.every((tween) => tween.isPlaying())) return;
     this.stopHintPulse();
     if (!cell) return;
 
     this.hintCell = cell;
+    const hintStrokeWidth = CELL_GLOW_STROKE_WIDTH * 1.75;
+    const glowRadius = this.view
+      ? this.view.radius + CELL_GLOW_RADIUS_MARGIN
+      : cell.glow.displayWidth * 0.5;
+    const numberBallRadius = this.view
+      ? liquidBallRadius(this.view.radius) * NUMBER_FILL_DISPLAY_SCALE
+      : glowRadius;
+    const innerRingScale = numberBallRadius / Math.max(1, glowRadius - hintStrokeWidth * 0.5);
+    cell.glow.setScale(innerRingScale).setAlpha(1);
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      cell.glow.setScale(1).setAlpha(1);
+      cell.glowSecond.setScale(innerRingScale).setAlpha(0);
+      cell.glowThird.setScale(innerRingScale).setAlpha(0);
       return;
     }
 
-    cell.glow.setScale(0.94).setAlpha(0.64);
-    this.hintTween = this.tweens.add({
-      targets: cell.glow,
-      scale: CELL_HINT_MAX_SCALE,
-      alpha: 1,
-      duration: 880,
-      ease: 'Sine.easeInOut',
-      yoyo: true,
+    const expansionDuration = 650;
+    const secondRingDelay = 200;
+    const cyclePause = 1000;
+    const repeatDelay = secondRingDelay + cyclePause;
+    const expansionScale = CELL_HINT_MAX_SCALE + 0.3;
+    [cell.glowSecond, cell.glowThird].forEach(
+      (ring) => ring.setScale(innerRingScale).setAlpha(0),
+    );
+    this.hintTweens = [cell.glowSecond, cell.glowThird].map((ring, index) => this.tweens.add({
+      targets: ring,
+      scaleX: { from: innerRingScale, to: expansionScale },
+      scaleY: { from: innerRingScale, to: expansionScale },
+      alpha: { from: 0.94, to: 0 },
+      delay: index * secondRingDelay,
+      duration: expansionDuration,
+      ease: 'Sine.easeOut',
       repeat: -1,
-    });
+      repeatDelay,
+    }));
   }
 
   private stopHintPulse(): void {
-    this.hintTween?.stop();
-    this.hintTween = undefined;
+    this.hintTweens.forEach((tween) => tween.stop());
+    this.hintTweens = [];
     this.hintCell?.glow.setScale(1).setAlpha(1);
+    this.hintCell?.glowSecond.setScale(1).setAlpha(1);
+    this.hintCell?.glowThird.setScale(1).setAlpha(1);
     this.hintCell = undefined;
   }
 
@@ -2415,6 +2514,7 @@ export class BoardScene extends Phaser.Scene {
       const shouldLoseLife = !this.wrongCellIndexes.has(action.index);
       this.flashWrong(action.index);
       this.resetConnectionRewardCombo();
+      this.skipCurrentConnectionSoundMelody();
       this.playSound('wrong');
       this.cancelAutoClickSequence();
       this.pendingStepReward = undefined;
@@ -2859,6 +2959,11 @@ export class BoardScene extends Phaser.Scene {
 
   private resetConnectionSoundComposition(): void {
     this.connectionSoundArrangementIndex = 0;
+    this.connectionSoundMelodyIndex = undefined;
+    this.connectionSoundNoteIndex = 0;
+  }
+
+  private skipCurrentConnectionSoundMelody(): void {
     this.connectionSoundMelodyIndex = undefined;
     this.connectionSoundNoteIndex = 0;
   }

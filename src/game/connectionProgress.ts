@@ -413,6 +413,12 @@ export class ConnectionProgress {
     return this.suggestedNextHint()?.index;
   }
 
+  public immediateNextIndex(index: number): number | undefined {
+    const orderedIndices = this.orderedIndices();
+    const position = orderedIndices.indexOf(index);
+    return position < 0 ? undefined : orderedIndices[position + 1];
+  }
+
   private inBounds(index: number): boolean {
     return Number.isInteger(index) && index >= 0 && index < this.totalNodes;
   }
