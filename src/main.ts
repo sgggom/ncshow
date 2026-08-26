@@ -1,5 +1,10 @@
 import Phaser from 'phaser';
 import './styles.css';
+import {
+  COMBO_INSTRUMENTS,
+  isAvailableComboInstrumentId,
+  comboSoundfontPlayer,
+} from './audio/comboSoundfont';
 import type { GameEventMap } from './app/GameEvents';
 import { ScreenRouter, type ScreenName } from './app/ScreenRouter';
 import { query } from './app/dom';
@@ -47,7 +52,6 @@ import {
   type BoardHoldScore,
   type BoardSessionInput,
   type Cell,
-  type ComboSoundSet,
   type EndlessStageSettings,
   type GameMode,
   type GameSettings,
@@ -173,18 +177,6 @@ const ENDLESS_RUN_KEY = 'number-connect.endless-run.v1';
 const FIRST_LEVEL_RATING_PROMPT_KEY = 'number-connect.first-level-rating-prompt.v1';
 const RATING_VALUE_KEY = 'number-connect.rating-value.v1';
 const NORMAL_LIFE_LIMIT = 3;
-const SOUND_DEBUG_COMBO_SETS: ReadonlyArray<{
-  id: ComboSoundSet;
-  label: string;
-  badge: string;
-  filePrefix: string;
-  noteCount: number;
-  tone: string;
-}> = [
-  { id: 'combo1', label: 'Combo 1', badge: 'Original', filePrefix: 'combo_', noteCount: 8, tone: 'blue' },
-  { id: 'combo2', label: 'Combo 2', badge: 'New', filePrefix: 'combo2_', noteCount: 11, tone: 'purple' },
-] as const;
-
 const loadCollectionCompletedCount = (): number => {
   try {
     const value = Number(window.localStorage.getItem(COLLECTION_PROGRESS_KEY));
@@ -432,6 +424,7 @@ class NumberConnectApp {
   private readonly soundDebugPanel = query<HTMLElement>('#sound-debug-panel');
   private readonly soundDebugToggle = query<HTMLButtonElement>('#sound-debug-toggle');
   private readonly soundDebugComboSet = query<HTMLSelectElement>('#sound-debug-combo-set');
+  private readonly soundDebugComboRandom = query<HTMLButtonElement>('#sound-debug-combo-random');
   private readonly soundDebugComboGroup = query<HTMLElement>('#sound-debug-combo-group');
   private readonly soundDebugComboBadge = query<HTMLElement>('#sound-debug-combo-badge');
   private readonly soundDebugPatternList = query<HTMLElement>('#sound-debug-pattern-list');
@@ -533,7 +526,6 @@ class NumberConnectApp {
   private currentProgress = 0;
   private currentTotal = 0;
   private settingsContext: 'lobby' | 'play' = 'lobby';
-  private soundDebugAudio?: HTMLAudioElement;
   private resultContext: ResultContext = 'normal';
   private resultActionBusy = false;
   private solutionRevealed = false;
@@ -615,6 +607,7 @@ class NumberConnectApp {
   public constructor() {
     this.applyLobbyTheme(this.settings.lobbyTheme);
     this.boardScene.setComboSoundSet(this.settings.comboSoundSet);
+    this.boardScene.setComboSoundRandom(this.settings.comboSoundRandom);
     this.boardScene.setConnectionSoundComposition(
       this.settings.comboSoundPatterns,
       this.settings.comboSoundArrangement,
@@ -1697,6 +1690,12 @@ class NumberConnectApp {
     query('#sound-debug-close').addEventListener('click', () => this.setSoundDebugPanelOpen(false));
     this.soundDebugComboSet.addEventListener('change', () => {
       this.stopSoundDebug();
+      this.settings.comboSoundRandom = false;
+      this.renderSoundDebugComboSet();
+    });
+    this.soundDebugComboRandom.addEventListener('click', () => {
+      this.stopSoundDebug();
+      this.settings.comboSoundRandom = !this.settings.comboSoundRandom;
       this.renderSoundDebugComboSet();
     });
     this.soundDebugPatternAdd.addEventListener('click', () => this.addSoundDebugPattern());
@@ -1720,7 +1719,7 @@ class NumberConnectApp {
     this.soundDebugArrangementBrackets.addEventListener('click', () => this.insertSoundDebugArrangementGroup());
     this.soundDebugConfigExport.addEventListener('click', () => void this.exportSoundDebugConfig());
     this.soundDebugConfigImport.addEventListener('click', () => void this.importSoundDebugConfig());
-    this.soundDebugPanel.querySelectorAll<HTMLButtonElement>('[data-debug-sound]').forEach((button) => {
+    this.soundDebugPanel.querySelectorAll<HTMLButtonElement>('[data-debug-combo-step]').forEach((button) => {
       button.addEventListener('click', () => this.playSoundDebug(button));
     });
     window.addEventListener('resize', () => this.positionSoundDebugPanel());
@@ -1749,13 +1748,23 @@ class NumberConnectApp {
   }
 
   private populateSoundDebugComboSets(): void {
-    const options = SOUND_DEBUG_COMBO_SETS.map((set) => {
-      const option = document.createElement('option');
-      option.value = set.id;
-      option.textContent = set.label;
-      return option;
+    const groups = [
+      { label: '可用（本地音色）', available: true },
+      { label: '不可用（未下载，在线加载）', available: false },
+    ].map(({ label, available }) => {
+      const group = document.createElement('optgroup');
+      group.label = label;
+      group.append(...COMBO_INSTRUMENTS.filter((instrument) => (
+        isAvailableComboInstrumentId(instrument.id) === available
+      )).map((instrument) => {
+        const option = document.createElement('option');
+        option.value = instrument.id;
+        option.textContent = instrument.name;
+        return option;
+      }));
+      return group;
     });
-    this.soundDebugComboSet.replaceChildren(...options);
+    this.soundDebugComboSet.replaceChildren(...groups);
     this.soundDebugComboSet.value = this.settings.comboSoundSet;
     this.soundDebugArrangement.value = this.settings.comboSoundArrangement;
     this.renderSoundDebugPatterns();
@@ -2057,17 +2066,17 @@ class NumberConnectApp {
   }
 
   private renderSoundDebugComboSet(): void {
-    const selected = SOUND_DEBUG_COMBO_SETS.find((set) => set.id === this.soundDebugComboSet.value)
-      ?? SOUND_DEBUG_COMBO_SETS[0];
+    const selected = COMBO_INSTRUMENTS.find((instrument) => instrument.id === this.soundDebugComboSet.value)
+      ?? COMBO_INSTRUMENTS[0];
     this.settings.comboSoundSet = selected.id;
     saveSettings(this.settings);
     this.boardScene.setComboSoundSet(selected.id);
-    this.soundDebugComboGroup.dataset.tone = selected.tone;
-    this.soundDebugComboBadge.textContent = selected.badge;
+    this.boardScene.setComboSoundRandom(this.settings.comboSoundRandom);
+    this.soundDebugComboRandom.setAttribute('aria-pressed', String(this.settings.comboSoundRandom));
+    this.soundDebugComboGroup.dataset.tone = 'purple';
+    this.soundDebugComboBadge.textContent = this.settings.comboSoundRandom ? '伪随机' : selected.name;
     this.soundDebugComboGroup.querySelectorAll<HTMLButtonElement>('[data-debug-combo-step]').forEach((button) => {
-      const step = button.dataset.debugComboStep;
-      button.dataset.debugSound = `${selected.filePrefix}${step}.mp3`;
-      button.hidden = Number(step) > selected.noteCount;
+      button.hidden = false;
     });
   }
 
@@ -2096,28 +2105,17 @@ class NumberConnectApp {
   }
 
   private playSoundDebug(button: HTMLButtonElement): void {
-    const file = button.dataset.debugSound;
-    if (!file) return;
+    const level = Number(button.dataset.debugComboStep);
+    if (!Number.isInteger(level)) return;
     this.stopSoundDebug();
-    const audio = new Audio(`./audio/${file}`);
-    this.soundDebugAudio = audio;
-    audio.volume = 0.72;
-    this.soundDebugPanel.querySelectorAll('[data-debug-sound]').forEach((item) => item.classList.remove('is-playing'));
     button.classList.add('is-playing');
-    const finish = (): void => {
-      if (this.soundDebugAudio !== audio) return;
-      button.classList.remove('is-playing');
-      this.soundDebugAudio = undefined;
-    };
-    audio.addEventListener('ended', finish, { once: true });
-    audio.addEventListener('error', finish, { once: true });
-    void audio.play().catch(finish);
+    void comboSoundfontPlayer.play(level);
+    window.setTimeout(() => button.classList.remove('is-playing'), 700);
   }
 
   private stopSoundDebug(): void {
-    this.soundDebugAudio?.pause();
-    this.soundDebugAudio = undefined;
-    this.soundDebugPanel.querySelectorAll('[data-debug-sound]').forEach((item) => item.classList.remove('is-playing'));
+    comboSoundfontPlayer.stopAll();
+    this.soundDebugPanel.querySelectorAll('[data-debug-combo-step]').forEach((item) => item.classList.remove('is-playing'));
   }
 
   private refreshLevels(): void {

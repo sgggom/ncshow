@@ -168,14 +168,16 @@ describe('game settings migration', () => {
     }
   });
 
-  it('loads a valid combo sound set and falls back from an invalid one', () => {
+  it('loads a valid combo instrument, migrates legacy sets, and falls back from an invalid one', () => {
     const getItem = vi.fn()
+      .mockReturnValueOnce(JSON.stringify({ comboSoundSet: 'musicbox' }))
       .mockReturnValueOnce(JSON.stringify({ comboSoundSet: 'combo2' }))
       .mockReturnValueOnce(JSON.stringify({ comboSoundSet: 'missing' }));
     vi.stubGlobal('window', { localStorage: { getItem } });
 
     try {
-      expect(loadSettings().comboSoundSet).toBe('combo2');
+      expect(loadSettings().comboSoundSet).toBe('musicbox');
+      expect(loadSettings().comboSoundSet).toBe('musicbox');
       expect(loadSettings().comboSoundSet).toBe(DEFAULT_SETTINGS.comboSoundSet);
     } finally {
       vi.unstubAllGlobals();

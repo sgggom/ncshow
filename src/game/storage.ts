@@ -2,7 +2,6 @@ import {
   BoardShape,
   DEFAULT_SETTINGS,
   isComboSoundArrangement,
-  isComboSoundSet,
   isInputMode,
   isLobbyTheme,
   isMainGameplay,
@@ -12,6 +11,7 @@ import {
   type GameSettings,
   type LevelData,
 } from './types';
+import { DEFAULT_COMBO_INSTRUMENT_ID, isComboInstrumentId } from '../audio/comboSoundfont';
 import { decodeCompactLevelCollection } from './levelDataFormat';
 
 const SETTINGS_KEY = 'number-connect.settings.v1';
@@ -95,9 +95,12 @@ export const loadSettings = (): GameSettings => {
       ...DEFAULT_SETTINGS,
       ...currentSettings,
       inputMode,
-      comboSoundSet: isComboSoundSet(stored.comboSoundSet)
+      comboSoundSet: isComboInstrumentId(stored.comboSoundSet)
         ? stored.comboSoundSet
-        : DEFAULT_SETTINGS.comboSoundSet,
+        : stored.comboSoundSet === 'combo2'
+          ? 'musicbox'
+          : DEFAULT_COMBO_INSTRUMENT_ID,
+      comboSoundRandom: stored.comboSoundRandom === true,
       comboSoundPattern: comboSoundPatterns[comboSoundPatternIndex],
       comboSoundPatterns,
       comboSoundPatternIndex,

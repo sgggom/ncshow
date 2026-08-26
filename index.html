@@ -370,8 +370,11 @@
         <div class="sound-debug-panel__body">
           <section id="sound-debug-combo-group" class="sound-debug-group" aria-labelledby="sound-debug-combo-title" data-tone="blue">
             <label class="sound-debug-combo-picker" for="sound-debug-combo-set">
-              <span><b id="sound-debug-combo-title">连击音阶</b><small id="sound-debug-combo-badge">Original</small></span>
-              <select id="sound-debug-combo-set" aria-label="选择连击音效套组"></select>
+              <span><b id="sound-debug-combo-title">连击音色</b><small id="sound-debug-combo-badge">三角钢琴</small></span>
+              <div class="sound-debug-combo-controls">
+                <select id="sound-debug-combo-set" aria-label="选择连击音色"></select>
+                <button id="sound-debug-combo-random" type="button" aria-pressed="false" title="伪随机使用本地可用音色">随机</button>
+              </div>
             </label>
             <div class="sound-debug-combo-grid">
               <button type="button" data-debug-combo-step="1"><span>1</span></button>
@@ -398,7 +401,7 @@
               </div>
               <header><div><b id="sound-debug-composer-title">旋律列表</b><small>编号对应组曲中的数字</small></div><button id="sound-debug-pattern-add" type="button">＋ 新增</button></header>
               <div id="sound-debug-pattern-list" class="sound-debug-pattern-list" role="list" aria-label="旋律列表"></div>
-              <small class="sound-debug-pattern-hint">用逗号分隔；[1,2,3] 表示随机音节；Combo 2 支持 1–11</small>
+              <small class="sound-debug-pattern-hint">用逗号分隔；[1,2,3] 表示随机音节；所有音色支持 1–11</small>
             </section>
           </section>
         </div>

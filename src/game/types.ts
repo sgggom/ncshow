@@ -15,8 +15,7 @@ export type LobbyTheme = typeof LOBBY_THEMES[number];
 export const INPUT_MODES = ['drag', 'click', 'auto-click'] as const;
 export type InputMode = typeof INPUT_MODES[number];
 
-export const COMBO_SOUND_SETS = ['combo1', 'combo2'] as const;
-export type ComboSoundSet = typeof COMBO_SOUND_SETS[number];
+export type ComboSoundSet = string;
 
 export const MAIN_GAMEPLAYS = ['beads', 'puzzle', 'mode3', 'mode4', 'mode5'] as const;
 export type MainGameplay = typeof MAIN_GAMEPLAYS[number];
@@ -34,10 +33,6 @@ export const isLobbyTheme = (value: unknown): value is LobbyTheme => (
 
 export const isInputMode = (value: unknown): value is InputMode => (
   typeof value === 'string' && (INPUT_MODES as readonly string[]).includes(value)
-);
-
-export const isComboSoundSet = (value: unknown): value is ComboSoundSet => (
-  typeof value === 'string' && (COMBO_SOUND_SETS as readonly string[]).includes(value)
 );
 
 export type ComboSoundPatternToken = readonly number[];
@@ -271,6 +266,7 @@ export interface GameSettings {
   showDifficultyScore: boolean;
   soundEnabled: boolean;
   comboSoundSet: ComboSoundSet;
+  comboSoundRandom: boolean;
   comboSoundPattern: string;
   comboSoundPatterns: string[];
   comboSoundPatternIndex: number;
@@ -405,7 +401,8 @@ export const DEFAULT_SETTINGS: GameSettings = {
   showNextNumber: true,
   showDifficultyScore: false,
   soundEnabled: true,
-  comboSoundSet: 'combo1',
+  comboSoundSet: 'piano',
+  comboSoundRandom: false,
   comboSoundPattern: '1,2,3,4,5,6,7,8',
   comboSoundPatterns: ['1,2,3,4,5,6,7,8'],
   comboSoundPatternIndex: 0,

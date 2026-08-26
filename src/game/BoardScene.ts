@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { comboSoundfontPlayer } from '../audio/comboSoundfont';
 import { COLLECTION_ARTWORK_NAMES } from '../gameplay/collection/collectionArtwork';
 import {
   buildBoardNeighborhoodPreview,
@@ -266,8 +267,6 @@ export class BoardScene extends Phaser.Scene {
   private boardViewportScroll = { x: 0.5, y: 0.5 };
   private readonly artworkTextures = new Map<string, string>();
   private readonly artworkColorCache = new Map<string, readonly number[]>();
-  private comboSoundSet: ComboSoundSet = 'combo1';
-
   public constructor() {
     super('board');
   }
@@ -281,7 +280,11 @@ export class BoardScene extends Phaser.Scene {
   }
 
   public setComboSoundSet(set: ComboSoundSet): void {
-    this.comboSoundSet = set;
+    comboSoundfontPlayer.setInstrument(set);
+  }
+
+  public setComboSoundRandom(enabled: boolean): void {
+    comboSoundfontPlayer.setRandomEnabled(enabled);
   }
 
   public playFailureSound(): void {
@@ -312,12 +315,6 @@ export class BoardScene extends Phaser.Scene {
   }
 
   public preload(): void {
-    for (let index = 1; index <= 8; index += 1) {
-      this.load.audio(`combo1-${index}`, `./audio/combo_${index}.mp3`);
-    }
-    for (let index = 1; index <= 11; index += 1) {
-      this.load.audio(`combo2-${index}`, `./audio/combo2_${index}.mp3`);
-    }
     this.load.audio('wrong', './audio/wrong_move.mp3');
     this.load.audio('victory', './audio/victory_bgm.mp3');
     this.load.audio('failure', './audio/failure.mp3');
@@ -357,6 +354,7 @@ export class BoardScene extends Phaser.Scene {
   };
 
   public setBoard(session: BoardSessionInput): void {
+    comboSoundfontPlayer.advanceRandomInstrument();
     this.resetConnectionRewardCombo();
     this.resetConnectionSoundComposition();
     this.cancelAutoClickSequence();
@@ -740,6 +738,7 @@ export class BoardScene extends Phaser.Scene {
       + 100
     );
 
+    comboSoundfontPlayer.advanceRandomInstrument();
     this.session = session;
     this.resetConnectionRewardCombo();
     this.connection = this.createConnectionProgress(session);
@@ -2949,12 +2948,11 @@ export class BoardScene extends Phaser.Scene {
       ?? this.connectionSoundMelodies[0]
       ?? [[1]];
     const choices = melody[this.connectionSoundNoteIndex] ?? [1];
-    const maxLevel = this.comboSoundSet === 'combo2' ? 11 : 8;
-    const availableChoices = choices.filter((level) => level <= maxLevel);
+    const availableChoices = choices.filter((level) => level <= 11);
     const level = availableChoices[Math.floor(Math.random() * availableChoices.length)] ?? 1;
     this.connectionSoundNoteIndex += 1;
     if (this.connectionSoundNoteIndex >= melody.length) this.connectionSoundMelodyIndex = undefined;
-    this.playSound(`${this.comboSoundSet}-${level}`);
+    if (this.session?.soundEnabled) void comboSoundfontPlayer.play(level);
   }
 
   private resetConnectionSoundComposition(): void {

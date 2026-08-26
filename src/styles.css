@@ -2678,7 +2678,10 @@ input[type="range"] { width: 100%; accent-color: var(--green); }
 .sound-debug-combo-picker > span { display: flex; align-items: baseline; justify-content: space-between; }
 .sound-debug-combo-picker b { font-size: .78rem; }
 .sound-debug-combo-picker small { color: #3979b8; font-size: .56rem; font-weight: 900; letter-spacing: .04em; }
+.sound-debug-combo-controls { display: grid; grid-template-columns: minmax(0, 1fr) 64px; gap: 7px; }
 .sound-debug-combo-picker select { width: 100%; min-height: 38px; padding: 0 34px 0 11px; border: 1px solid rgba(57,121,184,.16); border-radius: 12px; color: #345d88; background: #edf5fc; font-size: .72rem; font-weight: 850; cursor: pointer; }
+.sound-debug-combo-controls > button { min-height: 38px; border: 1px solid rgba(118,80,184,.16); border-radius: 12px; color: #7650b8; background: #f4effb; font-size: .68rem; font-weight: 900; transition: color .16s ease, background-color .16s ease, box-shadow .16s ease; }
+.sound-debug-combo-controls > button[aria-pressed="true"] { color: #fff; border-color: transparent; background: linear-gradient(145deg,#a977dc,#7650b8); box-shadow: 0 6px 14px rgba(118,80,184,.24); }
 .sound-debug-combo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
 .sound-debug-combo-grid button { height: 38px; display: grid; place-items: center; border: 1px solid rgba(57,121,184,.13); border-radius: 10px; color: #3979b8; background: #edf5fc; box-shadow: inset 0 1px rgba(255,255,255,.86); transition: transform .15s ease, color .15s ease, background-color .15s ease; }
 .sound-debug-combo-grid button span { font-size: .72rem; font-weight: 900; }
