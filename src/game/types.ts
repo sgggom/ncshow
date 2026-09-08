@@ -37,12 +37,41 @@ export const isInputMode = (value: unknown): value is InputMode => (
 
 export type ComboSoundPatternToken = readonly number[];
 
+const parseComboSoundTokenArray = (
+  value: unknown,
+  maximumValue?: number,
+): ComboSoundPatternToken[] | undefined => {
+  if (!Array.isArray(value) || value.length === 0) return undefined;
+  const tokens: ComboSoundPatternToken[] = [];
+  for (const token of value) {
+    if (!Array.isArray(token) || token.length === 0) return undefined;
+    if (!token.every((number) => (
+      typeof number === 'number'
+      && Number.isInteger(number)
+      && number >= 1
+      && (maximumValue === undefined || number <= maximumValue)
+    ))) return undefined;
+    tokens.push(token);
+  }
+  return tokens;
+};
+
 export const normalizeComboSoundCommas = (value: string): string => (
   value.replace(/[，,]+/g, ',')
 );
 
 export const parseComboSoundPattern = (value: unknown): ComboSoundPatternToken[] | undefined => {
-  if (typeof value !== 'string' || value.length === 0 || value.length > 64) return undefined;
+  if (typeof value !== 'string' || value.length === 0 || value.length > 256) return undefined;
+  try {
+    const parsed = JSON.parse(value) as unknown;
+    if (Array.isArray(parsed) && parsed.length > 0 && parsed.every((number) => (
+      typeof number === 'number' && Number.isInteger(number) && number >= 1 && number <= 11
+    ))) return parsed.map((number) => [number]);
+    const legacyTokens = parseComboSoundTokenArray(parsed, 11);
+    if (legacyTokens) return legacyTokens.map((choices) => [choices[0]]);
+  } catch {
+    // Continue with the legacy comma-separated syntax for stored-setting migration.
+  }
   const normalized = normalizeComboSoundCommas(value);
   const tokens: ComboSoundPatternToken[] = [];
   for (let index = 0; index < normalized.length;) {
@@ -51,7 +80,7 @@ export const parseComboSoundPattern = (value: unknown): ComboSoundPatternToken[]
       if (closeIndex < 0) return undefined;
       const choices = normalized.slice(index + 1, closeIndex);
       if (!/^(?:1[01]|[1-9])(?:,(?:1[01]|[1-9]))*$/.test(choices)) return undefined;
-      tokens.push(choices.split(',').map(Number));
+      tokens.push([Number(choices.split(',')[0])]);
       index = closeIndex + 1;
     } else {
       const match = normalized.slice(index).match(/^(?:1[01]|[1-9])/);
@@ -67,12 +96,10 @@ export const parseComboSoundPattern = (value: unknown): ComboSoundPatternToken[]
 };
 
 export const normalizeComboSoundPattern = (value: unknown): string | undefined => {
-  if (typeof value !== 'string' || value.length === 0 || value.length > 64) return undefined;
+  if (typeof value !== 'string' || value.length === 0 || value.length > 256) return undefined;
   const normalizedCommas = normalizeComboSoundCommas(value);
   const parsed = parseComboSoundPattern(normalizedCommas);
-  if (parsed) return parsed.map((choices) => (
-    choices.length === 1 ? String(choices[0]) : `[${choices.join(',')}]`
-  )).join(',');
+  if (parsed) return JSON.stringify(parsed.map((choices) => choices[0]));
 
   const legacyTokens: ComboSoundPatternToken[] = [];
   for (let index = 0; index < value.length;) {
@@ -87,12 +114,10 @@ export const normalizeComboSoundPattern = (value: unknown): string | undefined =
     if (closeIndex < 0) return undefined;
     const choices = value.slice(index + 1, closeIndex);
     if (!/^[1-8]+$/.test(choices)) return undefined;
-    legacyTokens.push([...choices].map(Number));
+    legacyTokens.push([Number(choices[0])]);
     index = closeIndex + 1;
   }
-  return legacyTokens.length > 0 ? legacyTokens.map((choices) => (
-    choices.length === 1 ? String(choices[0]) : `[${choices.join(',')}]`
-  )).join(',') : undefined;
+  return legacyTokens.length > 0 ? JSON.stringify(legacyTokens.map((choices) => choices[0])) : undefined;
 };
 
 export const isComboSoundPattern = (value: unknown): value is string => (
@@ -115,7 +140,13 @@ export const comboSoundBracketGroupRange = (
 };
 
 export const parseComboSoundArrangement = (value: unknown): ComboSoundPatternToken[] | undefined => {
-  if (typeof value !== 'string' || value.length === 0 || value.length > 128) return undefined;
+  if (typeof value !== 'string' || value.length === 0 || value.length > 512) return undefined;
+  try {
+    const tokens = parseComboSoundTokenArray(JSON.parse(value));
+    if (tokens) return tokens;
+  } catch {
+    // Continue with the legacy comma-separated syntax for stored-setting migration.
+  }
   const normalized = normalizeComboSoundCommas(value);
   const tokens: ComboSoundPatternToken[] = [];
   for (let index = 0; index < normalized.length;) {
@@ -139,6 +170,11 @@ export const parseComboSoundArrangement = (value: unknown): ComboSoundPatternTok
   return tokens.length > 0 ? tokens : undefined;
 };
 
+export const normalizeComboSoundArrangement = (value: unknown): string | undefined => {
+  const tokens = parseComboSoundArrangement(value);
+  return tokens ? JSON.stringify(tokens) : undefined;
+};
+
 export const isComboSoundArrangement = (value: unknown, melodyCount: number): value is string => {
   const tokens = parseComboSoundArrangement(value);
   return tokens !== undefined && tokens.every((choices) => (
@@ -154,17 +190,42 @@ export interface ComboSoundCompositionConfig {
 export const encodeComboSoundCompositionConfig = (
   patterns: readonly string[],
   arrangement: string,
-): string => JSON.stringify({
-  type: 'number-connect-sound-composition',
-  version: 1,
-  arrangement,
-  melodies: patterns,
-}, null, 2);
+): string => {
+  const arrangementTokens = parseComboSoundArrangement(arrangement);
+  const melodyTokens = patterns.map(parseComboSoundPattern);
+  if (!arrangementTokens || melodyTokens.some((tokens) => !tokens)) return '';
+  const melodies = melodyTokens.map((tokens) => tokens!.map((choices) => choices[0]));
+  return `${JSON.stringify(arrangementTokens)}\t${JSON.stringify(melodies)}`;
+};
 
 export const parseComboSoundCompositionConfig = (
   value: unknown,
 ): ComboSoundCompositionConfig | undefined => {
-  if (typeof value !== 'string' || value.length === 0 || value.length > 8192) return undefined;
+  if (typeof value !== 'string' || value.length === 0 || value.length > 32768) return undefined;
+  const fields = value.split('\t');
+  if (fields.length === 2) {
+    try {
+      const arrangementTokens = parseComboSoundTokenArray(JSON.parse(fields[0].trim()));
+      const melodies = JSON.parse(fields[1].trim()) as unknown;
+      if (!arrangementTokens || !Array.isArray(melodies) || melodies.length === 0 || melodies.length > 32) {
+        return undefined;
+      }
+      const patterns = melodies.flatMap((melody) => {
+        if (Array.isArray(melody) && melody.length > 0 && melody.every((number) => (
+          typeof number === 'number' && Number.isInteger(number) && number >= 1 && number <= 11
+        ))) return [JSON.stringify(melody)];
+        const legacyTokens = parseComboSoundTokenArray(melody, 11);
+        return legacyTokens ? [JSON.stringify(legacyTokens.map((choices) => choices[0]))] : [];
+      });
+      if (patterns.length !== melodies.length) return undefined;
+      const arrangement = JSON.stringify(arrangementTokens);
+      if (!isComboSoundArrangement(arrangement, patterns.length)) return undefined;
+      return { arrangement, patterns };
+    } catch {
+      return undefined;
+    }
+  }
+
   let parsed: unknown;
   try {
     parsed = JSON.parse(value);
@@ -184,7 +245,8 @@ export const parseComboSoundCompositionConfig = (
   if (patterns.length !== record.melodies.length || typeof record.arrangement !== 'string') {
     return undefined;
   }
-  const arrangement = normalizeComboSoundCommas(record.arrangement);
+  const arrangement = normalizeComboSoundArrangement(record.arrangement);
+  if (!arrangement) return undefined;
   if (!isComboSoundArrangement(arrangement, patterns.length)) return undefined;
   return { arrangement, patterns };
 };
@@ -199,9 +261,9 @@ export const remapComboSoundArrangementAfterRemoval = (
       .filter((number) => number !== removedMelodyNumber)
       .map((number) => number > removedMelodyNumber ? number - 1 : number);
     if (nextChoices.length === 0) return [];
-    return [nextChoices.length === 1 ? String(nextChoices[0]) : `[${nextChoices.join(',')}]`];
+    return [nextChoices];
   });
-  return remapped.length > 0 ? remapped.join(',') : '1';
+  return JSON.stringify(remapped.length > 0 ? remapped : [[1]]);
 };
 
 export const isMainGameplay = (value: unknown): value is MainGameplay => (
@@ -276,6 +338,33 @@ export interface GameSettings {
   touchPreviewSize: TouchPreviewSize;
   touchPreviewFollowsPointer: boolean;
 }
+
+const LEGACY_DEFAULT_COMBO_SOUND_PATTERNS = [
+  '1,2,3,4,5,6,7,8',
+  '1,3,5,8,7,5,3,1',
+  '1,2,3,3,4,5,5,6,7,7,8,9',
+  '1,3,2,3,5,4,5,7,6,7,9,8',
+  '1,3,5,2,4,6,3,5,7,4,6,8',
+  '1,4,2,5,3,6,4,7,5,8',
+  '1,2,4,3,3,4,6,5,5,6,8,7',
+  '1,3,2,4,3,5,4,6,5,7,6,8',
+  '3,5,4,6,5,7,6,8,7,9,8,10',
+  '1,4,3,2,3,6,5,4,5,8,7,6',
+  '1,[2,3],4,3,3,[4,5],6,5,5,[6,7],8,7',
+  '1,2,1,3,4,3,5,6,5,7,8,7,9,10,9',
+  '1,3,5,2,4,6,3,5,7,4,6,8,5,7,9,6,8,10,7,9,11',
+  '6,8,10,11,9,7,8,5',
+  '11,9,8,6,5,3,2,1',
+  '5,3,1,3,6,4,2,1',
+] as const;
+
+export const DEFAULT_COMBO_SOUND_PATTERNS = LEGACY_DEFAULT_COMBO_SOUND_PATTERNS.map(
+  (pattern) => normalizeComboSoundPattern(pattern)!,
+);
+
+export const DEFAULT_COMBO_SOUND_ARRANGEMENT = normalizeComboSoundArrangement(
+  '1,2,[3,4],5,6,[7,8],9,10,[11,12],13,14,[15,16],6',
+)!;
 
 export interface BoardNeighborhoodPreviewCell {
   index: number;
@@ -403,10 +492,10 @@ export const DEFAULT_SETTINGS: GameSettings = {
   soundEnabled: true,
   comboSoundSet: 'piano',
   comboSoundRandom: false,
-  comboSoundPattern: '1,2,3,4,5,6,7,8',
-  comboSoundPatterns: ['1,2,3,4,5,6,7,8'],
+  comboSoundPattern: DEFAULT_COMBO_SOUND_PATTERNS[0],
+  comboSoundPatterns: [...DEFAULT_COMBO_SOUND_PATTERNS],
   comboSoundPatternIndex: 0,
-  comboSoundArrangement: '1',
+  comboSoundArrangement: DEFAULT_COMBO_SOUND_ARRANGEMENT,
   lobbyTheme: 'cool',
   inputMode: 'drag',
   touchPreviewSize: 'off',

@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import {
   comboSoundBracketGroupRange,
+  DEFAULT_COMBO_SOUND_ARRANGEMENT,
+  DEFAULT_COMBO_SOUND_PATTERNS,
   encodeComboSoundCompositionConfig,
   isComboSoundArrangement,
   isComboSoundPattern,
@@ -13,19 +15,28 @@ import {
 } from '../game/types';
 
 describe('connection sound composition syntax', () => {
-  it('parses fixed notes and random-choice groups as sequence tokens', () => {
-    expect(parseComboSoundPattern('1,[2,3,4],5,8')).toEqual([[1], [2, 3, 4], [5], [8]]);
-    expect(parseComboSoundPattern('[1,2,3]')).toEqual([[1, 2, 3]]);
-    expect(parseComboSoundPattern('9,10,[10,11]')).toEqual([[9], [10], [10, 11]]);
-    expect(parseComboSoundPattern('1，[2，3]，8')).toEqual([[1], [2, 3], [8]]);
+  it('keeps every built-in ascending melody and its suite valid', () => {
+    expect(DEFAULT_COMBO_SOUND_PATTERNS).toHaveLength(16);
+    expect(DEFAULT_COMBO_SOUND_PATTERNS.every(isComboSoundPattern)).toBe(true);
+    expect(isComboSoundArrangement(
+      DEFAULT_COMBO_SOUND_ARRANGEMENT,
+      DEFAULT_COMBO_SOUND_PATTERNS.length,
+    )).toBe(true);
+  });
+
+  it('parses melodies as fixed-note sequences and collapses old random notes to the first choice', () => {
+    expect(parseComboSoundPattern('1,[2,3,4],5,8')).toEqual([[1], [2], [5], [8]]);
+    expect(parseComboSoundPattern('[1,2,3]')).toEqual([[1], [2], [3]]);
+    expect(parseComboSoundPattern('9,10,[10,11]')).toEqual([[9], [10], [10]]);
+    expect(parseComboSoundPattern('1，[2，3]，8')).toEqual([[1], [2], [8]]);
   });
 
   it('normalizes Chinese commas and migrates compact legacy patterns', () => {
-    expect(normalizeComboSoundPattern('1，[2，3]，8')).toBe('1,[2,3],8');
+    expect(normalizeComboSoundPattern('1，[2，3]，8')).toBe('[1,2,8]');
     expect(normalizeComboSoundCommas('1，，2')).toBe('1,2');
     expect(normalizeComboSoundCommas('1，,2')).toBe('1,2');
-    expect(parseComboSoundPattern('1，，[2，3]')).toEqual([[1], [2, 3]]);
-    expect(normalizeComboSoundPattern('1[234]58')).toBe('1,[2,3,4],5,8');
+    expect(parseComboSoundPattern('1，，[2，3]')).toEqual([[1], [2]]);
+    expect(normalizeComboSoundPattern('1[234]58')).toBe('[1,2,5,8]');
   });
 
   it('rejects empty, incomplete, nested, and out-of-range groups', () => {
@@ -61,20 +72,30 @@ describe('connection sound arrangement syntax', () => {
   });
 
   it('removes deleted melodies and renumbers later melody references', () => {
-    expect(remapComboSoundArrangementAfterRemoval('1,2,[3,4],12', 2)).toBe('1,[2,3],11');
-    expect(remapComboSoundArrangementAfterRemoval('[2],1', 2)).toBe('1');
+    expect(remapComboSoundArrangementAfterRemoval('1,2,[3,4],12', 2)).toBe('[[1],[2,3],[11]]');
+    expect(remapComboSoundArrangementAfterRemoval('[2],1', 2)).toBe('[[1]]');
   });
 });
 
 describe('connection sound composition clipboard config', () => {
-  it('round-trips the suite and every melody with versioned JSON', () => {
+  it('exports only the two tab-separated array fields and round-trips them', () => {
     const encoded = encodeComboSoundCompositionConfig(
       ['1,2,3', '8,[6,7],5'],
       '1,[1,2],2',
     );
+    expect(encoded).toBe('[[1],[1,2],[2]]\t[[1,2,3],[8,6,5]]');
     expect(parseComboSoundCompositionConfig(encoded)).toEqual({
-      arrangement: '1,[1,2],2',
-      patterns: ['1,2,3', '8,[6,7],5'],
+      arrangement: '[[1],[1,2],[2]]',
+      patterns: ['[1,2,3]', '[8,6,5]'],
+    });
+  });
+
+  it('reads a tab-separated row copied directly from a spreadsheet', () => {
+    expect(parseComboSoundCompositionConfig(
+      '[[1],[1,2],[2]]\t[[1,2,3],[8,6,5]]\r\n',
+    )).toEqual({
+      arrangement: '[[1],[1,2],[2]]',
+      patterns: ['[1,2,3]', '[8,6,5]'],
     });
   });
 
@@ -85,8 +106,8 @@ describe('connection sound composition clipboard config', () => {
       arrangement: '1，2',
       melodies: ['123', '8[67]5'],
     }))).toEqual({
-      arrangement: '1,2',
-      patterns: ['1,2,3', '8,[6,7],5'],
+      arrangement: '[[1],[2]]',
+      patterns: ['[1,2,3]', '[8,6,5]'],
     });
   });
 

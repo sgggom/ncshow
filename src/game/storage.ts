@@ -1,5 +1,7 @@
 import {
   BoardShape,
+  DEFAULT_COMBO_SOUND_ARRANGEMENT,
+  DEFAULT_COMBO_SOUND_PATTERNS,
   DEFAULT_SETTINGS,
   isComboSoundArrangement,
   isInputMode,
@@ -7,6 +9,7 @@ import {
   isMainGameplay,
   isMainGameplayDifficulty,
   isTouchPreviewSize,
+  normalizeComboSoundArrangement,
   normalizeComboSoundPattern,
   type GameSettings,
   type LevelData,
@@ -80,17 +83,27 @@ export const loadSettings = (): GameSettings => {
         return normalized ? [normalized] : [];
       }).slice(0, 32)
       : [];
-    const legacyComboPattern = normalizeComboSoundPattern(stored.comboSoundPattern)
-      ?? DEFAULT_SETTINGS.comboSoundPattern;
-    const comboSoundPatterns = storedComboPatterns.length > 0
-      ? storedComboPatterns
-      : [legacyComboPattern];
+    const normalizedLegacyComboPattern = normalizeComboSoundPattern(stored.comboSoundPattern);
+    const legacyComboPattern = normalizedLegacyComboPattern ?? DEFAULT_SETTINGS.comboSoundPattern;
+    const hasPristineLegacyComposition = storedComboPatterns.length === 1
+      && storedComboPatterns[0] === DEFAULT_COMBO_SOUND_PATTERNS[0]
+      && (stored.comboSoundArrangement === undefined || stored.comboSoundArrangement === '1');
+    const useExpandedDefaultComposition = (
+      storedComboPatterns.length === 0 && normalizedLegacyComboPattern === undefined
+    ) || hasPristineLegacyComposition;
+    const comboSoundPatterns = useExpandedDefaultComposition
+      ? [...DEFAULT_COMBO_SOUND_PATTERNS]
+      : storedComboPatterns.length > 0
+        ? storedComboPatterns
+        : [legacyComboPattern];
     const comboSoundPatternIndex = Number.isInteger(stored.comboSoundPatternIndex)
       ? Math.max(0, Math.min(comboSoundPatterns.length - 1, Number(stored.comboSoundPatternIndex)))
       : Math.max(0, comboSoundPatterns.indexOf(legacyComboPattern));
-    const comboSoundArrangement = isComboSoundArrangement(stored.comboSoundArrangement, comboSoundPatterns.length)
-      ? stored.comboSoundArrangement
-      : DEFAULT_SETTINGS.comboSoundArrangement;
+    const comboSoundArrangement = useExpandedDefaultComposition
+      ? normalizeComboSoundArrangement(DEFAULT_COMBO_SOUND_ARRANGEMENT) ?? '[[1]]'
+      : isComboSoundArrangement(stored.comboSoundArrangement, comboSoundPatterns.length)
+        ? normalizeComboSoundArrangement(stored.comboSoundArrangement) ?? '[[1]]'
+        : '[[1]]';
     return {
       ...DEFAULT_SETTINGS,
       ...currentSettings,

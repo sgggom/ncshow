@@ -129,6 +129,7 @@ class ComboSoundfontPlayer {
   private randomEnabled = false;
   private randomBag: string[] = [];
   private lastRandomInstrumentId?: string;
+  private queuedRandomInstrumentId?: string;
   private readonly buffers = new Map<string, Promise<AudioBuffer>>();
   private readonly activeSources = new Set<AudioBufferSourceNode>();
 
@@ -143,8 +144,9 @@ class ComboSoundfontPlayer {
     if (this.randomEnabled === enabled) return;
     this.randomEnabled = enabled;
     if (enabled) {
-      this.advanceRandomInstrument();
+      this.queueNextRandomInstrument();
     } else {
+      this.queuedRandomInstrumentId = undefined;
       this.activeInstrumentId = this.instrumentId;
       void this.preload(this.instrumentId);
     }
@@ -152,11 +154,12 @@ class ComboSoundfontPlayer {
 
   public advanceRandomInstrument(): void {
     if (!this.randomEnabled) return;
-    if (this.randomBag.length === 0) this.refillRandomBag();
-    const next = this.randomBag.pop() ?? DEFAULT_COMBO_INSTRUMENT_ID;
+    const next = this.queuedRandomInstrumentId ?? this.drawRandomInstrument();
+    this.queuedRandomInstrumentId = undefined;
     this.activeInstrumentId = next;
     this.lastRandomInstrumentId = next;
     void this.preload(next);
+    this.queueNextRandomInstrument();
   }
 
   public async preload(instrumentId = this.activeInstrumentId): Promise<void> {
@@ -171,7 +174,6 @@ class ComboSoundfontPlayer {
       const context = this.getContext();
       if (context.state === 'suspended') await context.resume();
       const buffer = await this.loadBuffer(instrumentId, note);
-      if (instrumentId !== this.activeInstrumentId) return;
       const source = context.createBufferSource();
       const gain = context.createGain();
       source.buffer = buffer;
@@ -208,6 +210,18 @@ class ComboSoundfontPlayer {
       [bag[0], bag[bag.length - 1]] = [bag[bag.length - 1], bag[0]];
     }
     this.randomBag = bag;
+  }
+
+  private drawRandomInstrument(): string {
+    if (this.randomBag.length === 0) this.refillRandomBag();
+    return this.randomBag.pop() ?? DEFAULT_COMBO_INSTRUMENT_ID;
+  }
+
+  private queueNextRandomInstrument(): void {
+    if (!this.randomEnabled || this.queuedRandomInstrumentId) return;
+    const next = this.drawRandomInstrument();
+    this.queuedRandomInstrumentId = next;
+    void this.preload(next);
   }
 
   private loadBuffer(instrumentId: string, note: string): Promise<AudioBuffer> {

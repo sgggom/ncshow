@@ -15,7 +15,6 @@ import {
   baseCellRadiusForStep,
   CELL_GLOW_RADIUS_MARGIN,
   CELL_GLOW_STROKE_WIDTH,
-  CELL_HINT_MAX_SCALE,
   CELL_RADIUS_SCALE,
   maximumStepForExtent,
   numberFontSizeForBoard,
@@ -142,6 +141,8 @@ const hexagonPoints = (radius: number): Phaser.Geom.Point[] => Array.from({ leng
 });
 
 const HIDDEN_CELL_RING_WIDTH_SCALE = 0.2;
+const CELL_HINT_BASE_STROKE_MULTIPLIER = 1.75;
+const CELL_HINT_PULSE_STROKE_MULTIPLIER = 3.5;
 const BOARD_HORIZONTAL_PADDING = 5;
 const BOARD_VERTICAL_PADDING = 10;
 const AUTO_CLICK_STEP_DELAY_MS = 400;
@@ -156,10 +157,28 @@ const NUMBER_FILL_RADIUS_SCALE = 49 / 64;
 const NUMBER_FILL_DISPLAY_SCALE = 0.95;
 const CONNECTED_NUMBER_BACKDROP_SCALE = 1.2;
 const CONNECTED_NUMBER_BACKDROP_ALPHA = 0.5;
+const CELL_HINT_PULSE_END_SCALE = 1.35;
 const NUMBER_UNDERLINE_Y_OFFSET_SCALE = 0.44;
 
 const numberFillDisplaySize = (radius: number): number =>
   liquidBallRadius(radius) * 2 / NUMBER_FILL_RADIUS_SCALE * NUMBER_FILL_DISPLAY_SCALE;
+
+const hintPulseGeometry = (radius: number): {
+  startScale: number;
+  endScale: number;
+  strokeWidth: number;
+} => {
+  const glowRadius = radius + CELL_GLOW_RADIUS_MARGIN;
+  const numberBallDiameter = numberFillDisplaySize(radius);
+  const strokeWidth = CELL_GLOW_STROKE_WIDTH * CELL_HINT_PULSE_STROKE_MULTIPLIER;
+  const unscaledOuterDiameter = (glowRadius + strokeWidth * 0.5) * 2;
+  return {
+    startScale: numberBallDiameter / Math.max(1, unscaledOuterDiameter),
+    endScale: numberBallDiameter * CELL_HINT_PULSE_END_SCALE
+      / Math.max(1, unscaledOuterDiameter),
+    strokeWidth,
+  };
+};
 
 const colorHex = (color: number): string =>
   `#${(color & 0xffffff).toString(16).padStart(6, '0')}`;
@@ -1882,29 +1901,31 @@ export class BoardScene extends Phaser.Scene {
       const glowColor = selectingCell
         ? COLORS.powerUpTarget
         : numberFillColor;
+      const pulseGeometry = hintPulseGeometry(this.view!.radius);
       cellView.glow.setFillStyle(
         glowColor,
         selectingCell ? 0.13 : 0,
       );
       cellView.glow.setStrokeStyle(
-        hint ? CELL_GLOW_STROKE_WIDTH * 1.75 : CELL_GLOW_STROKE_WIDTH,
+        hint ? CELL_GLOW_STROKE_WIDTH * CELL_HINT_BASE_STROKE_MULTIPLIER : CELL_GLOW_STROKE_WIDTH,
         glowColor,
-        selectingCell ? 0.72 : hint ? 0.9 : 0,
+        selectingCell ? 0.72 : 0,
       );
       cellView.glowSecond
         .setFillStyle(glowColor, 0)
         .setStrokeStyle(
-          CELL_GLOW_STROKE_WIDTH * 1.75,
+          pulseGeometry.strokeWidth,
           glowColor,
-          hint ? 0.9 : 0,
+          hint ? 1 : 0,
         );
       cellView.glowThird
         .setFillStyle(glowColor, 0)
         .setStrokeStyle(
-          CELL_GLOW_STROKE_WIDTH * 1.75,
+          pulseGeometry.strokeWidth,
           glowColor,
-          hint ? 0.9 : 0,
-        );
+          hint ? 1 : 0,
+        )
+        .setAlpha(0);
       if (hint) activeHintCell = cellView;
     });
 
@@ -2045,40 +2066,61 @@ export class BoardScene extends Phaser.Scene {
     if (!cell) return;
 
     this.hintCell = cell;
-    const hintStrokeWidth = CELL_GLOW_STROKE_WIDTH * 1.75;
+    const baseHintStrokeWidth = CELL_GLOW_STROKE_WIDTH * CELL_HINT_BASE_STROKE_MULTIPLIER;
     const glowRadius = this.view
       ? this.view.radius + CELL_GLOW_RADIUS_MARGIN
       : cell.glow.displayWidth * 0.5;
-    const numberBallRadius = this.view
-      ? liquidBallRadius(this.view.radius) * NUMBER_FILL_DISPLAY_SCALE
-      : glowRadius;
-    const innerRingScale = numberBallRadius / Math.max(1, glowRadius - hintStrokeWidth * 0.5);
-    cell.glow.setScale(innerRingScale).setAlpha(1);
+    const numberBallDiameter = this.view
+      ? numberFillDisplaySize(this.view.radius)
+      : glowRadius * 2;
+    const pulseGeometry = this.view
+      ? hintPulseGeometry(this.view.radius)
+      : {
+        startScale: 1,
+        endScale: CELL_HINT_PULSE_END_SCALE,
+        strokeWidth: CELL_GLOW_STROKE_WIDTH,
+      };
+    const baseRingScale = numberBallDiameter
+      / Math.max(1, (glowRadius + baseHintStrokeWidth * 0.5) * 2);
+    const pulseStartScale = pulseGeometry.startScale;
+    cell.glow.setScale(baseRingScale).setAlpha(0);
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      cell.glowSecond.setScale(innerRingScale).setAlpha(0);
-      cell.glowThird.setScale(innerRingScale).setAlpha(0);
+      cell.glowSecond.setScale(pulseStartScale).setAlpha(0);
+      cell.glowThird.setScale(pulseStartScale).setAlpha(0);
       return;
     }
 
     const expansionDuration = 650;
     const secondRingDelay = 200;
     const cyclePause = 1000;
-    const repeatDelay = secondRingDelay + cyclePause;
-    const expansionScale = CELL_HINT_MAX_SCALE + 0.3;
-    [cell.glowSecond, cell.glowThird].forEach(
-      (ring) => ring.setScale(innerRingScale).setAlpha(0),
-    );
-    this.hintTweens = [cell.glowSecond, cell.glowThird].map((ring, index) => this.tweens.add({
-      targets: ring,
-      scaleX: { from: innerRingScale, to: expansionScale },
-      scaleY: { from: innerRingScale, to: expansionScale },
-      alpha: { from: 0.94, to: 0 },
-      delay: index * secondRingDelay,
-      duration: expansionDuration,
-      ease: 'Sine.easeOut',
+    const cycleDuration = expansionDuration + secondRingDelay + cyclePause;
+    const expansionScale = pulseGeometry.endScale;
+    cell.glowSecond.setScale(pulseStartScale).setAlpha(0);
+    cell.glowThird.setScale(pulseStartScale).setAlpha(0);
+    this.hintTweens = [this.tweens.addCounter({
+      from: 0,
+      to: 1,
+      duration: cycleDuration,
+      ease: 'Linear',
       repeat: -1,
-      repeatDelay,
-    }));
+      onUpdate: (tween) => {
+        const cycleElapsed = (tween.getValue() ?? 0) * cycleDuration;
+        const updateRing = (ring: CellShape, delay: number): void => {
+          const elapsed = cycleElapsed - delay;
+          if (elapsed < 0 || elapsed >= expansionDuration) {
+            ring.setAlpha(0);
+            return;
+          }
+          const expansionProgress = elapsed / expansionDuration;
+          const easedExpansion = Phaser.Math.Easing.Sine.Out(expansionProgress);
+          ring
+            .setScale(Phaser.Math.Linear(pulseStartScale, expansionScale, easedExpansion))
+            .setAlpha(0.95 * (1 - expansionProgress));
+        };
+        updateRing(cell.glowSecond, 0);
+        updateRing(cell.glowThird, secondRingDelay);
+      },
+    })];
   }
 
   private stopHintPulse(): void {

@@ -191,7 +191,7 @@ describe('game settings migration', () => {
     vi.stubGlobal('window', { localStorage: { getItem } });
 
     try {
-      expect(loadSettings().comboSoundPattern).toBe('1,3,5,8,7,6,4,2');
+      expect(loadSettings().comboSoundPattern).toBe('[1,3,5,8,7,6,4,2]');
       expect(loadSettings().comboSoundPattern).toBe(DEFAULT_SETTINGS.comboSoundPattern);
     } finally {
       vi.unstubAllGlobals();
@@ -208,10 +208,28 @@ describe('game settings migration', () => {
 
     try {
       const settings = loadSettings();
-      expect(settings.comboSoundPatterns).toEqual(['1,2', '8,7,6']);
+      expect(settings.comboSoundPatterns).toEqual(['[1,2]', '[8,7,6]']);
       expect(settings.comboSoundPatternIndex).toBe(1);
-      expect(settings.comboSoundPattern).toBe('8,7,6');
-      expect(settings.comboSoundArrangement).toBe('1,[1,2],2');
+      expect(settings.comboSoundPattern).toBe('[8,7,6]');
+      expect(settings.comboSoundArrangement).toBe('[[1],[1,2],[2]]');
+    } finally {
+      vi.unstubAllGlobals();
+    }
+  });
+
+  it('expands the old untouched melody into the new default suite', () => {
+    const getItem = vi.fn(() => JSON.stringify({
+      comboSoundPattern: '1,2,3,4,5,6,7,8',
+      comboSoundPatterns: ['1,2,3,4,5,6,7,8'],
+      comboSoundPatternIndex: 0,
+      comboSoundArrangement: '1',
+    }));
+    vi.stubGlobal('window', { localStorage: { getItem } });
+
+    try {
+      const settings = loadSettings();
+      expect(settings.comboSoundPatterns).toEqual(DEFAULT_SETTINGS.comboSoundPatterns);
+      expect(settings.comboSoundArrangement).toBe(DEFAULT_SETTINGS.comboSoundArrangement);
     } finally {
       vi.unstubAllGlobals();
     }

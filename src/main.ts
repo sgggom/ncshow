@@ -43,7 +43,9 @@ import {
   isComboSoundArrangement,
   isComboSoundPattern,
   isLobbyTheme,
+  normalizeComboSoundArrangement,
   normalizeComboSoundCommas,
+  normalizeComboSoundPattern,
   parseComboSoundCompositionConfig,
   isTouchPreviewSize,
   remapComboSoundArrangementAfterRemoval,
@@ -1713,6 +1715,11 @@ class NumberConnectApp {
       if (!isComboSoundArrangement(this.soundDebugArrangement.value, this.settings.comboSoundPatterns.length)) {
         this.soundDebugArrangement.value = this.settings.comboSoundArrangement;
         this.soundDebugArrangement.removeAttribute('aria-invalid');
+      } else {
+        const normalized = normalizeComboSoundArrangement(this.soundDebugArrangement.value)!;
+        this.soundDebugArrangement.value = normalized;
+        this.settings.comboSoundArrangement = normalized;
+        this.syncActiveSoundDebugPattern();
       }
     });
     this.soundDebugArrangementBrackets.addEventListener('pointerdown', (event) => event.preventDefault());
@@ -1790,13 +1797,12 @@ class NumberConnectApp {
       const input = document.createElement('input');
       input.type = 'text';
       input.inputMode = 'text';
-      input.maxLength = 64;
+      input.maxLength = 256;
       input.value = pattern;
       input.autocomplete = 'off';
       input.spellcheck = false;
       input.setAttribute('aria-label', `旋律 ${index + 1}`);
       input.addEventListener('focus', () => this.selectSoundDebugPattern(index, false));
-      input.addEventListener('keydown', (event) => this.handleSoundDebugPatternDelete(index, input, event));
       input.addEventListener('input', (event) => {
         if ((event as InputEvent).isComposing) return;
         this.updateSoundDebugPattern(index, input);
@@ -1806,8 +1812,13 @@ class NumberConnectApp {
       });
       input.addEventListener('blur', () => {
         if (!isComboSoundPattern(input.value)) {
-          input.value = this.settings.comboSoundPatterns[index] ?? '1,2,3,4,5,6,7,8';
+          input.value = this.settings.comboSoundPatterns[index] ?? '[1,2,3,4,5,6,7,8]';
           input.removeAttribute('aria-invalid');
+        } else {
+          const normalized = normalizeComboSoundPattern(input.value)!;
+          input.value = normalized;
+          this.settings.comboSoundPatterns[index] = normalized;
+          this.syncActiveSoundDebugPattern();
         }
       });
 
@@ -1819,14 +1830,7 @@ class NumberConnectApp {
       remove.setAttribute('aria-label', `删除旋律 ${index + 1}`);
       remove.addEventListener('click', () => this.removeSoundDebugPattern(index));
 
-      const addRandomGroup = document.createElement('button');
-      addRandomGroup.type = 'button';
-      addRandomGroup.className = 'sound-debug-pattern-brackets';
-      addRandomGroup.textContent = '＋[]';
-      addRandomGroup.setAttribute('aria-label', `在旋律 ${index + 1} 中添加随机音节括号`);
-      addRandomGroup.addEventListener('pointerdown', (event) => event.preventDefault());
-      addRandomGroup.addEventListener('click', () => this.insertSoundDebugRandomGroup(index, input));
-      row.append(select, input, remove, addRandomGroup);
+      row.append(select, input, remove);
       return row;
     });
     this.soundDebugPatternList.replaceChildren(...rows);
@@ -1835,7 +1839,7 @@ class NumberConnectApp {
 
   private addSoundDebugPattern(): void {
     if (this.settings.comboSoundPatterns.length >= 32) return;
-    this.settings.comboSoundPatterns.push('1,2,3,4,5,6,7,8');
+    this.settings.comboSoundPatterns.push('[1,2,3,4,5,6,7,8]');
     this.settings.comboSoundPatternIndex = this.settings.comboSoundPatterns.length - 1;
     this.syncActiveSoundDebugPattern();
     this.renderSoundDebugPatterns();
@@ -1872,7 +1876,7 @@ class NumberConnectApp {
   }
 
   private updateSoundDebugPattern(index: number, input: HTMLInputElement): void {
-    const sanitized = normalizeComboSoundCommas(input.value).replace(/[^0-9,[\]]/g, '').slice(0, 64);
+    const sanitized = normalizeComboSoundCommas(input.value).replace(/[^0-9,[\]]/g, '').slice(0, 256);
     if (input.value !== sanitized) input.value = sanitized;
     if (!isComboSoundPattern(sanitized)) {
       input.setAttribute('aria-invalid', 'true');
@@ -1883,60 +1887,9 @@ class NumberConnectApp {
     this.syncActiveSoundDebugPattern();
   }
 
-  private insertSoundDebugRandomGroup(index: number, input: HTMLInputElement): void {
-    const selectionStart = input.selectionStart ?? input.value.length;
-    const selectionEnd = input.selectionEnd ?? selectionStart;
-    const prefix = selectionStart > 0 && input.value[selectionStart - 1] !== ',' ? ',' : '';
-    const suffix = selectionEnd < input.value.length && input.value[selectionEnd] !== ',' ? ',' : '';
-    const insertion = `${prefix}[]${suffix}`;
-    const nextValue = `${input.value.slice(0, selectionStart)}${insertion}${input.value.slice(selectionEnd)}`;
-    if (nextValue.length > input.maxLength) return;
-    input.value = nextValue;
-    this.updateSoundDebugPattern(index, input);
-    input.focus();
-    const caret = selectionStart + prefix.length + 1;
-    input.setSelectionRange(caret, caret);
-  }
-
-  private handleSoundDebugPatternDelete(
-    index: number,
-    input: HTMLInputElement,
-    event: KeyboardEvent,
-  ): void {
-    if (event.key !== 'Backspace' && event.key !== 'Delete') return;
-    const selectionStart = input.selectionStart ?? 0;
-    const selectionEnd = input.selectionEnd ?? selectionStart;
-    let deleteStart = selectionStart;
-    let deleteEnd = selectionEnd;
-
-    if (selectionStart === selectionEnd) {
-      const targetIndex = event.key === 'Backspace' ? selectionStart - 1 : selectionStart;
-      const group = comboSoundBracketGroupRange(input.value, targetIndex);
-      if (!group) return;
-      deleteStart = group.start;
-      deleteEnd = group.end;
-    } else {
-      let touchesBracket = false;
-      for (let position = selectionStart; position < selectionEnd; position += 1) {
-        const group = comboSoundBracketGroupRange(input.value, position);
-        if (!group) continue;
-        touchesBracket = true;
-        deleteStart = Math.min(deleteStart, group.start);
-        deleteEnd = Math.max(deleteEnd, group.end);
-      }
-      if (!touchesBracket) return;
-    }
-
-    event.preventDefault();
-    if (input.value[deleteEnd] === ',') deleteEnd += 1;
-    else if (deleteStart > 0 && input.value[deleteStart - 1] === ',') deleteStart -= 1;
-    input.value = `${input.value.slice(0, deleteStart)}${input.value.slice(deleteEnd)}`;
-    this.updateSoundDebugPattern(index, input);
-    input.setSelectionRange(deleteStart, deleteStart);
-  }
-
   private syncActiveSoundDebugPattern(): void {
-    const pattern = this.settings.comboSoundPatterns[this.settings.comboSoundPatternIndex] ?? '1,2,3,4,5,6,7,8';
+    const pattern = this.settings.comboSoundPatterns[this.settings.comboSoundPatternIndex]
+      ?? '[1,2,3,4,5,6,7,8]';
     this.settings.comboSoundPattern = pattern;
     saveSettings(this.settings);
     this.boardScene.setConnectionSoundComposition(
@@ -1948,7 +1901,7 @@ class NumberConnectApp {
   private updateSoundDebugArrangement(): void {
     const sanitized = normalizeComboSoundCommas(this.soundDebugArrangement.value)
       .replace(/[^0-9,[\]]/g, '')
-      .slice(0, 128);
+      .slice(0, 512);
     if (this.soundDebugArrangement.value !== sanitized) this.soundDebugArrangement.value = sanitized;
     if (!isComboSoundArrangement(sanitized, this.settings.comboSoundPatterns.length)) {
       this.soundDebugArrangement.setAttribute('aria-invalid', 'true');
@@ -1961,17 +1914,16 @@ class NumberConnectApp {
 
   private insertSoundDebugArrangementGroup(): void {
     const input = this.soundDebugArrangement;
-    const selectionStart = input.selectionStart ?? input.value.length;
-    const selectionEnd = input.selectionEnd ?? selectionStart;
-    const prefix = selectionStart > 0 && input.value[selectionStart - 1] !== ',' ? ',' : '';
-    const suffix = selectionEnd < input.value.length && input.value[selectionEnd] !== ',' ? ',' : '';
-    const insertion = `${prefix}[]${suffix}`;
-    const nextValue = `${input.value.slice(0, selectionStart)}${insertion}${input.value.slice(selectionEnd)}`;
+    const outerClose = input.value.lastIndexOf(']');
+    if (outerClose < 0) return;
+    const prefix = input.value[outerClose - 1] === '[' ? '' : ',';
+    const insertion = `${prefix}[]`;
+    const nextValue = `${input.value.slice(0, outerClose)}${insertion}${input.value.slice(outerClose)}`;
     if (nextValue.length > input.maxLength) return;
     input.value = nextValue;
     this.updateSoundDebugArrangement();
     input.focus();
-    const caret = selectionStart + prefix.length + 1;
+    const caret = outerClose + prefix.length + 1;
     input.setSelectionRange(caret, caret);
   }
 
@@ -2032,7 +1984,7 @@ class NumberConnectApp {
     this.soundDebugConfigExport.disabled = true;
     try {
       await this.writeSoundDebugConfigToClipboard(value);
-      this.setSoundDebugConfigStatus(`已导出 ${this.settings.comboSoundPatterns.length} 条旋律到剪贴板`, 'success');
+      this.setSoundDebugConfigStatus(`已导出组曲与 ${this.settings.comboSoundPatterns.length} 条旋律到剪贴板`, 'success');
     } catch {
       this.setSoundDebugConfigStatus('导出失败：浏览器未允许写入剪贴板', 'error');
     } finally {
@@ -2057,7 +2009,7 @@ class NumberConnectApp {
       this.soundDebugArrangement.removeAttribute('aria-invalid');
       this.syncActiveSoundDebugPattern();
       this.renderSoundDebugPatterns();
-      this.setSoundDebugConfigStatus(`已读取 ${config.patterns.length} 条旋律，游戏内已生效`, 'success');
+      this.setSoundDebugConfigStatus(`已读取组曲与 ${config.patterns.length} 条旋律，游戏内已生效`, 'success');
     } catch {
       this.setSoundDebugConfigStatus('读取失败：剪贴板内容不是有效的组曲配置', 'error');
     } finally {

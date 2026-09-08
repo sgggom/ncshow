@@ -2714,7 +2714,7 @@ input[type="range"] { width: 100%; accent-color: var(--green); }
 .sound-debug-config-actions > small[data-tone="success"] { color: #2f987b; }
 .sound-debug-config-actions > small[data-tone="error"] { color: #c44f60; }
 .sound-debug-pattern-list { max-height: 230px; padding-right: 4px; display: grid; gap: 7px; overflow-y: auto; overscroll-behavior: contain; scrollbar-gutter: stable; }
-.sound-debug-pattern-row { min-height: 44px; padding: 4px; display: grid; grid-template-columns: 34px minmax(0, 1fr) 32px 44px; gap: 5px; align-items: center; border: 1px solid rgba(74,101,130,.12); border-radius: 13px; background: #f3f6f9; transition: border-color .16s ease, background-color .16s ease, box-shadow .16s ease; }
+.sound-debug-pattern-row { min-height: 44px; padding: 4px; display: grid; grid-template-columns: 34px minmax(0, 1fr) 32px; gap: 5px; align-items: center; border: 1px solid rgba(74,101,130,.12); border-radius: 13px; background: #f3f6f9; transition: border-color .16s ease, background-color .16s ease, box-shadow .16s ease; }
 .sound-debug-pattern-row.is-active { border-color: rgba(57,121,184,.35); background: #edf5fc; box-shadow: 0 0 0 2px rgba(57,121,184,.08); }
 .sound-debug-pattern-select { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 9px; color: #718397; background: #e4eaf0; font-size: .66rem; font-weight: 900; }
 .sound-debug-pattern-row.is-active .sound-debug-pattern-select { color: #fff; background: #3979b8; }
@@ -2722,7 +2722,6 @@ input[type="range"] { width: 100%; accent-color: var(--green); }
 .sound-debug-pattern-row input[aria-invalid="true"] { box-shadow: inset 0 0 0 2px #d94f62; }
 .sound-debug-pattern-remove { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 9px; color: #c44f60; background: #fbecef; font-size: 1rem; line-height: 1; }
 .sound-debug-pattern-remove:disabled { color: #aab5c0; background: #edf1f4; cursor: default; }
-.sound-debug-pattern-brackets { width: 42px; height: 30px; display: grid; place-items: center; border-radius: 9px; color: #7650b8; background: #f0e9f9; font-size: .62rem; font-weight: 900; }
 .sound-debug-panel [data-debug-sound]:hover { transform: translateY(-1px); }
 .sound-debug-panel [data-debug-sound].is-playing { color: #fff; border-color: transparent; background: linear-gradient(145deg,#58bfa0,#31977b); box-shadow: 0 7px 16px rgba(47,152,123,.22); }
 
