@@ -317,6 +317,7 @@ export interface GameSettings {
   mainGameplayDifficulty: MainGameplayDifficulty;
   beadMainLevelId: number;
   puzzleMainLevelId: number;
+  puzzleAnimationFlow: 'flow1' | 'flow2';
   mode3MainLevelId: number;
   mode4MainLevelId: number;
   mode5MainLevelId: number;
@@ -443,6 +444,14 @@ export interface BoardSessionInput {
   level: LevelData;
   hiddenCells: Set<string>;
   artwork?: BoardArtworkInput;
+  beadArtwork?: {
+    width: number;
+    height: number;
+    originX: number;
+    originY: number;
+    completedPixels?: readonly Cell[];
+    pixels: readonly { x: number; y: number; color: string }[];
+  };
   completionGemColors?: readonly string[];
   completionGemDestination?: 'jar' | 'showcase';
   showNextNumber: boolean;
@@ -480,6 +489,7 @@ export const DEFAULT_SETTINGS: GameSettings = {
   mainGameplayDifficulty: 'dynamic',
   beadMainLevelId: 1,
   puzzleMainLevelId: 1,
+  puzzleAnimationFlow: 'flow1',
   mode3MainLevelId: 1,
   mode4MainLevelId: 1,
   mode5MainLevelId: 1,

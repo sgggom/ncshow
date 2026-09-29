@@ -122,6 +122,7 @@
         <div id="game-host" class="game-host" aria-label="数字连接棋盘">
           <div id="play-puzzle-progress" class="play-puzzle-progress" role="progressbar" aria-label="当前数字进度" aria-valuemin="1" aria-valuemax="4" aria-valuenow="1" hidden>
             <i id="play-puzzle-progress-fill"></i>
+            <div id="play-puzzle-stage-nodes" class="play-puzzle-stage-nodes" aria-hidden="true" hidden></div>
             <b id="play-progress-start" class="play-progress-ball play-progress-ball--start" aria-hidden="true">1</b>
             <b id="play-progress-current" class="play-progress-ball play-progress-ball--current" aria-hidden="true" hidden>1</b>
             <b id="play-progress-end" class="play-progress-ball play-progress-ball--end" aria-hidden="true">4</b>
@@ -409,6 +410,7 @@
       <form method="dialog" class="settings-card">
         <header><div><h2>游戏设置</h2></div><button id="settings-close-button" class="icon-button" value="cancel" aria-label="关闭">×</button></header>
         <div class="settings-list">
+          <div class="setting-row"><span><b>拼图动画</b><small>阶段完成与结算流程</small></span><div class="setting-segmented" role="radiogroup" aria-label="拼图动画流程"><label><input type="radio" name="puzzle-animation-flow" value="flow1" checked /><span>流程1</span></label><label><input type="radio" name="puzzle-animation-flow" value="flow2" /><span>流程2</span></label></div></div>
           <div class="setting-row"><span><b>大厅主题</b><small>切换大厅背景、Logo 和开始按钮</small></span><div id="lobby-theme" class="setting-segmented setting-theme-control" role="radiogroup" aria-label="大厅主题"><label><input type="radio" name="lobby-theme" value="cool" checked /><span>冷色</span></label><label><input type="radio" name="lobby-theme" value="warm" /><span>暖色</span></label></div></div>
           <label class="setting-row"><span><b>游戏声音</b><small>连击、错误和胜利反馈</small></span><input id="settings-sound" class="switch" type="checkbox" checked /></label>
           <button id="sound-debug-toggle" class="setting-row setting-row--button setting-row--sound-debug" type="button" aria-controls="sound-debug-panel" aria-expanded="false"><span><b>音效调试面板</b><small>逐个试听游戏内的反馈音效</small></span><strong>打开 ›</strong></button>

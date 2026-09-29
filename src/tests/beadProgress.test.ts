@@ -171,7 +171,7 @@ describe('bead progression', () => {
 
   it('restores an unfinished pattern from the sequence', () => {
     const storage = {
-      getItem: vi.fn(() => JSON.stringify({ patternId: pattern.id, collected: 2 })),
+      getItem: vi.fn(() => JSON.stringify({ patternId: pattern.id, collected: 2, layout: 'sections-v1' })),
       setItem: vi.fn(),
     };
 

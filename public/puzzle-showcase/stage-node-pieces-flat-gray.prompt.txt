@@ -1,0 +1,2 @@
+Built-in image_gen edit of stage-node-pieces.png.
+Edit the preceding 2x2 jigsaw piece sprite sheet. Preserve the exact four piece silhouettes, exact positions, scale, 2x2 quadrant layout and genuinely transparent background. Change only appearance: flat 2D light gray pieces (#D9DDE2), a very thin slightly darker gray outline for legibility, solid uniform fill. Remove ALL blue/cyan color, glossy highlights, bevels, extrusion, lighting gradients and shadows. Minimal clean flat mobile UI icon style. No text, numbers, frames or additional objects.

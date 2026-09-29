@@ -123,6 +123,7 @@ export const loadSettings = (): GameSettings => {
       lobbyTheme: isLobbyTheme(stored.lobbyTheme) ? stored.lobbyTheme : DEFAULT_SETTINGS.lobbyTheme,
       beadMainLevelId,
       puzzleMainLevelId,
+      puzzleAnimationFlow: stored.puzzleAnimationFlow === 'flow2' ? 'flow2' : 'flow1',
       mode3MainLevelId,
       mode4MainLevelId,
       mode5MainLevelId,

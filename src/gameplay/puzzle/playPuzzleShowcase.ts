@@ -152,6 +152,40 @@ export const renderPlayPuzzleShowcase = (
   host.setAttribute('aria-label', `拼图：${pattern.name}，已完成 ${revealedCount} / ${puzzlePieceCount(pattern)} 块`);
 };
 
+export const renderPlayPuzzleFinaleFlow2 = (
+  host: HTMLElement,
+  pattern: PlayPuzzlePattern,
+): void => {
+  renderPlayPuzzleFinale(host, pattern);
+  // Align each sprite's square body to its grid cell; tabs may cross cell edges.
+  const quadrantSize = 627;
+  const bodySize = 430;
+  const origins = [[60, 48], [123, 48], [60, 118], [123, 118]];
+  host.querySelectorAll<HTMLElement>('.play-puzzle-finale__piece-face').forEach((face, index) => {
+    const [originX, originY] = origins[index];
+    const column = index % pattern.columns;
+    const row = Math.floor(index / pattern.columns);
+    face.classList.add('is-jigsaw-face');
+    face.style.inset = 'auto';
+    face.style.left = `${-originX / bodySize * 100}%`;
+    face.style.top = `${-originY / bodySize * 100}%`;
+    face.style.width = `${quadrantSize / bodySize * 100}%`;
+    face.style.height = `${quadrantSize / bodySize * 100}%`;
+    face.style.backgroundSize = `${pattern.columns * bodySize / quadrantSize * 100}% ${pattern.rows * bodySize / quadrantSize * 100}%`;
+    face.style.backgroundPosition = `${(originX - column * bodySize) / (quadrantSize - pattern.columns * bodySize) * 100}% ${(originY - row * bodySize) / (quadrantSize - pattern.rows * bodySize) * 100}%`;
+    face.style.setProperty('--finale-mask-position', `${index % 2 * 100}% ${Math.floor(index / 2) * 100}%`);
+  });
+  const completeImage = document.createElement('img');
+  completeImage.className = 'play-puzzle-finale__complete-image';
+  completeImage.src = pattern.imageUrl;
+  completeImage.alt = '';
+  completeImage.draggable = false;
+  const flash = document.createElement('span');
+  flash.className = 'play-puzzle-finale__assembly-flash';
+  flash.setAttribute('aria-hidden', 'true');
+  host.append(completeImage, flash);
+};
+
 export const renderPlayPuzzleFinale = (
   host: HTMLElement,
   pattern: PlayPuzzlePattern,
