@@ -56,6 +56,23 @@
               <span class="reference-feature-meta">画线解谜</span>
               <span class="reference-feature-play">Play</span>
             </button>
+            <button id="default-witness-tiles-button" class="default-feature-card default-feature-card--witness default-feature-card--witness-tiles" type="button" aria-label="进入圆点解谜">
+              <strong>圆点解谜</strong>
+              <span class="witness-entry-art" aria-hidden="true">
+                <svg viewBox="0 0 140 140" fill="none">
+                  <rect x="8" y="8" width="124" height="124" rx="18" fill="#e8f2ff" stroke="#c4ddff" stroke-width="4"/>
+                  <g fill="#fff" stroke="#afc9ed" stroke-width="2">
+                    <circle cx="35" cy="35" r="13"/><circle cx="70" cy="35" r="13"/><circle cx="105" cy="35" r="13"/>
+                    <circle cx="35" cy="70" r="13"/><circle cx="70" cy="70" r="13"/><circle cx="105" cy="70" r="13"/>
+                    <circle cx="35" cy="105" r="13"/><circle cx="70" cy="105" r="13"/><circle cx="105" cy="105" r="13"/>
+                  </g>
+                  <path d="M35 105V70H70V35H105" stroke="#3780e8" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+                  <circle cx="35" cy="105" r="7" fill="#3780e8"/><circle cx="105" cy="35" r="7" fill="#ffcb73"/>
+                <g fill="#245a9c" font-size="15" font-weight="800" text-anchor="middle"><text x="35" y="110">1</text><text x="35" y="75">2</text><text x="70" y="75">3</text></g></svg>
+              </span>
+              <span class="reference-feature-meta">Witness · 数字圆点</span>
+              <span class="reference-feature-play">Play</span>
+            </button>
             <button id="default-daily-challenge-button" class="default-feature-card default-feature-card--daily" type="button" aria-label="打开每日挑战">
               <strong>DAILY CHALLENGE</strong>
               <span class="default-feature-artwork" aria-hidden="true">
@@ -84,6 +101,7 @@
 
       </section>
 
+      <section id="witness-tiles-screen" class="screen witness-screen witness-tiles-screen" aria-label="圆点解谜" hidden></section>
       <section id="witness-screen" class="screen witness-screen" aria-label="Witness 画线解谜" hidden></section>
       <section id="play-screen" class="screen play-screen" hidden aria-label="游戏界面">
         <div id="play-coin-frame" class="play-coin-frame" role="status" aria-live="polite" aria-label="金币 0">

@@ -1,3 +1,4 @@
+import { drawTileBoard } from './tileBoard';
 import { tracePointer } from './trace';
 import data from './puzzles.json';
 import originalData from './originalPuzzles.json';
@@ -7,7 +8,7 @@ const puzzles: Puzzle[] = [...data, ...originalData.map(p=>({...p,source:'ttws' 
 const labels: Record<string,string> = { maze:'起点与终点', dots:'必经黑点', square:'色块分区', star:'星星配对', triangle:'三角计数', mixed:'组合挑战' };
 const tips: Record<string,string> = { maze:'从大圆点出发，沿网格画到伸出的终点。', dots:'路线必须经过每一个黑点。', square:'用路线分区，每个区域只能有一种颜色的方块。', star:'星星所在区域必须恰好有两个同色符号，方块也计入。', triangle:'格子里的三角形有几个，路线就必须经过它的几条边。', mixed:'同时满足棋盘上所有符号的规则。' };
 const NS='http://www.w3.org/2000/svg';
-const storageKey='ncshow:witness:v1';
+const tileTips: Record<string,string> = { maze:'从起点圆点走到终点圆点，可上下左右连接，不必走满。', dots:'连接相邻圆点，经过圆点上和圆点间的全部黑点。', square:'用连线分区，让提示区里不同颜色的方块分开。', star:'每颗星星所在区域，必须恰好有两个同色符号。', triangle:'三角提示周围的四条连线，经过条数须等于三角数量。', mixed:'连接相邻圆点，同时满足圆点间提示区的全部规则。' };
 export class WitnessGame {
   private index=0;
   private path:number[][]=[];
@@ -19,16 +20,16 @@ export class WitnessGame {
   private readonly board:SVGSVGElement;
   private readonly status:HTMLElement;
   private readonly picker:HTMLElement;
-  constructor(private readonly root:HTMLElement, private readonly back:()=>void) {
-    try { const saved=JSON.parse(localStorage.getItem(storageKey)||'{}'); this.completed=new Set(Array.isArray(saved.completed)?saved.completed.filter((id:unknown)=>typeof id==='string'):[]); this.index=Math.max(0,puzzles.findIndex(p=>p.id===saved.current)); } catch { /* Storage is optional. */ }
-    root.innerHTML=`<header class="witness-header"><button data-action="back" aria-label="返回大厅">‹</button><div><small>画线解谜</small><h1>WITNESS</h1></div><button data-action="library">玩法分类</button></header>
+  constructor(private readonly root:HTMLElement, private readonly back:()=>void, private readonly variant:'lines'|'tiles'='lines') {
+    try { const saved=JSON.parse(localStorage.getItem(this.storageKey)||'{}'); this.completed=new Set(Array.isArray(saved.completed)?saved.completed.filter((id:unknown)=>typeof id==='string'):[]); this.index=Math.max(0,puzzles.findIndex(p=>p.id===saved.current)); } catch { /* Storage is optional. */ }
+    root.innerHTML=`<header class="witness-header"><button data-action="back" aria-label="返回大厅">‹</button><div><small>${this.variant==='tiles'?'WITNESS · 圆点版':'画线解谜'}</small><h1>${this.variant==='tiles'?'圆点解谜':'WITNESS'}</h1></div><button data-action="library">玩法分类</button></header>
       <div class="witness-level"><span></span><strong></strong></div>
       <p class="witness-tip"></p>
       <svg class="witness-board" tabindex="0" role="application" aria-label="画线棋盘：拖动起点画线，或按回车开始，方向键移动，退格撤销"></svg>
       <p class="witness-status" role="status" aria-live="polite"></p>
       <div class="witness-actions"><button data-action="undo">撤销</button><button data-action="reset">重画</button><button data-action="hint">提示一步</button></div>
       <button class="witness-next" data-action="next" hidden>下一题 →</button>
-      <details class="witness-help"><summary>玩法与题库来源</summary><p>从圆点画到终点，路线不能交叉或穿过断口。可拖动，也可逐点点击；往回走即可撤销。键盘：回车开始、方向键移动、退格撤销。</p><p>${Object.values(tips).slice(1,5).join('<br>')}</p><p>题库包含 ttws 社区整理的原版题目和 36 道社区练习题。原版整理不代表官方完整题库。<a href="https://github.com/barrycohen/ttws" target="_blank" rel="noopener">ttws</a> · <a href="${import.meta.env.BASE_URL}witness/ttws/LICENSE.txt" target="_blank" rel="noopener">MIT 授权</a>。社区练习来自 <a href="https://witnesspuzzles.com/" target="_blank" rel="noopener">Witness Puzzles</a> · <a href="${import.meta.env.BASE_URL}witness/LICENSE.txt" target="_blank" rel="noopener">BSD 授权</a></p><a class="witness-source" target="_blank" rel="noopener">查看本题原始来源</a></details>
+      <details class="witness-help"><summary>玩法与题库来源</summary><p>${this.variant==='tiles'?'从起点圆点连到终点圆点，只能上下左右走，不能重复经过圆点或跨越红色挡板。不必走满所有圆点，数字表示连接步序。圆点间的符号是分区提示，不是可连接的圆点。':'从圆点画到终点，路线不能交叉或穿过断口。'}可拖动，也可逐点点击；往回走即可撤销。键盘：回车开始、方向键移动、退格撤销。</p><p>${Object.values(this.variant==='tiles'?tileTips:tips).slice(1,5).join('<br>')}</p><p>题库包含 ttws 社区整理的原版题目和 36 道社区练习题。原版整理不代表官方完整题库。<a href="https://github.com/barrycohen/ttws" target="_blank" rel="noopener">ttws</a> · <a href="${import.meta.env.BASE_URL}witness/ttws/LICENSE.txt" target="_blank" rel="noopener">MIT 授权</a>。社区练习来自 <a href="https://witnesspuzzles.com/" target="_blank" rel="noopener">Witness Puzzles</a> · <a href="${import.meta.env.BASE_URL}witness/LICENSE.txt" target="_blank" rel="noopener">BSD 授权</a></p><a class="witness-source" target="_blank" rel="noopener">查看本题原始来源</a></details>
       <div class="witness-picker" hidden><header><h2>Witness 题库</h2><button data-action="close">关闭</button></header><div class="witness-source-tabs" aria-label="题库来源"><button data-source="ttws">原版整理</button><button data-source="community">社区练习</button></div><p class="witness-library-note"></p><p class="witness-progress"></p><div class="witness-levels"></div></div>`;
     this.board=root.querySelector('svg')!;this.status=root.querySelector('.witness-status')!;this.picker=root.querySelector('.witness-picker')!;
     root.addEventListener('click',event=>{
@@ -74,18 +75,20 @@ export class WitnessGame {
     });
     this.load();
   }
+  private get storageKey():string{return this.variant==='tiles'?'ncshow:witness-tiles:v1':'ncshow:witness:v1';}
+  private get ruleTips():Record<string,string>{return this.variant==='tiles'?tileTips:tips;}
   public open():void{this.openLibrary(true);}
   private get categoryPuzzles():Puzzle[]{return puzzles.filter(p=>p.category===this.puzzle.category && p.source===this.puzzle.source);}
   private get puzzle():Puzzle{return puzzles[this.index];}
-  private save():void{try{localStorage.setItem(storageKey,JSON.stringify({completed:[...this.completed],current:this.puzzle.id}));}catch{/* Keep playing without persistence. */}}
+  private save():void{try{localStorage.setItem(this.storageKey,JSON.stringify({completed:[...this.completed],current:this.puzzle.id}));}catch{/* Keep playing without persistence. */}}
   private load():void{
     this.path=[];this.solved=false;this.pointer=null;
     this.root.querySelector('.witness-level span')!.textContent=`${labels[this.puzzle.category]} · 第 ${this.categoryPuzzles.findIndex(p=>p.id===this.puzzle.id)+1} / ${this.categoryPuzzles.length} 题`;
     this.root.querySelector('.witness-level strong')!.textContent=this.completed.has(this.puzzle.id)?'已通关 ✓':'';
-    this.root.querySelector('.witness-tip')!.textContent=tips[this.puzzle.category];
+    this.root.querySelector('.witness-tip')!.textContent=this.ruleTips[this.puzzle.category];
     const source=this.root.querySelector<HTMLAnchorElement>('.witness-source')!;source.href=this.puzzle.source==='ttws'?`https://github.com/barrycohen/ttws/blob/master/witness_puzzles#L${this.puzzle.sourceLine}`:`https://witnesspuzzles.com/play/${this.puzzle.id}.html`;
     source.textContent=this.puzzle.source==='ttws'?`本题来源：ttws 第 ${this.puzzle.sourceLine} 条`:'查看本题原始来源';
-    this.status.textContent='从大圆点开始';this.render();this.save();
+    this.status.textContent=this.variant==='tiles'?'从标有 1 的圆点开始':'从大圆点开始';this.render();this.save();
   }
   private atPointer(e:PointerEvent):void{
     const matrix=this.board.getScreenCTM();if(!matrix)return;
@@ -104,6 +107,15 @@ export class WitnessGame {
   }
   private drawTrace(points:number[][]):void{
     this.board.querySelector('.witness-trace')?.setAttribute('points',points.map(a=>`${40+a[0]*30},${40+a[1]*30}`).join(' '));
+    if(this.variant==='tiles'){
+      this.board.querySelectorAll('.witness-node-number').forEach(node=>node.remove());
+      this.path.forEach((point,index)=>{
+        const label=document.createElementNS(NS,'text');
+        const attrs={x:40+point[0]*30,y:40+point[1]*30,'text-anchor':'middle','dominant-baseline':'central',fill:'#fff','font-size':18,'font-weight':800,stroke:'#3780e8','stroke-width':5,'paint-order':'stroke',class:'witness-node-number'};
+        for(const [key,value]of Object.entries(attrs))label.setAttribute(key,String(value));
+        label.textContent=String(index+1);this.board.append(label);
+      });
+    }
   }
 
   private step(point:number[]):void{
@@ -117,9 +129,9 @@ export class WitnessGame {
     this.render();
   }
   private updateStatus():void{
-    this.status.textContent='沿网格继续画线，往回走可撤销';
+    this.status.textContent=this.variant==='tiles'?'连接相邻圆点，往回拖可撤销':'沿网格继续画线，往回走可撤销';
     if(this.path.length && same(this.path.at(-1)!,this.puzzle.end)){
-      const error=validate(this.puzzle,this.path);this.status.textContent=error||'解开了！所有规则均已满足 ✓';
+      const error=validate(this.puzzle,this.path);this.status.textContent=(this.variant==='tiles'?error?.replace('该格被路线经过的边数','该提示周围被连接的边数'):error)||'解开了！所有规则均已满足 ✓';
       if(!error){this.solved=true;this.completed.add(this.puzzle.id);this.save();this.root.querySelector('.witness-level strong')!.textContent='已通关 ✓';}
     }
   }
@@ -134,24 +146,32 @@ export class WitnessGame {
     const p=this.puzzle;this.board.replaceChildren();this.board.setAttribute('viewBox',`0 0 ${80+p.width*60} ${80+p.height*60}`);
     const el=(name:string,attrs:Record<string,string|number>)=>{const node=document.createElementNS(NS,name);for(const [k,v]of Object.entries(attrs))node.setAttribute(k,String(v));this.board.append(node);return node;};
     const line=(a:number[],b:number[],color:string,width:number)=>el('line',{x1:40+a[0]*30,y1:40+a[1]*30,x2:40+b[0]*30,y2:40+b[1]*30,stroke:color,'stroke-width':width,'stroke-linecap':'round'});
-    for(let x=0;x<=p.width*2;x+=2)for(let y=0;y<=p.height*2;y+=2)for(const d of [[2,0],[0,2]]){
+    if(this.variant==='tiles')drawTileBoard(this.board,p,this.path);
+    else for(let x=0;x<=p.width*2;x+=2)for(let y=0;y<=p.height*2;y+=2)for(const d of [[2,0],[0,2]]){
       const b=[x+d[0],y+d[1]];if(b[0]>p.width*2||b[1]>p.height*2)continue;
       if(canStep(p,[x,y],b))line([x,y],b,'#567f79',9);
       else {line([x,y],[x+d[0]*.32,y+d[1]*.32],'#567f79',9);line([x+d[0]*.68,y+d[1]*.68],b,'#567f79',9);}
     }
     const direction:Record<string,number[]>={top:[0,-.6],bottom:[0,.6],left:[-.6,0],right:[.6,0]};const d=direction[p.endDirection]||[0,-.6];
-    line(p.end,p.end.map((v,i)=>v+d[i]),this.solved?'#ffe19a':'#567f79',9);
-    el('circle',{cx:40+p.start[0]*30,cy:40+p.start[1]*30,r:13,fill:'#779b90'});
+    if(this.variant==='lines')line(p.end,p.end.map((v,i)=>v+d[i]),this.solved?'#ffe19a':'#567f79',9);
+    if(this.variant==='lines')el('circle',{cx:40+p.start[0]*30,cy:40+p.start[1]*30,r:13,fill:'#779b90'});
     for(const s of p.symbols){const x=40+s.x*30,y=40+s.y*30;
       if(s.type==='square')el('rect',{x:x-10,y:y-10,width:20,height:20,rx:3,fill:s.color,stroke:'#96afa5','stroke-width':1});
       if(s.type==='star'){const points=Array.from({length:16},(_,i)=>{const a=i*Math.PI/8,r=i%2?6:12;return `${x+Math.sin(a)*r},${y+Math.cos(a)*r}`;}).join(' ');el('polygon',{points,fill:s.color,stroke:'#96afa5','stroke-width':.7});}
       if(s.type==='triangle')for(let i=0;i<(s.count||1);i++){const cx=x+(i-((s.count||1)-1)/2)*13;el('polygon',{points:`${cx},${y-6} ${cx-5},${y+4} ${cx+5},${y+4}`,fill:s.color});}
     }
     for(const dot of p.dots)el('circle',{cx:40+dot[0]*30,cy:40+dot[1]*30,r:5,fill:'#0a211e'});
-    if(this.path.length){el('polyline',{class:'witness-trace',points:this.path.map(a=>`${40+a[0]*30},${40+a[1]*30}`).join(' '),fill:'none',stroke:'#ffe19a','stroke-width':9,'stroke-linecap':'round','stroke-linejoin':'round'});el('circle',{cx:40+p.start[0]*30,cy:40+p.start[1]*30,r:13,fill:'#ffe19a'});}
+    if(this.path.length){el('polyline',{class:'witness-trace',points:this.path.map(a=>`${40+a[0]*30},${40+a[1]*30}`).join(' '),fill:'none',stroke:this.variant==='tiles'?'#3780e8':'#ffe19a','stroke-width':9,'stroke-linecap':'round','stroke-linejoin':'round'});el('circle',{cx:40+p.start[0]*30,cy:40+p.start[1]*30,r:this.variant==='tiles'?6:13,fill:this.variant==='tiles'?'#3780e8':'#ffe19a'});}
+    if(this.variant==='tiles'){
+      for(const [point,label]of [[p.start,'1'],[p.end,'终']] as [number[],string][]){
+        if(this.path.some(p=>same(p,point)))continue;
+        const text=el('text',{x:40+point[0]*30,y:40+point[1]*30,'text-anchor':'middle','dominant-baseline':'central',fill:label==='1'?'#205caa':'#916712','font-size':15,'font-weight':700,stroke:label==='1'?'#ffffff':'#fff1ce','stroke-width':4,'paint-order':'stroke'});text.textContent=label;
+      }
+    }
     const nextButton=this.root.querySelector<HTMLElement>('[data-action="next"]')!;
     nextButton.hidden=!this.solved;
     nextButton.textContent=this.categoryPuzzles.every(p=>this.completed.has(p.id))?'本类已完成 · 选择其他玩法':'本类下一题 →';
+    if(this.variant==='tiles')this.drawTrace(this.path);
     this.root.querySelector<HTMLButtonElement>('[data-action="undo"]')!.disabled=!this.path.length;
     this.root.querySelector<HTMLButtonElement>('[data-action="hint"]')!.disabled=this.solved;
   }
@@ -186,7 +206,7 @@ export class WitnessGame {
       : '36 道社区创作练习题，通关进度独立保存。';
     const selected=category?sourcePuzzles.filter(p=>p.category===category):sourcePuzzles;
     this.root.querySelector('.witness-progress')!.textContent=category
-      ? `${tips[category]} 已完成 ${selected.filter(p=>this.completed.has(p.id)).length} / ${selected.length} 题`
+      ? `${this.ruleTips[category]} 已完成 ${selected.filter(p=>this.completed.has(p.id)).length} / ${selected.length} 题`
       : '按规则自由选择，每种玩法单独记录进度';
     const list=this.root.querySelector<HTMLElement>('.witness-levels')!;list.replaceChildren();
     list.className=category?'witness-levels witness-category-levels':'witness-levels witness-categories';

@@ -1,6 +1,6 @@
 import { query } from './dom';
 
-export type ScreenName = 'witness' | 'lobby' | 'play' | 'bead' | 'collection' | 'daily' | 'endless' | 'favorites';
+export type ScreenName = 'witness-tiles' | 'witness' | 'lobby' | 'play' | 'bead' | 'collection' | 'daily' | 'endless' | 'favorites';
 type PrimaryTab = 'lobby' | 'challenge' | 'endless' | 'favorites';
 
 const PRIMARY_TAB_ORDER: readonly PrimaryTab[] = ['lobby', 'challenge', 'endless', 'favorites'];
@@ -16,6 +16,7 @@ const primaryTabForScreen: Partial<Record<ScreenName, PrimaryTab>> = {
 export class ScreenRouter {
   private readonly appShell = query<HTMLElement>('#app');
   private readonly screens: Record<ScreenName, HTMLElement> = {
+    'witness-tiles': query<HTMLElement>('#witness-tiles-screen'),
     witness: query<HTMLElement>('#witness-screen'),
     lobby: query<HTMLElement>('#lobby-screen'),
     play: query<HTMLElement>('#play-screen'),

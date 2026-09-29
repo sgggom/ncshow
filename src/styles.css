@@ -3699,3 +3699,11 @@ html[data-theme="default"] .default-brand-lockup { margin-top: 72px; }
 .witness-source-tabs button { flex:1; }
 .witness-source-tabs button[aria-pressed="true"] { background:#316c54; color:#fff2d1; }
 .witness-library-note { margin:12px 0; font-size:12px; line-height:1.7; color:#557568; }
+
+html[data-theme="default"] .default-feature-card--witness-tiles { background:linear-gradient(150deg,#92bff3,#3774bd); box-shadow:inset 0 -6px 0 #245999; }
+.witness-tiles-screen, .witness-tiles-screen .witness-picker { background:#edf4fd; color:#294d7d; }
+.witness-tiles-screen .witness-board { background:#e1ecfa; box-shadow:inset 0 0 0 5px #d1e1f5,0 8px 20px #315a8315; }
+.witness-tiles-screen button { background:#d6e5f7; color:#294d7d; }
+.witness-tiles-screen .witness-categories button:nth-child(2n) { background:#dde9f8; }
+.witness-tiles-screen .witness-category-icon, .witness-tiles-screen .witness-progress, .witness-tiles-screen .witness-library-note { color:#5478a5; }
+.witness-tiles-screen button[aria-pressed="true"], .witness-tiles-screen button[aria-current="true"], .witness-tiles-screen .witness-next { background:#377dcc; color:white; }

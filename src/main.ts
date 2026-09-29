@@ -737,6 +737,12 @@ class NumberConnectApp {
     });
     bindFeatureCarousel(query('#lobby-feature-list'), query<HTMLButtonElement>('#feature-list-previous'), query<HTMLButtonElement>('#feature-list-next'));
     query('#default-start-button').addEventListener('click', () => void this.startNormalMode());
+    let witnessTiles: WitnessGame | undefined;
+    query('#default-witness-tiles-button').addEventListener('click', () => {
+      witnessTiles ??= new WitnessGame(query('#witness-tiles-screen'), () => this.backToLobby(), 'tiles');
+      this.showScreen('witness-tiles');
+      witnessTiles.open();
+    });
     let witness: WitnessGame | undefined;
     query('#default-witness-mode-button').addEventListener('click', () => {
       witness ??= new WitnessGame(query('#witness-screen'), () => this.backToLobby());
