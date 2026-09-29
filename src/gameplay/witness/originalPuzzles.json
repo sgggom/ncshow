@@ -1,0 +1,9465 @@
+[
+  {
+    "id": "ttws-e2e8f55d55f5",
+    "name": "The Witness · ttws #1",
+    "width": 5,
+    "height": 5,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "star",
+        "color": "black"
+      },
+      {
+        "x": 3,
+        "y": 1,
+        "type": "star",
+        "color": "black"
+      },
+      {
+        "x": 5,
+        "y": 1,
+        "type": "star",
+        "color": "red"
+      },
+      {
+        "x": 7,
+        "y": 1,
+        "type": "star",
+        "color": "red"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "star",
+        "color": "white"
+      },
+      {
+        "x": 3,
+        "y": 3,
+        "type": "star",
+        "color": "white"
+      },
+      {
+        "x": 5,
+        "y": 3,
+        "type": "star",
+        "color": "green"
+      },
+      {
+        "x": 7,
+        "y": 3,
+        "type": "star",
+        "color": "green"
+      },
+      {
+        "x": 1,
+        "y": 5,
+        "type": "star",
+        "color": "cyan"
+      },
+      {
+        "x": 3,
+        "y": 5,
+        "type": "star",
+        "color": "cyan"
+      },
+      {
+        "x": 5,
+        "y": 5,
+        "type": "star",
+        "color": "blue"
+      },
+      {
+        "x": 7,
+        "y": 5,
+        "type": "star",
+        "color": "blue"
+      },
+      {
+        "x": 1,
+        "y": 7,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 3,
+        "y": 7,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 5,
+        "y": 7,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 7,
+        "y": 7,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 1,
+        "y": 9,
+        "type": "star",
+        "color": "yellow"
+      },
+      {
+        "x": 3,
+        "y": 9,
+        "type": "star",
+        "color": "yellow"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 1,
+    "endDirection": "right",
+    "start": [
+      0,
+      10
+    ],
+    "end": [
+      10,
+      0
+    ],
+    "category": "star",
+    "solution": [
+      [
+        0,
+        10
+      ],
+      [
+        2,
+        10
+      ],
+      [
+        4,
+        10
+      ],
+      [
+        6,
+        10
+      ],
+      [
+        8,
+        10
+      ],
+      [
+        10,
+        10
+      ],
+      [
+        10,
+        8
+      ],
+      [
+        10,
+        6
+      ],
+      [
+        10,
+        4
+      ],
+      [
+        10,
+        2
+      ],
+      [
+        10,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-80845b9cee13",
+    "name": "The Witness · ttws #3",
+    "width": 1,
+    "height": 2,
+    "dots": [],
+    "gaps": [],
+    "symbols": [],
+    "source": "ttws",
+    "sourceLine": 3,
+    "endDirection": "top",
+    "start": [
+      2,
+      4
+    ],
+    "end": [
+      0,
+      0
+    ],
+    "category": "maze",
+    "solution": [
+      [
+        2,
+        4
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        0,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-2fe8d02a2087",
+    "name": "The Witness · ttws #4",
+    "width": 4,
+    "height": 4,
+    "dots": [],
+    "gaps": [],
+    "symbols": [],
+    "source": "ttws",
+    "sourceLine": 4,
+    "endDirection": "top",
+    "start": [
+      0,
+      8
+    ],
+    "end": [
+      8,
+      0
+    ],
+    "category": "maze",
+    "solution": [
+      [
+        0,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        4,
+        8
+      ],
+      [
+        6,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        6
+      ],
+      [
+        8,
+        4
+      ],
+      [
+        8,
+        2
+      ],
+      [
+        8,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-80cb68489802",
+    "name": "The Witness · ttws #5",
+    "width": 6,
+    "height": 6,
+    "dots": [],
+    "gaps": [],
+    "symbols": [],
+    "source": "ttws",
+    "sourceLine": 5,
+    "endDirection": "top",
+    "start": [
+      8,
+      8
+    ],
+    "end": [
+      4,
+      0
+    ],
+    "category": "maze",
+    "solution": [
+      [
+        8,
+        8
+      ],
+      [
+        10,
+        8
+      ],
+      [
+        12,
+        8
+      ],
+      [
+        12,
+        6
+      ],
+      [
+        12,
+        4
+      ],
+      [
+        12,
+        2
+      ],
+      [
+        12,
+        0
+      ],
+      [
+        10,
+        0
+      ],
+      [
+        8,
+        0
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        4,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-ee4c9c088108",
+    "name": "The Witness · ttws #7",
+    "width": 1,
+    "height": 2,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "square",
+        "color": "white"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 7,
+    "endDirection": "right",
+    "start": [
+      0,
+      2
+    ],
+    "end": [
+      2,
+      2
+    ],
+    "category": "square",
+    "solution": [
+      [
+        0,
+        2
+      ],
+      [
+        2,
+        2
+      ]
+    ]
+  },
+  {
+    "id": "ttws-51a1253a7cae",
+    "name": "The Witness · ttws #8",
+    "width": 1,
+    "height": 2,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "square",
+        "color": "white"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 8,
+    "endDirection": "top",
+    "start": [
+      0,
+      4
+    ],
+    "end": [
+      2,
+      0
+    ],
+    "category": "square",
+    "solution": [
+      [
+        0,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        2,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-b8f23a105948",
+    "name": "The Witness · ttws #9",
+    "width": 1,
+    "height": 3,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 1,
+        "y": 5,
+        "type": "square",
+        "color": "white"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 9,
+    "endDirection": "top",
+    "start": [
+      0,
+      6
+    ],
+    "end": [
+      2,
+      0
+    ],
+    "category": "square",
+    "solution": [
+      [
+        0,
+        6
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-537f68cfe8c4",
+    "name": "The Witness · ttws #10",
+    "width": 1,
+    "height": 3,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 1,
+        "y": 5,
+        "type": "square",
+        "color": "black"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 10,
+    "endDirection": "top",
+    "start": [
+      0,
+      6
+    ],
+    "end": [
+      2,
+      0
+    ],
+    "category": "square",
+    "solution": [
+      [
+        0,
+        6
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-856fdf3e20c0",
+    "name": "The Witness · ttws #11",
+    "width": 2,
+    "height": 2,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 3,
+        "y": 1,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 3,
+        "y": 3,
+        "type": "square",
+        "color": "white"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 11,
+    "endDirection": "top",
+    "start": [
+      0,
+      4
+    ],
+    "end": [
+      4,
+      0
+    ],
+    "category": "square",
+    "solution": [
+      [
+        0,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        4,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-963b7153f1b0",
+    "name": "The Witness · ttws #12",
+    "width": 3,
+    "height": 3,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 3,
+        "y": 1,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 5,
+        "y": 1,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 3,
+        "y": 3,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 5,
+        "y": 3,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 1,
+        "y": 5,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 3,
+        "y": 5,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 5,
+        "y": 5,
+        "type": "square",
+        "color": "white"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 12,
+    "endDirection": "top",
+    "start": [
+      0,
+      6
+    ],
+    "end": [
+      6,
+      0
+    ],
+    "category": "square",
+    "solution": [
+      [
+        0,
+        6
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        6,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-f119a88aeedf",
+    "name": "The Witness · ttws #13",
+    "width": 3,
+    "height": 3,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 3,
+        "y": 1,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 5,
+        "y": 1,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 3,
+        "y": 3,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 5,
+        "y": 3,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 1,
+        "y": 5,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 3,
+        "y": 5,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 5,
+        "y": 5,
+        "type": "square",
+        "color": "white"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 13,
+    "endDirection": "left",
+    "start": [
+      0,
+      6
+    ],
+    "end": [
+      0,
+      4
+    ],
+    "category": "square",
+    "solution": [
+      [
+        0,
+        6
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        0,
+        4
+      ]
+    ]
+  },
+  {
+    "id": "ttws-0a024b60ae08",
+    "name": "The Witness · ttws #14",
+    "width": 4,
+    "height": 4,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 5,
+        "y": 1,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 7,
+        "y": 1,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 3,
+        "y": 3,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 5,
+        "y": 3,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 7,
+        "y": 3,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 1,
+        "y": 5,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 3,
+        "y": 5,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 5,
+        "y": 5,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 7,
+        "y": 5,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 1,
+        "y": 7,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 3,
+        "y": 7,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 5,
+        "y": 7,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 7,
+        "y": 7,
+        "type": "square",
+        "color": "black"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 14,
+    "endDirection": "top",
+    "start": [
+      0,
+      8
+    ],
+    "end": [
+      2,
+      0
+    ],
+    "category": "square",
+    "solution": [
+      [
+        0,
+        8
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        6,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        6
+      ],
+      [
+        8,
+        4
+      ],
+      [
+        8,
+        2
+      ],
+      [
+        8,
+        0
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        2,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-81a4a2048b75",
+    "name": "The Witness · ttws #15",
+    "width": 4,
+    "height": 4,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 3,
+        "y": 1,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 5,
+        "y": 1,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 7,
+        "y": 1,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 3,
+        "y": 3,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 5,
+        "y": 3,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 7,
+        "y": 3,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 1,
+        "y": 5,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 3,
+        "y": 5,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 5,
+        "y": 5,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 7,
+        "y": 5,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 1,
+        "y": 7,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 3,
+        "y": 7,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 5,
+        "y": 7,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 7,
+        "y": 7,
+        "type": "square",
+        "color": "black"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 15,
+    "endDirection": "right",
+    "start": [
+      0,
+      8
+    ],
+    "end": [
+      8,
+      4
+    ],
+    "category": "square",
+    "solution": [
+      [
+        0,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        4,
+        8
+      ],
+      [
+        6,
+        8
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        8,
+        0
+      ],
+      [
+        8,
+        2
+      ],
+      [
+        8,
+        4
+      ]
+    ]
+  },
+  {
+    "id": "ttws-e917eb08ebc2",
+    "name": "The Witness · ttws #16",
+    "width": 4,
+    "height": 4,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 3,
+        "y": 1,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 5,
+        "y": 1,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 7,
+        "y": 1,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 7,
+        "y": 3,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 1,
+        "y": 5,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 3,
+        "y": 5,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 5,
+        "y": 5,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 1,
+        "y": 7,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 3,
+        "y": 7,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 5,
+        "y": 7,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 7,
+        "y": 7,
+        "type": "square",
+        "color": "black"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 16,
+    "endDirection": "bottom",
+    "start": [
+      0,
+      8
+    ],
+    "end": [
+      6,
+      8
+    ],
+    "category": "square",
+    "solution": [
+      [
+        0,
+        8
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        6,
+        8
+      ]
+    ]
+  },
+  {
+    "id": "ttws-a964075d0724",
+    "name": "The Witness · ttws #17",
+    "width": 4,
+    "height": 4,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 3,
+        "y": 1,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 5,
+        "y": 1,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 7,
+        "y": 1,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 3,
+        "y": 3,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 5,
+        "y": 3,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 7,
+        "y": 3,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 1,
+        "y": 5,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 3,
+        "y": 5,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 5,
+        "y": 5,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 7,
+        "y": 5,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 1,
+        "y": 7,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 3,
+        "y": 7,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 5,
+        "y": 7,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 7,
+        "y": 7,
+        "type": "square",
+        "color": "white"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 17,
+    "endDirection": "top",
+    "start": [
+      0,
+      8
+    ],
+    "end": [
+      8,
+      0
+    ],
+    "category": "square",
+    "solution": [
+      [
+        0,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        4,
+        8
+      ],
+      [
+        6,
+        8
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        8,
+        6
+      ],
+      [
+        8,
+        4
+      ],
+      [
+        8,
+        2
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        8,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-b1674b382524",
+    "name": "The Witness · ttws #19",
+    "width": 2,
+    "height": 2,
+    "dots": [
+      [
+        2,
+        1
+      ],
+      [
+        4,
+        1
+      ]
+    ],
+    "gaps": [],
+    "symbols": [],
+    "source": "ttws",
+    "sourceLine": 19,
+    "endDirection": "top",
+    "start": [
+      0,
+      4
+    ],
+    "end": [
+      4,
+      0
+    ],
+    "category": "dots",
+    "solution": [
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        4,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-7540c666fe95",
+    "name": "The Witness · ttws #20",
+    "width": 2,
+    "height": 2,
+    "dots": [
+      [
+        0,
+        0
+      ],
+      [
+        4,
+        4
+      ]
+    ],
+    "gaps": [],
+    "symbols": [],
+    "source": "ttws",
+    "sourceLine": 20,
+    "endDirection": "top",
+    "start": [
+      0,
+      4
+    ],
+    "end": [
+      4,
+      0
+    ],
+    "category": "dots",
+    "solution": [
+      [
+        0,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        4,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-38067828c5ec",
+    "name": "The Witness · ttws #21",
+    "width": 3,
+    "height": 3,
+    "dots": [
+      [
+        2,
+        0
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        6,
+        6
+      ]
+    ],
+    "gaps": [],
+    "symbols": [],
+    "source": "ttws",
+    "sourceLine": 21,
+    "endDirection": "top",
+    "start": [
+      0,
+      6
+    ],
+    "end": [
+      6,
+      0
+    ],
+    "category": "dots",
+    "solution": [
+      [
+        0,
+        6
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        6,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-1c48ae76cedf",
+    "name": "The Witness · ttws #22",
+    "width": 3,
+    "height": 3,
+    "dots": [
+      [
+        2,
+        0
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        6,
+        6
+      ]
+    ],
+    "gaps": [
+      [
+        3,
+        2
+      ]
+    ],
+    "symbols": [],
+    "source": "ttws",
+    "sourceLine": 22,
+    "endDirection": "top",
+    "start": [
+      0,
+      6
+    ],
+    "end": [
+      6,
+      0
+    ],
+    "category": "dots",
+    "solution": [
+      [
+        0,
+        6
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        6,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-2ff3266c8438",
+    "name": "The Witness · ttws #25",
+    "width": 5,
+    "height": 5,
+    "dots": [
+      [
+        5,
+        0
+      ],
+      [
+        0,
+        5
+      ],
+      [
+        10,
+        5
+      ]
+    ],
+    "gaps": [
+      [
+        3,
+        2
+      ],
+      [
+        7,
+        2
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        8,
+        3
+      ],
+      [
+        10,
+        3
+      ],
+      [
+        0,
+        7
+      ],
+      [
+        2,
+        7
+      ],
+      [
+        8,
+        7
+      ],
+      [
+        10,
+        7
+      ],
+      [
+        3,
+        8
+      ],
+      [
+        7,
+        8
+      ]
+    ],
+    "symbols": [],
+    "source": "ttws",
+    "sourceLine": 25,
+    "endDirection": "bottom",
+    "start": [
+      4,
+      10
+    ],
+    "end": [
+      6,
+      10
+    ],
+    "category": "dots",
+    "solution": [
+      [
+        4,
+        10
+      ],
+      [
+        4,
+        8
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        8,
+        4
+      ],
+      [
+        10,
+        4
+      ],
+      [
+        10,
+        6
+      ],
+      [
+        8,
+        6
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        6,
+        8
+      ],
+      [
+        6,
+        10
+      ]
+    ]
+  },
+  {
+    "id": "ttws-5df1ec18d596",
+    "name": "The Witness · ttws #26",
+    "width": 5,
+    "height": 5,
+    "dots": [
+      [
+        3,
+        0
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        6,
+        3
+      ],
+      [
+        10,
+        4
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        10,
+        7
+      ],
+      [
+        4,
+        8
+      ],
+      [
+        8,
+        10
+      ]
+    ],
+    "gaps": [],
+    "symbols": [],
+    "source": "ttws",
+    "sourceLine": 26,
+    "endDirection": "top",
+    "start": [
+      4,
+      10
+    ],
+    "end": [
+      6,
+      0
+    ],
+    "category": "dots",
+    "solution": [
+      [
+        4,
+        10
+      ],
+      [
+        6,
+        10
+      ],
+      [
+        8,
+        10
+      ],
+      [
+        10,
+        10
+      ],
+      [
+        10,
+        8
+      ],
+      [
+        10,
+        6
+      ],
+      [
+        10,
+        4
+      ],
+      [
+        10,
+        2
+      ],
+      [
+        10,
+        0
+      ],
+      [
+        8,
+        0
+      ],
+      [
+        8,
+        2
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        8,
+        4
+      ],
+      [
+        8,
+        6
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        4,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        6,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-ef482ee1bf7d",
+    "name": "The Witness · ttws #96",
+    "width": 1,
+    "height": 2,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "star",
+        "color": "red"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "star",
+        "color": "red"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 96,
+    "endDirection": "top",
+    "start": [
+      0,
+      4
+    ],
+    "end": [
+      2,
+      0
+    ],
+    "category": "star",
+    "solution": [
+      [
+        0,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-9696f7c9879d",
+    "name": "The Witness · ttws #97",
+    "width": 4,
+    "height": 4,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "star",
+        "color": "red"
+      },
+      {
+        "x": 7,
+        "y": 7,
+        "type": "star",
+        "color": "red"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 97,
+    "endDirection": "top",
+    "start": [
+      0,
+      8
+    ],
+    "end": [
+      8,
+      0
+    ],
+    "category": "star",
+    "solution": [
+      [
+        0,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        4,
+        8
+      ],
+      [
+        6,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        6
+      ],
+      [
+        8,
+        4
+      ],
+      [
+        8,
+        2
+      ],
+      [
+        8,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-a0614ba09285",
+    "name": "The Witness · ttws #98",
+    "width": 3,
+    "height": 3,
+    "dots": [],
+    "gaps": [
+      [
+        0,
+        1
+      ],
+      [
+        6,
+        1
+      ],
+      [
+        1,
+        4
+      ],
+      [
+        5,
+        4
+      ],
+      [
+        1,
+        6
+      ]
+    ],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 5,
+        "y": 5,
+        "type": "star",
+        "color": "orange"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 98,
+    "endDirection": "top",
+    "start": [
+      4,
+      6
+    ],
+    "end": [
+      2,
+      0
+    ],
+    "category": "star",
+    "solution": [
+      [
+        4,
+        6
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        2,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-3d2a1e9aab18",
+    "name": "The Witness · ttws #99",
+    "width": 4,
+    "height": 4,
+    "dots": [],
+    "gaps": [
+      [
+        5,
+        0
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        6,
+        1
+      ],
+      [
+        3,
+        2
+      ],
+      [
+        7,
+        2
+      ],
+      [
+        8,
+        5
+      ],
+      [
+        3,
+        6
+      ],
+      [
+        3,
+        8
+      ]
+    ],
+    "symbols": [
+      {
+        "x": 7,
+        "y": 3,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 1,
+        "y": 7,
+        "type": "star",
+        "color": "orange"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 99,
+    "endDirection": "top",
+    "start": [
+      4,
+      8
+    ],
+    "end": [
+      4,
+      0
+    ],
+    "category": "star",
+    "solution": [
+      [
+        4,
+        8
+      ],
+      [
+        6,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        6
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        0,
+        8
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        4,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-b863e3656efc",
+    "name": "The Witness · ttws #100",
+    "width": 2,
+    "height": 2,
+    "dots": [],
+    "gaps": [
+      [
+        3,
+        2
+      ]
+    ],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 3,
+        "y": 1,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 3,
+        "y": 3,
+        "type": "star",
+        "color": "orange"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 100,
+    "endDirection": "top",
+    "start": [
+      2,
+      4
+    ],
+    "end": [
+      2,
+      0
+    ],
+    "category": "star",
+    "solution": [
+      [
+        2,
+        4
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-ea60a3e1e234",
+    "name": "The Witness · ttws #101",
+    "width": 2,
+    "height": 2,
+    "dots": [],
+    "gaps": [
+      [
+        2,
+        1
+      ]
+    ],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 3,
+        "y": 1,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 3,
+        "y": 3,
+        "type": "star",
+        "color": "orange"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 101,
+    "endDirection": "top",
+    "start": [
+      2,
+      4
+    ],
+    "end": [
+      2,
+      0
+    ],
+    "category": "star",
+    "solution": [
+      [
+        2,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        2,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-471820d0ff5f",
+    "name": "The Witness · ttws #102",
+    "width": 4,
+    "height": 4,
+    "dots": [],
+    "gaps": [
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        4,
+        1
+      ],
+      [
+        5,
+        2
+      ],
+      [
+        6,
+        3
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        2,
+        5
+      ],
+      [
+        5,
+        6
+      ],
+      [
+        7,
+        8
+      ]
+    ],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 7,
+        "y": 1,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 1,
+        "y": 7,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 7,
+        "y": 7,
+        "type": "star",
+        "color": "orange"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 102,
+    "endDirection": "top",
+    "start": [
+      4,
+      8
+    ],
+    "end": [
+      4,
+      0
+    ],
+    "category": "star",
+    "solution": [
+      [
+        4,
+        8
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        0,
+        8
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        8,
+        4
+      ],
+      [
+        8,
+        2
+      ],
+      [
+        8,
+        0
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        4,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-5442062583ae",
+    "name": "The Witness · ttws #103",
+    "width": 4,
+    "height": 4,
+    "dots": [],
+    "gaps": [
+      [
+        7,
+        0
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        4,
+        1
+      ],
+      [
+        6,
+        1
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        2,
+        5
+      ],
+      [
+        8,
+        7
+      ]
+    ],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 7,
+        "y": 1,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 1,
+        "y": 7,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 7,
+        "y": 7,
+        "type": "star",
+        "color": "orange"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 103,
+    "endDirection": "top",
+    "start": [
+      4,
+      8
+    ],
+    "end": [
+      4,
+      0
+    ],
+    "category": "star",
+    "solution": [
+      [
+        4,
+        8
+      ],
+      [
+        6,
+        8
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        0,
+        8
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        8,
+        4
+      ],
+      [
+        8,
+        2
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        4,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-8c5c94d7139f",
+    "name": "The Witness · ttws #104",
+    "width": 3,
+    "height": 3,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 5,
+        "y": 1,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 5,
+        "y": 3,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 1,
+        "y": 5,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 5,
+        "y": 5,
+        "type": "star",
+        "color": "orange"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 104,
+    "endDirection": "top",
+    "start": [
+      2,
+      6
+    ],
+    "end": [
+      4,
+      0
+    ],
+    "category": "star",
+    "solution": [
+      [
+        2,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        4,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-130e3ee86858",
+    "name": "The Witness · ttws #105",
+    "width": 3,
+    "height": 3,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 3,
+        "y": 1,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 5,
+        "y": 1,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 1,
+        "y": 5,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 3,
+        "y": 5,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 5,
+        "y": 5,
+        "type": "star",
+        "color": "orange"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 105,
+    "endDirection": "top",
+    "start": [
+      2,
+      6
+    ],
+    "end": [
+      2,
+      0
+    ],
+    "category": "star",
+    "solution": [
+      [
+        2,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        2,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-98b1938f0b6d",
+    "name": "The Witness · ttws #106",
+    "width": 4,
+    "height": 4,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 7,
+        "y": 1,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 7,
+        "y": 3,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 1,
+        "y": 5,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 3,
+        "y": 5,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 7,
+        "y": 5,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 7,
+        "y": 7,
+        "type": "star",
+        "color": "orange"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 106,
+    "endDirection": "top",
+    "start": [
+      4,
+      8
+    ],
+    "end": [
+      4,
+      0
+    ],
+    "category": "star",
+    "solution": [
+      [
+        4,
+        8
+      ],
+      [
+        6,
+        8
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        8,
+        4
+      ],
+      [
+        8,
+        2
+      ],
+      [
+        8,
+        0
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        4,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-bffe0b65120a",
+    "name": "The Witness · ttws #107",
+    "width": 4,
+    "height": 4,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 3,
+        "y": 1,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 5,
+        "y": 1,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 7,
+        "y": 1,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 1,
+        "y": 5,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 1,
+        "y": 7,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 3,
+        "y": 7,
+        "type": "star",
+        "color": "orange"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 107,
+    "endDirection": "top",
+    "start": [
+      0,
+      8
+    ],
+    "end": [
+      8,
+      0
+    ],
+    "category": "star",
+    "solution": [
+      [
+        0,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        4,
+        8
+      ],
+      [
+        6,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        6
+      ],
+      [
+        8,
+        4
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        8,
+        2
+      ],
+      [
+        8,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-8bec218016ac",
+    "name": "The Witness · ttws #108",
+    "width": 3,
+    "height": 3,
+    "dots": [
+      [
+        2,
+        0
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        2,
+        4
+      ]
+    ],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 3,
+        "y": 3,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 1,
+        "y": 5,
+        "type": "star",
+        "color": "orange"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 108,
+    "endDirection": "top",
+    "start": [
+      0,
+      6
+    ],
+    "end": [
+      6,
+      0
+    ],
+    "category": "mixed",
+    "solution": [
+      [
+        0,
+        6
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        6,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-9630d3b7a9af",
+    "name": "The Witness · ttws #109",
+    "width": 3,
+    "height": 3,
+    "dots": [
+      [
+        2,
+        0
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        6,
+        6
+      ]
+    ],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 3,
+        "y": 3,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 5,
+        "y": 5,
+        "type": "star",
+        "color": "orange"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 109,
+    "endDirection": "top",
+    "start": [
+      0,
+      6
+    ],
+    "end": [
+      6,
+      0
+    ],
+    "category": "mixed",
+    "solution": [
+      [
+        0,
+        6
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        6,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-05dca8db8bbe",
+    "name": "The Witness · ttws #110",
+    "width": 4,
+    "height": 4,
+    "dots": [
+      [
+        0,
+        0
+      ],
+      [
+        8,
+        0
+      ],
+      [
+        0,
+        8
+      ],
+      [
+        8,
+        8
+      ]
+    ],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 5,
+        "y": 1,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 1,
+        "y": 7,
+        "type": "star",
+        "color": "orange"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 110,
+    "endDirection": "top",
+    "start": [
+      4,
+      8
+    ],
+    "end": [
+      4,
+      0
+    ],
+    "category": "mixed",
+    "solution": [
+      [
+        4,
+        8
+      ],
+      [
+        6,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        6
+      ],
+      [
+        8,
+        4
+      ],
+      [
+        8,
+        2
+      ],
+      [
+        8,
+        0
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        0,
+        8
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        4,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-47c8725ec51c",
+    "name": "The Witness · ttws #111",
+    "width": 4,
+    "height": 4,
+    "dots": [
+      [
+        0,
+        0
+      ],
+      [
+        8,
+        0
+      ],
+      [
+        0,
+        8
+      ],
+      [
+        8,
+        8
+      ]
+    ],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 7,
+        "y": 1,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 1,
+        "y": 7,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 7,
+        "y": 7,
+        "type": "star",
+        "color": "orange"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 111,
+    "endDirection": "top",
+    "start": [
+      4,
+      8
+    ],
+    "end": [
+      4,
+      0
+    ],
+    "category": "mixed",
+    "solution": [
+      [
+        4,
+        8
+      ],
+      [
+        6,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        6
+      ],
+      [
+        8,
+        4
+      ],
+      [
+        8,
+        2
+      ],
+      [
+        8,
+        0
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        0,
+        8
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        4,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-114488ac6772",
+    "name": "The Witness · ttws #112",
+    "width": 5,
+    "height": 5,
+    "dots": [
+      [
+        0,
+        0
+      ],
+      [
+        10,
+        0
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        0,
+        10
+      ],
+      [
+        10,
+        10
+      ]
+    ],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 9,
+        "y": 1,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 5,
+        "y": 5,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 9,
+        "y": 9,
+        "type": "star",
+        "color": "orange"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 112,
+    "endDirection": "top",
+    "start": [
+      4,
+      10
+    ],
+    "end": [
+      6,
+      0
+    ],
+    "category": "mixed",
+    "solution": [
+      [
+        4,
+        10
+      ],
+      [
+        6,
+        10
+      ],
+      [
+        8,
+        10
+      ],
+      [
+        10,
+        10
+      ],
+      [
+        10,
+        8
+      ],
+      [
+        10,
+        6
+      ],
+      [
+        10,
+        4
+      ],
+      [
+        10,
+        2
+      ],
+      [
+        10,
+        0
+      ],
+      [
+        8,
+        0
+      ],
+      [
+        8,
+        2
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        8,
+        4
+      ],
+      [
+        8,
+        6
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        10
+      ],
+      [
+        0,
+        10
+      ],
+      [
+        0,
+        8
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        6,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-e9966e4c4646",
+    "name": "The Witness · ttws #113",
+    "width": 3,
+    "height": 3,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 3,
+        "y": 3,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 5,
+        "y": 5,
+        "type": "star",
+        "color": "orange"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 113,
+    "endDirection": "top",
+    "start": [
+      4,
+      6
+    ],
+    "end": [
+      2,
+      0
+    ],
+    "category": "mixed",
+    "solution": [
+      [
+        4,
+        6
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-2e130c434c6c",
+    "name": "The Witness · ttws #114",
+    "width": 3,
+    "height": 3,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 5,
+        "y": 1,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 5,
+        "y": 3,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 1,
+        "y": 5,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 5,
+        "y": 5,
+        "type": "square",
+        "color": "black"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 114,
+    "endDirection": "top",
+    "start": [
+      4,
+      6
+    ],
+    "end": [
+      2,
+      0
+    ],
+    "category": "mixed",
+    "solution": [
+      [
+        4,
+        6
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        2,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-e54d5d407fbc",
+    "name": "The Witness · ttws #115",
+    "width": 3,
+    "height": 3,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 3,
+        "y": 1,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 5,
+        "y": 1,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 5,
+        "y": 3,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 1,
+        "y": 5,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 3,
+        "y": 5,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 5,
+        "y": 5,
+        "type": "square",
+        "color": "black"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 115,
+    "endDirection": "top",
+    "start": [
+      4,
+      6
+    ],
+    "end": [
+      2,
+      0
+    ],
+    "category": "mixed",
+    "solution": [
+      [
+        4,
+        6
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        2,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-9f7ce951f747",
+    "name": "The Witness · ttws #116",
+    "width": 3,
+    "height": 3,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "square",
+        "color": "orange"
+      },
+      {
+        "x": 3,
+        "y": 1,
+        "type": "star",
+        "color": "white"
+      },
+      {
+        "x": 5,
+        "y": 1,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "star",
+        "color": "white"
+      },
+      {
+        "x": 5,
+        "y": 3,
+        "type": "star",
+        "color": "white"
+      },
+      {
+        "x": 1,
+        "y": 5,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 3,
+        "y": 5,
+        "type": "star",
+        "color": "white"
+      },
+      {
+        "x": 5,
+        "y": 5,
+        "type": "square",
+        "color": "orange"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 116,
+    "endDirection": "top",
+    "start": [
+      4,
+      6
+    ],
+    "end": [
+      4,
+      0
+    ],
+    "category": "mixed",
+    "solution": [
+      [
+        4,
+        6
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        4,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-8a726f0a1b3c",
+    "name": "The Witness · ttws #117",
+    "width": 3,
+    "height": 3,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "star",
+        "color": "yellow"
+      },
+      {
+        "x": 3,
+        "y": 1,
+        "type": "square",
+        "color": "magenta"
+      },
+      {
+        "x": 5,
+        "y": 1,
+        "type": "star",
+        "color": "yellow"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "square",
+        "color": "red"
+      },
+      {
+        "x": 5,
+        "y": 3,
+        "type": "square",
+        "color": "red"
+      },
+      {
+        "x": 1,
+        "y": 5,
+        "type": "star",
+        "color": "yellow"
+      },
+      {
+        "x": 3,
+        "y": 5,
+        "type": "square",
+        "color": "magenta"
+      },
+      {
+        "x": 5,
+        "y": 5,
+        "type": "star",
+        "color": "yellow"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 117,
+    "endDirection": "top",
+    "start": [
+      4,
+      6
+    ],
+    "end": [
+      2,
+      0
+    ],
+    "category": "mixed",
+    "solution": [
+      [
+        4,
+        6
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        2,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-cb620c91b880",
+    "name": "The Witness · ttws #118",
+    "width": 5,
+    "height": 4,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 3,
+        "y": 1,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 5,
+        "y": 1,
+        "type": "square",
+        "color": "yellow"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "square",
+        "color": "yellow"
+      },
+      {
+        "x": 3,
+        "y": 3,
+        "type": "square",
+        "color": "yellow"
+      },
+      {
+        "x": 5,
+        "y": 3,
+        "type": "square",
+        "color": "yellow"
+      },
+      {
+        "x": 7,
+        "y": 3,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 9,
+        "y": 3,
+        "type": "square",
+        "color": "orange"
+      },
+      {
+        "x": 1,
+        "y": 5,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 3,
+        "y": 5,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 7,
+        "y": 5,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 9,
+        "y": 5,
+        "type": "square",
+        "color": "orange"
+      },
+      {
+        "x": 1,
+        "y": 7,
+        "type": "square",
+        "color": "orange"
+      },
+      {
+        "x": 3,
+        "y": 7,
+        "type": "square",
+        "color": "orange"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 118,
+    "endDirection": "top",
+    "start": [
+      0,
+      8
+    ],
+    "end": [
+      10,
+      0
+    ],
+    "category": "mixed",
+    "solution": [
+      [
+        0,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        4,
+        8
+      ],
+      [
+        6,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        10,
+        8
+      ],
+      [
+        10,
+        6
+      ],
+      [
+        10,
+        4
+      ],
+      [
+        10,
+        2
+      ],
+      [
+        8,
+        2
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        8,
+        4
+      ],
+      [
+        8,
+        6
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        8,
+        0
+      ],
+      [
+        10,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-522fe4d78ead",
+    "name": "The Witness · ttws #119",
+    "width": 5,
+    "height": 4,
+    "dots": [],
+    "gaps": [
+      [
+        8,
+        5
+      ],
+      [
+        3,
+        6
+      ]
+    ],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 3,
+        "y": 1,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 5,
+        "y": 1,
+        "type": "square",
+        "color": "yellow"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "square",
+        "color": "yellow"
+      },
+      {
+        "x": 3,
+        "y": 3,
+        "type": "square",
+        "color": "yellow"
+      },
+      {
+        "x": 5,
+        "y": 3,
+        "type": "square",
+        "color": "yellow"
+      },
+      {
+        "x": 7,
+        "y": 3,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 9,
+        "y": 3,
+        "type": "square",
+        "color": "orange"
+      },
+      {
+        "x": 1,
+        "y": 5,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 3,
+        "y": 5,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 7,
+        "y": 5,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 9,
+        "y": 5,
+        "type": "square",
+        "color": "orange"
+      },
+      {
+        "x": 1,
+        "y": 7,
+        "type": "square",
+        "color": "orange"
+      },
+      {
+        "x": 3,
+        "y": 7,
+        "type": "square",
+        "color": "orange"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 119,
+    "endDirection": "top",
+    "start": [
+      0,
+      8
+    ],
+    "end": [
+      10,
+      0
+    ],
+    "category": "mixed",
+    "solution": [
+      [
+        0,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        4,
+        8
+      ],
+      [
+        6,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        10,
+        8
+      ],
+      [
+        10,
+        6
+      ],
+      [
+        10,
+        4
+      ],
+      [
+        10,
+        2
+      ],
+      [
+        8,
+        2
+      ],
+      [
+        8,
+        4
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        8,
+        0
+      ],
+      [
+        10,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-4a29a3056892",
+    "name": "The Witness · ttws #120",
+    "width": 4,
+    "height": 4,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 3,
+        "y": 1,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 5,
+        "y": 1,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 7,
+        "y": 1,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 3,
+        "y": 3,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 5,
+        "y": 3,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 7,
+        "y": 3,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 1,
+        "y": 7,
+        "type": "star",
+        "color": "white"
+      },
+      {
+        "x": 7,
+        "y": 7,
+        "type": "star",
+        "color": "white"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 120,
+    "endDirection": "top",
+    "start": [
+      4,
+      8
+    ],
+    "end": [
+      4,
+      0
+    ],
+    "category": "mixed",
+    "solution": [
+      [
+        4,
+        8
+      ],
+      [
+        6,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        6
+      ],
+      [
+        8,
+        4
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        4,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-96afe1f4a812",
+    "name": "The Witness · ttws #121",
+    "width": 4,
+    "height": 3,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 3,
+        "y": 1,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 5,
+        "y": 1,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 7,
+        "y": 1,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 3,
+        "y": 3,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 5,
+        "y": 3,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 7,
+        "y": 3,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 1,
+        "y": 5,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 7,
+        "y": 5,
+        "type": "star",
+        "color": "orange"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 121,
+    "endDirection": "top",
+    "start": [
+      4,
+      6
+    ],
+    "end": [
+      4,
+      0
+    ],
+    "category": "mixed",
+    "solution": [
+      [
+        4,
+        6
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        8,
+        6
+      ],
+      [
+        8,
+        4
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        4,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-23a8224d9a18",
+    "name": "The Witness · ttws #122",
+    "width": 4,
+    "height": 3,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 3,
+        "y": 1,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 5,
+        "y": 1,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 7,
+        "y": 1,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 3,
+        "y": 3,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 5,
+        "y": 3,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 7,
+        "y": 3,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 1,
+        "y": 5,
+        "type": "star",
+        "color": "black"
+      },
+      {
+        "x": 7,
+        "y": 5,
+        "type": "star",
+        "color": "black"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 122,
+    "endDirection": "top",
+    "start": [
+      4,
+      6
+    ],
+    "end": [
+      4,
+      0
+    ],
+    "category": "mixed",
+    "solution": [
+      [
+        4,
+        6
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        4,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-fb2e0e17bf47",
+    "name": "The Witness · ttws #123",
+    "width": 4,
+    "height": 4,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 3,
+        "y": 1,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 5,
+        "y": 1,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 7,
+        "y": 1,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 3,
+        "y": 3,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 5,
+        "y": 3,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 7,
+        "y": 3,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 7,
+        "y": 7,
+        "type": "star",
+        "color": "black"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 123,
+    "endDirection": "top",
+    "start": [
+      4,
+      8
+    ],
+    "end": [
+      4,
+      0
+    ],
+    "category": "mixed",
+    "solution": [
+      [
+        4,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        0,
+        8
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        8,
+        6
+      ],
+      [
+        8,
+        4
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        4,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-ff0af0c2783d",
+    "name": "The Witness · ttws #124",
+    "width": 2,
+    "height": 2,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 3,
+        "y": 1,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 3,
+        "y": 3,
+        "type": "star",
+        "color": "white"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 124,
+    "endDirection": "top",
+    "start": [
+      2,
+      4
+    ],
+    "end": [
+      2,
+      0
+    ],
+    "category": "mixed",
+    "solution": [
+      [
+        2,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-7b04e0cf789f",
+    "name": "The Witness · ttws #125",
+    "width": 3,
+    "height": 3,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 5,
+        "y": 1,
+        "type": "square",
+        "color": "magenta"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 5,
+        "y": 3,
+        "type": "square",
+        "color": "yellow"
+      },
+      {
+        "x": 5,
+        "y": 5,
+        "type": "square",
+        "color": "white"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 125,
+    "endDirection": "top",
+    "start": [
+      2,
+      6
+    ],
+    "end": [
+      4,
+      0
+    ],
+    "category": "mixed",
+    "solution": [
+      [
+        2,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        4,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-fdd1514702cc",
+    "name": "The Witness · ttws #126",
+    "width": 3,
+    "height": 3,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 5,
+        "y": 1,
+        "type": "square",
+        "color": "magenta"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 5,
+        "y": 3,
+        "type": "square",
+        "color": "yellow"
+      },
+      {
+        "x": 1,
+        "y": 5,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 5,
+        "y": 5,
+        "type": "square",
+        "color": "white"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 126,
+    "endDirection": "top",
+    "start": [
+      2,
+      6
+    ],
+    "end": [
+      4,
+      0
+    ],
+    "category": "mixed",
+    "solution": [
+      [
+        2,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        4,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-06cc6c8df5b8",
+    "name": "The Witness · ttws #127",
+    "width": 4,
+    "height": 4,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "square",
+        "color": "magenta"
+      },
+      {
+        "x": 1,
+        "y": 5,
+        "type": "square",
+        "color": "yellow"
+      },
+      {
+        "x": 3,
+        "y": 5,
+        "type": "square",
+        "color": "yellow"
+      },
+      {
+        "x": 1,
+        "y": 7,
+        "type": "square",
+        "color": "magenta"
+      },
+      {
+        "x": 7,
+        "y": 7,
+        "type": "square",
+        "color": "yellow"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 127,
+    "endDirection": "top",
+    "start": [
+      4,
+      8
+    ],
+    "end": [
+      4,
+      0
+    ],
+    "category": "square",
+    "solution": [
+      [
+        4,
+        8
+      ],
+      [
+        6,
+        8
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        8,
+        6
+      ],
+      [
+        8,
+        4
+      ],
+      [
+        8,
+        2
+      ],
+      [
+        8,
+        0
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        4,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-bb27aeb65310",
+    "name": "The Witness · ttws #130",
+    "width": 3,
+    "height": 3,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "square",
+        "color": "yellow"
+      },
+      {
+        "x": 5,
+        "y": 3,
+        "type": "square",
+        "color": "yellow"
+      },
+      {
+        "x": 1,
+        "y": 5,
+        "type": "square",
+        "color": "magenta"
+      },
+      {
+        "x": 5,
+        "y": 5,
+        "type": "star",
+        "color": "magenta"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 130,
+    "endDirection": "top",
+    "start": [
+      4,
+      6
+    ],
+    "end": [
+      2,
+      0
+    ],
+    "category": "mixed",
+    "solution": [
+      [
+        4,
+        6
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        2,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-be186d109724",
+    "name": "The Witness · ttws #131",
+    "width": 2,
+    "height": 3,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 3,
+        "y": 1,
+        "type": "star",
+        "color": "yellow"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "square",
+        "color": "yellow"
+      },
+      {
+        "x": 3,
+        "y": 3,
+        "type": "square",
+        "color": "magenta"
+      },
+      {
+        "x": 1,
+        "y": 5,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 3,
+        "y": 5,
+        "type": "star",
+        "color": "yellow"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 131,
+    "endDirection": "top",
+    "start": [
+      2,
+      6
+    ],
+    "end": [
+      2,
+      0
+    ],
+    "category": "mixed",
+    "solution": [
+      [
+        2,
+        6
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-a27b26b701d0",
+    "name": "The Witness · ttws #132",
+    "width": 4,
+    "height": 4,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "star",
+        "color": "black"
+      },
+      {
+        "x": 7,
+        "y": 1,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 3,
+        "y": 3,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 5,
+        "y": 3,
+        "type": "star",
+        "color": "black"
+      },
+      {
+        "x": 1,
+        "y": 5,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 5,
+        "y": 5,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 3,
+        "y": 7,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 5,
+        "y": 7,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 7,
+        "y": 7,
+        "type": "star",
+        "color": "black"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 132,
+    "endDirection": "top",
+    "start": [
+      4,
+      8
+    ],
+    "end": [
+      4,
+      0
+    ],
+    "category": "mixed",
+    "solution": [
+      [
+        4,
+        8
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        8,
+        2
+      ],
+      [
+        8,
+        0
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        4,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-9f51b7b0cb3a",
+    "name": "The Witness · ttws #133",
+    "width": 4,
+    "height": 4,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "star",
+        "color": "black"
+      },
+      {
+        "x": 7,
+        "y": 1,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 3,
+        "y": 3,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 5,
+        "y": 3,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 1,
+        "y": 5,
+        "type": "star",
+        "color": "black"
+      },
+      {
+        "x": 5,
+        "y": 5,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 3,
+        "y": 7,
+        "type": "star",
+        "color": "black"
+      },
+      {
+        "x": 5,
+        "y": 7,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 7,
+        "y": 7,
+        "type": "star",
+        "color": "black"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 133,
+    "endDirection": "top",
+    "start": [
+      4,
+      8
+    ],
+    "end": [
+      4,
+      0
+    ],
+    "category": "mixed",
+    "solution": [
+      [
+        4,
+        8
+      ],
+      [
+        6,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        6
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        8,
+        4
+      ],
+      [
+        8,
+        2
+      ],
+      [
+        8,
+        0
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        4,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-e36bd8023e1f",
+    "name": "The Witness · ttws #134",
+    "width": 4,
+    "height": 4,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 5,
+        "y": 1,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 3,
+        "y": 3,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 5,
+        "y": 3,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 1,
+        "y": 5,
+        "type": "star",
+        "color": "black"
+      },
+      {
+        "x": 5,
+        "y": 5,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 3,
+        "y": 7,
+        "type": "star",
+        "color": "black"
+      },
+      {
+        "x": 5,
+        "y": 7,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 7,
+        "y": 7,
+        "type": "star",
+        "color": "black"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 134,
+    "endDirection": "top",
+    "start": [
+      4,
+      8
+    ],
+    "end": [
+      4,
+      0
+    ],
+    "category": "mixed",
+    "solution": [
+      [
+        4,
+        8
+      ],
+      [
+        6,
+        8
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        8,
+        2
+      ],
+      [
+        8,
+        0
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        4,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-e9f840493c3f",
+    "name": "The Witness · ttws #135",
+    "width": 4,
+    "height": 4,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 7,
+        "y": 1,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "star",
+        "color": "white"
+      },
+      {
+        "x": 3,
+        "y": 3,
+        "type": "star",
+        "color": "white"
+      },
+      {
+        "x": 5,
+        "y": 3,
+        "type": "square",
+        "color": "white"
+      },
+      {
+        "x": 1,
+        "y": 5,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 5,
+        "y": 5,
+        "type": "star",
+        "color": "white"
+      },
+      {
+        "x": 3,
+        "y": 7,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 5,
+        "y": 7,
+        "type": "star",
+        "color": "white"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 135,
+    "endDirection": "top",
+    "start": [
+      4,
+      8
+    ],
+    "end": [
+      4,
+      0
+    ],
+    "category": "mixed",
+    "solution": [
+      [
+        4,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        0,
+        8
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        8,
+        6
+      ],
+      [
+        8,
+        4
+      ],
+      [
+        8,
+        2
+      ],
+      [
+        8,
+        0
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        4,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-80a87338654c",
+    "name": "The Witness · ttws #136",
+    "width": 2,
+    "height": 2,
+    "dots": [],
+    "gaps": [
+      [
+        3,
+        2
+      ]
+    ],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 3,
+        "y": 1,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 3,
+        "y": 3,
+        "type": "star",
+        "color": "magenta"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 136,
+    "endDirection": "top",
+    "start": [
+      2,
+      4
+    ],
+    "end": [
+      2,
+      0
+    ],
+    "category": "star",
+    "solution": [
+      [
+        2,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        2,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-567ef0816ea9",
+    "name": "The Witness · ttws #137",
+    "width": 2,
+    "height": 2,
+    "dots": [],
+    "gaps": [
+      [
+        2,
+        1
+      ]
+    ],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 3,
+        "y": 1,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 3,
+        "y": 3,
+        "type": "star",
+        "color": "magenta"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 137,
+    "endDirection": "top",
+    "start": [
+      2,
+      4
+    ],
+    "end": [
+      2,
+      0
+    ],
+    "category": "star",
+    "solution": [
+      [
+        2,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        2,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-428ce81362b5",
+    "name": "The Witness · ttws #138",
+    "width": 2,
+    "height": 3,
+    "dots": [],
+    "gaps": [
+      [
+        2,
+        1
+      ]
+    ],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 3,
+        "y": 1,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 3,
+        "y": 3,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 1,
+        "y": 5,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 3,
+        "y": 5,
+        "type": "star",
+        "color": "orange"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 138,
+    "endDirection": "top",
+    "start": [
+      2,
+      6
+    ],
+    "end": [
+      2,
+      0
+    ],
+    "category": "star",
+    "solution": [
+      [
+        2,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        2,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-42159683920a",
+    "name": "The Witness · ttws #139",
+    "width": 2,
+    "height": 4,
+    "dots": [],
+    "gaps": [
+      [
+        2,
+        5
+      ]
+    ],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 3,
+        "y": 1,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 3,
+        "y": 3,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 1,
+        "y": 5,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 3,
+        "y": 5,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 1,
+        "y": 7,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 3,
+        "y": 7,
+        "type": "star",
+        "color": "orange"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 139,
+    "endDirection": "top",
+    "start": [
+      2,
+      8
+    ],
+    "end": [
+      2,
+      0
+    ],
+    "category": "star",
+    "solution": [
+      [
+        2,
+        8
+      ],
+      [
+        4,
+        8
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        2,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-3b32e0d047e5",
+    "name": "The Witness · ttws #141",
+    "width": 4,
+    "height": 4,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 3,
+        "y": 1,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 7,
+        "y": 5,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 5,
+        "y": 7,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 7,
+        "y": 7,
+        "type": "star",
+        "color": "orange"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 141,
+    "endDirection": "top",
+    "start": [
+      4,
+      8
+    ],
+    "end": [
+      4,
+      0
+    ],
+    "category": "star",
+    "solution": [
+      [
+        4,
+        8
+      ],
+      [
+        6,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        6
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        4,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-40164d6718ee",
+    "name": "The Witness · ttws #142",
+    "width": 4,
+    "height": 4,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 3,
+        "y": 1,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 7,
+        "y": 1,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 3,
+        "y": 3,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 5,
+        "y": 5,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 7,
+        "y": 5,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 1,
+        "y": 7,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 5,
+        "y": 7,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 7,
+        "y": 7,
+        "type": "star",
+        "color": "orange"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 142,
+    "endDirection": "top",
+    "start": [
+      4,
+      8
+    ],
+    "end": [
+      4,
+      0
+    ],
+    "category": "star",
+    "solution": [
+      [
+        4,
+        8
+      ],
+      [
+        6,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        6
+      ],
+      [
+        8,
+        4
+      ],
+      [
+        8,
+        2
+      ],
+      [
+        8,
+        0
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        0,
+        8
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        4,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-6fbf765160fb",
+    "name": "The Witness · ttws #143",
+    "width": 4,
+    "height": 4,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 3,
+        "y": 1,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 5,
+        "y": 1,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 7,
+        "y": 1,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 7,
+        "y": 3,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 1,
+        "y": 5,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 7,
+        "y": 5,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 1,
+        "y": 7,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 3,
+        "y": 7,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 5,
+        "y": 7,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 7,
+        "y": 7,
+        "type": "star",
+        "color": "orange"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 143,
+    "endDirection": "top",
+    "start": [
+      4,
+      8
+    ],
+    "end": [
+      4,
+      0
+    ],
+    "category": "star",
+    "solution": [
+      [
+        4,
+        8
+      ],
+      [
+        6,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        6
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        8,
+        2
+      ],
+      [
+        8,
+        0
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        4,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-fecef8326849",
+    "name": "The Witness · ttws #144",
+    "width": 4,
+    "height": 4,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 3,
+        "y": 1,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 5,
+        "y": 1,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 7,
+        "y": 1,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 3,
+        "y": 3,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 7,
+        "y": 3,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 1,
+        "y": 5,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 5,
+        "y": 5,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 7,
+        "y": 5,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 1,
+        "y": 7,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 3,
+        "y": 7,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 5,
+        "y": 7,
+        "type": "star",
+        "color": "orange"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 144,
+    "endDirection": "top",
+    "start": [
+      4,
+      8
+    ],
+    "end": [
+      4,
+      0
+    ],
+    "category": "star",
+    "solution": [
+      [
+        4,
+        8
+      ],
+      [
+        6,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        6
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        0,
+        8
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        8,
+        4
+      ],
+      [
+        8,
+        2
+      ],
+      [
+        8,
+        0
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        4,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-e12126b7b071",
+    "name": "The Witness · ttws #145",
+    "width": 4,
+    "height": 4,
+    "dots": [],
+    "gaps": [
+      [
+        7,
+        0
+      ],
+      [
+        0,
+        3
+      ]
+    ],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 7,
+        "y": 1,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "star",
+        "color": "yellow"
+      },
+      {
+        "x": 5,
+        "y": 3,
+        "type": "star",
+        "color": "orange"
+      },
+      {
+        "x": 5,
+        "y": 5,
+        "type": "star",
+        "color": "yellow"
+      },
+      {
+        "x": 1,
+        "y": 7,
+        "type": "star",
+        "color": "orange"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 145,
+    "endDirection": "top",
+    "start": [
+      4,
+      8
+    ],
+    "end": [
+      4,
+      0
+    ],
+    "category": "star",
+    "solution": [
+      [
+        4,
+        8
+      ],
+      [
+        6,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        6
+      ],
+      [
+        8,
+        4
+      ],
+      [
+        8,
+        2
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        4,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-0dba069a8d0f",
+    "name": "The Witness · ttws #146",
+    "width": 4,
+    "height": 3,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 3,
+        "y": 1,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 5,
+        "y": 1,
+        "type": "star",
+        "color": "yellow"
+      },
+      {
+        "x": 7,
+        "y": 1,
+        "type": "star",
+        "color": "yellow"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 3,
+        "y": 3,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 5,
+        "y": 3,
+        "type": "star",
+        "color": "red"
+      },
+      {
+        "x": 7,
+        "y": 3,
+        "type": "star",
+        "color": "red"
+      },
+      {
+        "x": 1,
+        "y": 5,
+        "type": "star",
+        "color": "red"
+      },
+      {
+        "x": 3,
+        "y": 5,
+        "type": "star",
+        "color": "red"
+      },
+      {
+        "x": 5,
+        "y": 5,
+        "type": "star",
+        "color": "red"
+      },
+      {
+        "x": 7,
+        "y": 5,
+        "type": "star",
+        "color": "red"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 146,
+    "endDirection": "top",
+    "start": [
+      4,
+      6
+    ],
+    "end": [
+      4,
+      0
+    ],
+    "category": "star",
+    "solution": [
+      [
+        4,
+        6
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        8,
+        6
+      ],
+      [
+        8,
+        4
+      ],
+      [
+        8,
+        2
+      ],
+      [
+        8,
+        0
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        4,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-7390b41ecfda",
+    "name": "The Witness · ttws #147",
+    "width": 4,
+    "height": 4,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 3,
+        "y": 1,
+        "type": "star",
+        "color": "red"
+      },
+      {
+        "x": 5,
+        "y": 1,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "star",
+        "color": "red"
+      },
+      {
+        "x": 3,
+        "y": 3,
+        "type": "star",
+        "color": "yellow"
+      },
+      {
+        "x": 5,
+        "y": 3,
+        "type": "star",
+        "color": "yellow"
+      },
+      {
+        "x": 7,
+        "y": 3,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 1,
+        "y": 5,
+        "type": "star",
+        "color": "red"
+      },
+      {
+        "x": 3,
+        "y": 5,
+        "type": "star",
+        "color": "yellow"
+      },
+      {
+        "x": 5,
+        "y": 5,
+        "type": "star",
+        "color": "yellow"
+      },
+      {
+        "x": 7,
+        "y": 5,
+        "type": "star",
+        "color": "magenta"
+      },
+      {
+        "x": 3,
+        "y": 7,
+        "type": "star",
+        "color": "red"
+      },
+      {
+        "x": 5,
+        "y": 7,
+        "type": "star",
+        "color": "magenta"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 147,
+    "endDirection": "top",
+    "start": [
+      4,
+      8
+    ],
+    "end": [
+      4,
+      0
+    ],
+    "category": "star",
+    "solution": [
+      [
+        4,
+        8
+      ],
+      [
+        6,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        6
+      ],
+      [
+        8,
+        4
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        4,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-3a6abb3a452b",
+    "name": "The Witness · ttws #155",
+    "width": 1,
+    "height": 2,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "star",
+        "color": "blue"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "star",
+        "color": "blue"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 155,
+    "endDirection": "right",
+    "start": [
+      0,
+      2
+    ],
+    "end": [
+      2,
+      2
+    ],
+    "category": "star",
+    "solution": [
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        2,
+        2
+      ]
+    ]
+  },
+  {
+    "id": "ttws-31457f0a9a49",
+    "name": "The Witness · ttws #156",
+    "width": 2,
+    "height": 2,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "star",
+        "color": "blue"
+      },
+      {
+        "x": 3,
+        "y": 1,
+        "type": "star",
+        "color": "blue"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "star",
+        "color": "blue"
+      },
+      {
+        "x": 3,
+        "y": 3,
+        "type": "star",
+        "color": "blue"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 156,
+    "endDirection": "top",
+    "start": [
+      0,
+      4
+    ],
+    "end": [
+      4,
+      0
+    ],
+    "category": "star",
+    "solution": [
+      [
+        0,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        4,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-159bc78257fb",
+    "name": "The Witness · ttws #157",
+    "width": 3,
+    "height": 3,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 3,
+        "type": "star",
+        "color": "blue"
+      },
+      {
+        "x": 3,
+        "y": 3,
+        "type": "star",
+        "color": "blue"
+      },
+      {
+        "x": 5,
+        "y": 3,
+        "type": "star",
+        "color": "blue"
+      },
+      {
+        "x": 3,
+        "y": 5,
+        "type": "star",
+        "color": "blue"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 157,
+    "endDirection": "top",
+    "start": [
+      0,
+      6
+    ],
+    "end": [
+      6,
+      0
+    ],
+    "category": "star",
+    "solution": [
+      [
+        0,
+        6
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        6,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-e5c52f7baaf9",
+    "name": "The Witness · ttws #158",
+    "width": 3,
+    "height": 3,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "star",
+        "color": "yellow"
+      },
+      {
+        "x": 3,
+        "y": 1,
+        "type": "star",
+        "color": "blue"
+      },
+      {
+        "x": 5,
+        "y": 1,
+        "type": "star",
+        "color": "blue"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "star",
+        "color": "yellow"
+      },
+      {
+        "x": 5,
+        "y": 3,
+        "type": "star",
+        "color": "yellow"
+      },
+      {
+        "x": 1,
+        "y": 5,
+        "type": "star",
+        "color": "blue"
+      },
+      {
+        "x": 3,
+        "y": 5,
+        "type": "star",
+        "color": "blue"
+      },
+      {
+        "x": 5,
+        "y": 5,
+        "type": "star",
+        "color": "yellow"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 158,
+    "endDirection": "top",
+    "start": [
+      0,
+      6
+    ],
+    "end": [
+      6,
+      0
+    ],
+    "category": "star",
+    "solution": [
+      [
+        0,
+        6
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        6,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-63006939f162",
+    "name": "The Witness · ttws #159",
+    "width": 4,
+    "height": 4,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "star",
+        "color": "white"
+      },
+      {
+        "x": 3,
+        "y": 1,
+        "type": "star",
+        "color": "white"
+      },
+      {
+        "x": 5,
+        "y": 1,
+        "type": "star",
+        "color": "white"
+      },
+      {
+        "x": 7,
+        "y": 1,
+        "type": "star",
+        "color": "white"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "star",
+        "color": "black"
+      },
+      {
+        "x": 3,
+        "y": 3,
+        "type": "star",
+        "color": "black"
+      },
+      {
+        "x": 5,
+        "y": 3,
+        "type": "star",
+        "color": "red"
+      },
+      {
+        "x": 7,
+        "y": 3,
+        "type": "star",
+        "color": "red"
+      },
+      {
+        "x": 1,
+        "y": 5,
+        "type": "star",
+        "color": "yellow"
+      },
+      {
+        "x": 3,
+        "y": 5,
+        "type": "star",
+        "color": "blue"
+      },
+      {
+        "x": 5,
+        "y": 5,
+        "type": "star",
+        "color": "blue"
+      },
+      {
+        "x": 7,
+        "y": 5,
+        "type": "star",
+        "color": "red"
+      },
+      {
+        "x": 1,
+        "y": 7,
+        "type": "star",
+        "color": "yellow"
+      },
+      {
+        "x": 3,
+        "y": 7,
+        "type": "star",
+        "color": "blue"
+      },
+      {
+        "x": 5,
+        "y": 7,
+        "type": "star",
+        "color": "blue"
+      },
+      {
+        "x": 7,
+        "y": 7,
+        "type": "star",
+        "color": "red"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 159,
+    "endDirection": "top",
+    "start": [
+      0,
+      8
+    ],
+    "end": [
+      8,
+      0
+    ],
+    "category": "star",
+    "solution": [
+      [
+        0,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        4,
+        8
+      ],
+      [
+        6,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        6
+      ],
+      [
+        8,
+        4
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        8,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-96f3345be042",
+    "name": "The Witness · ttws #160",
+    "width": 2,
+    "height": 3,
+    "dots": [],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "square",
+        "color": "black"
+      },
+      {
+        "x": 3,
+        "y": 3,
+        "type": "star",
+        "color": "white"
+      },
+      {
+        "x": 1,
+        "y": 5,
+        "type": "square",
+        "color": "white"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 160,
+    "endDirection": "top",
+    "start": [
+      0,
+      6
+    ],
+    "end": [
+      4,
+      0
+    ],
+    "category": "mixed",
+    "solution": [
+      [
+        0,
+        6
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        4,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-a9170ac4cd50",
+    "name": "The Witness · ttws #161",
+    "width": 4,
+    "height": 4,
+    "dots": [
+      [
+        2,
+        3
+      ],
+      [
+        6,
+        3
+      ]
+    ],
+    "gaps": [],
+    "symbols": [
+      {
+        "x": 1,
+        "y": 1,
+        "type": "star",
+        "color": "yellow"
+      },
+      {
+        "x": 3,
+        "y": 1,
+        "type": "star",
+        "color": "blue"
+      },
+      {
+        "x": 5,
+        "y": 1,
+        "type": "star",
+        "color": "blue"
+      },
+      {
+        "x": 7,
+        "y": 1,
+        "type": "star",
+        "color": "white"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "star",
+        "color": "yellow"
+      },
+      {
+        "x": 3,
+        "y": 3,
+        "type": "star",
+        "color": "blue"
+      },
+      {
+        "x": 5,
+        "y": 3,
+        "type": "star",
+        "color": "blue"
+      },
+      {
+        "x": 7,
+        "y": 3,
+        "type": "star",
+        "color": "white"
+      },
+      {
+        "x": 1,
+        "y": 5,
+        "type": "star",
+        "color": "yellow"
+      },
+      {
+        "x": 3,
+        "y": 5,
+        "type": "star",
+        "color": "cyan"
+      },
+      {
+        "x": 5,
+        "y": 5,
+        "type": "star",
+        "color": "cyan"
+      },
+      {
+        "x": 7,
+        "y": 5,
+        "type": "star",
+        "color": "white"
+      },
+      {
+        "x": 1,
+        "y": 7,
+        "type": "star",
+        "color": "yellow"
+      },
+      {
+        "x": 3,
+        "y": 7,
+        "type": "star",
+        "color": "cyan"
+      },
+      {
+        "x": 5,
+        "y": 7,
+        "type": "star",
+        "color": "cyan"
+      },
+      {
+        "x": 7,
+        "y": 7,
+        "type": "star",
+        "color": "white"
+      }
+    ],
+    "source": "ttws",
+    "sourceLine": 161,
+    "endDirection": "top",
+    "start": [
+      4,
+      8
+    ],
+    "end": [
+      4,
+      0
+    ],
+    "category": "mixed",
+    "solution": [
+      [
+        4,
+        8
+      ],
+      [
+        6,
+        8
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        0,
+        8
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        8,
+        4
+      ],
+      [
+        8,
+        2
+      ],
+      [
+        8,
+        0
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        4,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "ttws-106f8bc92fa2",
+    "name": "The Witness · ttws #167",
+    "width": 3,
+    "height": 3,
+    "dots": [
+      [
+        1,
+        0
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        4,
+        3
+      ],
+      [
+        1,
+        6
+      ],
+      [
+        3,
+        6
+      ]
+    ],
+    "gaps": [],
+    "symbols": [],
+    "source": "ttws",
+    "sourceLine": 167,
+    "endDirection": "top",
+    "start": [
+      0,
+      6
+    ],
+    "end": [
+      6,
+      0
+    ],
+    "category": "dots",
+    "solution": [
+      [
+        0,
+        6
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        6,
+        0
+      ]
+    ]
+  }
+]

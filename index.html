@@ -31,13 +31,29 @@
             </div>
           </header>
 
-          <div class="default-feature-grid" aria-label="特色玩法">
+          <div id="lobby-feature-list" class="default-feature-grid" role="region" aria-label="活动玩法，左右滑动查看更多" tabindex="0">
             <button id="default-bead-mode-button" class="default-feature-card default-feature-card--bead" type="button" aria-label="进入拼豆模式">
               <strong>PERLER BEADS</strong>
               <span class="default-feature-artwork" aria-hidden="true">
                 <img src="./ui/number-connect-slices/set-7/pindou.png" alt="" />
               </span>
               <span class="reference-feature-meta reference-feature-meta--countdown"><img src="./ui/number-connect-slices/set-7/pindou_daojishi.png" alt="" /><b>2d 10:15</b></span>
+              <span class="reference-feature-play">Play</span>
+            </button>
+            <button id="default-witness-mode-button" class="default-feature-card default-feature-card--witness" type="button" aria-label="进入 Witness 画线解谜">
+              <strong>WITNESS</strong>
+              <span class="witness-entry-art" aria-hidden="true">
+                <svg viewBox="0 0 140 140" fill="none">
+                  <rect x="8" y="8" width="124" height="124" rx="18" fill="#244d57" stroke="#bdebc8" stroke-width="4"/>
+                  <path d="M30 30H110M30 57H110M30 83H110M30 110H110M30 30V110M57 30V110M83 30V110M110 30V110" stroke="#67958d" stroke-width="4" stroke-linecap="round"/>
+                  <path d="M30 110V83H57V30H83V57H110V24" stroke="#fff5b7" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+                  <circle cx="30" cy="110" r="8" fill="#fff5b7"/>
+                  <circle cx="57" cy="57" r="5" fill="#fff"/>
+                  <rect x="89" y="90" width="13" height="13" rx="3" fill="#eeb872"/>
+                  <rect x="36" y="37" width="13" height="13" rx="3" fill="#fff"/>
+                </svg>
+              </span>
+              <span class="reference-feature-meta">画线解谜</span>
               <span class="reference-feature-play">Play</span>
             </button>
             <button id="default-daily-challenge-button" class="default-feature-card default-feature-card--daily" type="button" aria-label="打开每日挑战">
@@ -48,6 +64,12 @@
               <span id="lobby-daily-date" class="reference-feature-meta">Today</span>
               <span class="reference-feature-play">Play</span>
             </button>
+          </div>
+
+          <div class="feature-list-controls" aria-label="切换活动入口">
+            <span>左右滑动 · 更多玩法</span>
+            <button id="feature-list-previous" type="button" aria-label="查看前面的活动" aria-controls="lobby-feature-list">‹</button>
+            <button id="feature-list-next" type="button" aria-label="查看后面的活动" aria-controls="lobby-feature-list">›</button>
           </div>
 
           <div class="default-brand-lockup" aria-label="Number Connect">
@@ -62,6 +84,7 @@
 
       </section>
 
+      <section id="witness-screen" class="screen witness-screen" aria-label="Witness 画线解谜" hidden></section>
       <section id="play-screen" class="screen play-screen" hidden aria-label="游戏界面">
         <div id="play-coin-frame" class="play-coin-frame" role="status" aria-live="polite" aria-label="金币 0">
           <img src="./ui/coins/coin.png" alt="" draggable="false" />

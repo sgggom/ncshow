@@ -1,0 +1,1303 @@
+{
+  "total": 195,
+  "imported": 78,
+  "records": [
+    {
+      "line": 1,
+      "status": "imported",
+      "id": "ttws-e2e8f55d55f5",
+      "category": "star"
+    },
+    {
+      "line": 2,
+      "status": "unsupported",
+      "reasons": [
+        "multiple_start_or_end"
+      ]
+    },
+    {
+      "line": 3,
+      "status": "imported",
+      "id": "ttws-80845b9cee13",
+      "category": "maze"
+    },
+    {
+      "line": 4,
+      "status": "imported",
+      "id": "ttws-2fe8d02a2087",
+      "category": "maze"
+    },
+    {
+      "line": 5,
+      "status": "imported",
+      "id": "ttws-80cb68489802",
+      "category": "maze"
+    },
+    {
+      "line": 6,
+      "status": "unsupported",
+      "reasons": [
+        "multiple_start_or_end"
+      ]
+    },
+    {
+      "line": 7,
+      "status": "imported",
+      "id": "ttws-ee4c9c088108",
+      "category": "square"
+    },
+    {
+      "line": 8,
+      "status": "imported",
+      "id": "ttws-51a1253a7cae",
+      "category": "square"
+    },
+    {
+      "line": 9,
+      "status": "imported",
+      "id": "ttws-b8f23a105948",
+      "category": "square"
+    },
+    {
+      "line": 10,
+      "status": "imported",
+      "id": "ttws-537f68cfe8c4",
+      "category": "square"
+    },
+    {
+      "line": 11,
+      "status": "imported",
+      "id": "ttws-856fdf3e20c0",
+      "category": "square"
+    },
+    {
+      "line": 12,
+      "status": "imported",
+      "id": "ttws-963b7153f1b0",
+      "category": "square"
+    },
+    {
+      "line": 13,
+      "status": "imported",
+      "id": "ttws-f119a88aeedf",
+      "category": "square"
+    },
+    {
+      "line": 14,
+      "status": "imported",
+      "id": "ttws-0a024b60ae08",
+      "category": "square"
+    },
+    {
+      "line": 15,
+      "status": "imported",
+      "id": "ttws-81a4a2048b75",
+      "category": "square"
+    },
+    {
+      "line": 16,
+      "status": "imported",
+      "id": "ttws-e917eb08ebc2",
+      "category": "square"
+    },
+    {
+      "line": 17,
+      "status": "imported",
+      "id": "ttws-a964075d0724",
+      "category": "square"
+    },
+    {
+      "line": 18,
+      "status": "unsupported",
+      "reasons": [
+        "multiple_start_or_end"
+      ]
+    },
+    {
+      "line": 19,
+      "status": "imported",
+      "id": "ttws-b1674b382524",
+      "category": "dots"
+    },
+    {
+      "line": 20,
+      "status": "imported",
+      "id": "ttws-7540c666fe95",
+      "category": "dots"
+    },
+    {
+      "line": 21,
+      "status": "imported",
+      "id": "ttws-38067828c5ec",
+      "category": "dots"
+    },
+    {
+      "line": 22,
+      "status": "imported",
+      "id": "ttws-1c48ae76cedf",
+      "category": "dots"
+    },
+    {
+      "line": 23,
+      "status": "unsupported",
+      "reasons": [
+        "multiple_start_or_end"
+      ]
+    },
+    {
+      "line": 24,
+      "status": "unsupported",
+      "reasons": [
+        "multiple_start_or_end"
+      ]
+    },
+    {
+      "line": 25,
+      "status": "imported",
+      "id": "ttws-2ff3266c8438",
+      "category": "dots"
+    },
+    {
+      "line": 26,
+      "status": "imported",
+      "id": "ttws-5df1ec18d596",
+      "category": "dots"
+    },
+    {
+      "line": 27,
+      "status": "unsupported",
+      "reasons": [
+        "multiple_start_or_end"
+      ]
+    },
+    {
+      "line": 28,
+      "status": "unsupported",
+      "reasons": [
+        "symmetry"
+      ]
+    },
+    {
+      "line": 29,
+      "status": "unsupported",
+      "reasons": [
+        "symmetry"
+      ]
+    },
+    {
+      "line": 30,
+      "status": "unsupported",
+      "reasons": [
+        "symmetry"
+      ]
+    },
+    {
+      "line": 31,
+      "status": "unsupported",
+      "reasons": [
+        "symmetry"
+      ]
+    },
+    {
+      "line": 32,
+      "status": "unsupported",
+      "reasons": [
+        "symmetry"
+      ]
+    },
+    {
+      "line": 33,
+      "status": "unsupported",
+      "reasons": [
+        "symmetry"
+      ]
+    },
+    {
+      "line": 34,
+      "status": "unsupported",
+      "reasons": [
+        "symmetry"
+      ]
+    },
+    {
+      "line": 35,
+      "status": "unsupported",
+      "reasons": [
+        "symmetry"
+      ]
+    },
+    {
+      "line": 36,
+      "status": "unsupported",
+      "reasons": [
+        "symmetry"
+      ]
+    },
+    {
+      "line": 37,
+      "status": "unsupported",
+      "reasons": [
+        "symmetry"
+      ]
+    },
+    {
+      "line": 38,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 39,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 40,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 41,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 42,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 43,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 44,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 45,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 46,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 47,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 48,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 49,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 50,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 51,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 52,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 53,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 54,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 55,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 56,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 57,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 58,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 59,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 60,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 61,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 62,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 63,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 64,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 65,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 66,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 67,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 68,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 69,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 70,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 71,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 72,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 73,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 74,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 75,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 76,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 77,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 78,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 79,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 80,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 81,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 82,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 83,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 84,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 85,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 86,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 87,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 88,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 89,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 90,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 91,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 92,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 93,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 94,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 95,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 96,
+      "status": "imported",
+      "id": "ttws-ef482ee1bf7d",
+      "category": "star"
+    },
+    {
+      "line": 97,
+      "status": "imported",
+      "id": "ttws-9696f7c9879d",
+      "category": "star"
+    },
+    {
+      "line": 98,
+      "status": "imported",
+      "id": "ttws-a0614ba09285",
+      "category": "star"
+    },
+    {
+      "line": 99,
+      "status": "imported",
+      "id": "ttws-3d2a1e9aab18",
+      "category": "star"
+    },
+    {
+      "line": 100,
+      "status": "imported",
+      "id": "ttws-b863e3656efc",
+      "category": "star"
+    },
+    {
+      "line": 101,
+      "status": "imported",
+      "id": "ttws-ea60a3e1e234",
+      "category": "star"
+    },
+    {
+      "line": 102,
+      "status": "imported",
+      "id": "ttws-471820d0ff5f",
+      "category": "star"
+    },
+    {
+      "line": 103,
+      "status": "imported",
+      "id": "ttws-5442062583ae",
+      "category": "star"
+    },
+    {
+      "line": 104,
+      "status": "imported",
+      "id": "ttws-8c5c94d7139f",
+      "category": "star"
+    },
+    {
+      "line": 105,
+      "status": "imported",
+      "id": "ttws-130e3ee86858",
+      "category": "star"
+    },
+    {
+      "line": 106,
+      "status": "imported",
+      "id": "ttws-98b1938f0b6d",
+      "category": "star"
+    },
+    {
+      "line": 107,
+      "status": "imported",
+      "id": "ttws-bffe0b65120a",
+      "category": "star"
+    },
+    {
+      "line": 108,
+      "status": "imported",
+      "id": "ttws-8bec218016ac",
+      "category": "mixed"
+    },
+    {
+      "line": 109,
+      "status": "imported",
+      "id": "ttws-9630d3b7a9af",
+      "category": "mixed"
+    },
+    {
+      "line": 110,
+      "status": "imported",
+      "id": "ttws-05dca8db8bbe",
+      "category": "mixed"
+    },
+    {
+      "line": 111,
+      "status": "imported",
+      "id": "ttws-47c8725ec51c",
+      "category": "mixed"
+    },
+    {
+      "line": 112,
+      "status": "imported",
+      "id": "ttws-114488ac6772",
+      "category": "mixed"
+    },
+    {
+      "line": 113,
+      "status": "imported",
+      "id": "ttws-e9966e4c4646",
+      "category": "mixed"
+    },
+    {
+      "line": 114,
+      "status": "imported",
+      "id": "ttws-2e130c434c6c",
+      "category": "mixed"
+    },
+    {
+      "line": 115,
+      "status": "imported",
+      "id": "ttws-e54d5d407fbc",
+      "category": "mixed"
+    },
+    {
+      "line": 116,
+      "status": "imported",
+      "id": "ttws-9f7ce951f747",
+      "category": "mixed"
+    },
+    {
+      "line": 117,
+      "status": "imported",
+      "id": "ttws-8a726f0a1b3c",
+      "category": "mixed"
+    },
+    {
+      "line": 118,
+      "status": "imported",
+      "id": "ttws-cb620c91b880",
+      "category": "mixed"
+    },
+    {
+      "line": 119,
+      "status": "imported",
+      "id": "ttws-522fe4d78ead",
+      "category": "mixed"
+    },
+    {
+      "line": 120,
+      "status": "imported",
+      "id": "ttws-4a29a3056892",
+      "category": "mixed"
+    },
+    {
+      "line": 121,
+      "status": "imported",
+      "id": "ttws-96afe1f4a812",
+      "category": "mixed"
+    },
+    {
+      "line": 122,
+      "status": "imported",
+      "id": "ttws-23a8224d9a18",
+      "category": "mixed"
+    },
+    {
+      "line": 123,
+      "status": "imported",
+      "id": "ttws-fb2e0e17bf47",
+      "category": "mixed"
+    },
+    {
+      "line": 124,
+      "status": "imported",
+      "id": "ttws-ff0af0c2783d",
+      "category": "mixed"
+    },
+    {
+      "line": 125,
+      "status": "imported",
+      "id": "ttws-7b04e0cf789f",
+      "category": "mixed"
+    },
+    {
+      "line": 126,
+      "status": "imported",
+      "id": "ttws-fdd1514702cc",
+      "category": "mixed"
+    },
+    {
+      "line": 127,
+      "status": "imported",
+      "id": "ttws-06cc6c8df5b8",
+      "category": "square"
+    },
+    {
+      "line": 128,
+      "status": "unsupported",
+      "reasons": [
+        "multiple_start_or_end"
+      ]
+    },
+    {
+      "line": 129,
+      "status": "unsupported",
+      "reasons": [
+        "multiple_start_or_end"
+      ]
+    },
+    {
+      "line": 130,
+      "status": "imported",
+      "id": "ttws-bb27aeb65310",
+      "category": "mixed"
+    },
+    {
+      "line": 131,
+      "status": "imported",
+      "id": "ttws-be186d109724",
+      "category": "mixed"
+    },
+    {
+      "line": 132,
+      "status": "imported",
+      "id": "ttws-a27b26b701d0",
+      "category": "mixed"
+    },
+    {
+      "line": 133,
+      "status": "imported",
+      "id": "ttws-9f51b7b0cb3a",
+      "category": "mixed"
+    },
+    {
+      "line": 134,
+      "status": "imported",
+      "id": "ttws-e36bd8023e1f",
+      "category": "mixed"
+    },
+    {
+      "line": 135,
+      "status": "imported",
+      "id": "ttws-e9f840493c3f",
+      "category": "mixed"
+    },
+    {
+      "line": 136,
+      "status": "imported",
+      "id": "ttws-80a87338654c",
+      "category": "star"
+    },
+    {
+      "line": 137,
+      "status": "imported",
+      "id": "ttws-567ef0816ea9",
+      "category": "star"
+    },
+    {
+      "line": 138,
+      "status": "imported",
+      "id": "ttws-428ce81362b5",
+      "category": "star"
+    },
+    {
+      "line": 139,
+      "status": "imported",
+      "id": "ttws-42159683920a",
+      "category": "star"
+    },
+    {
+      "line": 140,
+      "status": "unsupported",
+      "reasons": [
+        "multiple_start_or_end"
+      ]
+    },
+    {
+      "line": 141,
+      "status": "imported",
+      "id": "ttws-3b32e0d047e5",
+      "category": "star"
+    },
+    {
+      "line": 142,
+      "status": "imported",
+      "id": "ttws-40164d6718ee",
+      "category": "star"
+    },
+    {
+      "line": 143,
+      "status": "imported",
+      "id": "ttws-6fbf765160fb",
+      "category": "star"
+    },
+    {
+      "line": 144,
+      "status": "imported",
+      "id": "ttws-fecef8326849",
+      "category": "star"
+    },
+    {
+      "line": 145,
+      "status": "imported",
+      "id": "ttws-e12126b7b071",
+      "category": "star"
+    },
+    {
+      "line": 146,
+      "status": "imported",
+      "id": "ttws-0dba069a8d0f",
+      "category": "star"
+    },
+    {
+      "line": 147,
+      "status": "imported",
+      "id": "ttws-7390b41ecfda",
+      "category": "star"
+    },
+    {
+      "line": 148,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 149,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 150,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 151,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 152,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 153,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 154,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 155,
+      "status": "imported",
+      "id": "ttws-3a6abb3a452b",
+      "category": "star"
+    },
+    {
+      "line": 156,
+      "status": "imported",
+      "id": "ttws-31457f0a9a49",
+      "category": "star"
+    },
+    {
+      "line": 157,
+      "status": "imported",
+      "id": "ttws-159bc78257fb",
+      "category": "star"
+    },
+    {
+      "line": 158,
+      "status": "imported",
+      "id": "ttws-e5c52f7baaf9",
+      "category": "star"
+    },
+    {
+      "line": 159,
+      "status": "imported",
+      "id": "ttws-63006939f162",
+      "category": "star"
+    },
+    {
+      "line": 160,
+      "status": "imported",
+      "id": "ttws-96f3345be042",
+      "category": "mixed"
+    },
+    {
+      "line": 161,
+      "status": "imported",
+      "id": "ttws-a9170ac4cd50",
+      "category": "mixed"
+    },
+    {
+      "line": 162,
+      "status": "unsupported",
+      "reasons": [
+        "negation"
+      ]
+    },
+    {
+      "line": 163,
+      "status": "unsupported",
+      "reasons": [
+        "negation"
+      ]
+    },
+    {
+      "line": 164,
+      "status": "unsupported",
+      "reasons": [
+        "negation"
+      ]
+    },
+    {
+      "line": 165,
+      "status": "unsupported",
+      "reasons": [
+        "negation"
+      ]
+    },
+    {
+      "line": 166,
+      "status": "unsupported",
+      "reasons": [
+        "negation"
+      ]
+    },
+    {
+      "line": 167,
+      "status": "imported",
+      "id": "ttws-106f8bc92fa2",
+      "category": "dots"
+    },
+    {
+      "line": 168,
+      "status": "unsupported",
+      "reasons": [
+        "negation"
+      ]
+    },
+    {
+      "line": 169,
+      "status": "unsupported",
+      "reasons": [
+        "negation"
+      ]
+    },
+    {
+      "line": 170,
+      "status": "unsupported",
+      "reasons": [
+        "negation"
+      ]
+    },
+    {
+      "line": 171,
+      "status": "unsupported",
+      "reasons": [
+        "negation"
+      ]
+    },
+    {
+      "line": 172,
+      "status": "unsupported",
+      "reasons": [
+        "negation"
+      ]
+    },
+    {
+      "line": 173,
+      "status": "unsupported",
+      "reasons": [
+        "negation"
+      ]
+    },
+    {
+      "line": 174,
+      "status": "unsupported",
+      "reasons": [
+        "negation"
+      ]
+    },
+    {
+      "line": 175,
+      "status": "unsupported",
+      "reasons": [
+        "negation"
+      ]
+    },
+    {
+      "line": 176,
+      "status": "unsupported",
+      "reasons": [
+        "negation"
+      ]
+    },
+    {
+      "line": 177,
+      "status": "unsupported",
+      "reasons": [
+        "negation"
+      ]
+    },
+    {
+      "line": 178,
+      "status": "unverified",
+      "reasons": [
+        "no_solution_within_search_budget"
+      ]
+    },
+    {
+      "line": 179,
+      "status": "unverified",
+      "reasons": [
+        "no_solution_within_search_budget"
+      ]
+    },
+    {
+      "line": 180,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino"
+      ]
+    },
+    {
+      "line": 181,
+      "status": "unsupported",
+      "reasons": [
+        "negation"
+      ]
+    },
+    {
+      "line": 182,
+      "status": "unsupported",
+      "reasons": [
+        "negation"
+      ]
+    },
+    {
+      "line": 183,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino",
+        "negation"
+      ]
+    },
+    {
+      "line": 184,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino",
+        "negation"
+      ]
+    },
+    {
+      "line": 185,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino",
+        "negation"
+      ]
+    },
+    {
+      "line": 186,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino",
+        "negation"
+      ]
+    },
+    {
+      "line": 187,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino",
+        "negation"
+      ]
+    },
+    {
+      "line": 188,
+      "status": "unsupported",
+      "reasons": [
+        "negation"
+      ]
+    },
+    {
+      "line": 189,
+      "status": "unsupported",
+      "reasons": [
+        "negation"
+      ]
+    },
+    {
+      "line": 190,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino",
+        "negation"
+      ]
+    },
+    {
+      "line": 191,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino",
+        "negation"
+      ]
+    },
+    {
+      "line": 192,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino",
+        "negation"
+      ]
+    },
+    {
+      "line": 193,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino",
+        "negation"
+      ]
+    },
+    {
+      "line": 194,
+      "status": "unsupported",
+      "reasons": [
+        "negation"
+      ]
+    },
+    {
+      "line": 195,
+      "status": "unsupported",
+      "reasons": [
+        "polyomino",
+        "negation"
+      ]
+    }
+  ]
+}

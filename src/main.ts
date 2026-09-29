@@ -1,3 +1,5 @@
+import { WitnessGame } from './gameplay/witness/WitnessGame';
+import { bindFeatureCarousel } from './app/featureCarousel';
 import Phaser from 'phaser';
 import { createBeadSectionLevels } from './gameplay/beads/beadSectionLevel';
 import './styles.css';
@@ -733,7 +735,14 @@ class NumberConnectApp {
     this.beadGalleryDialog.addEventListener('click', (event) => {
       if (event.target === this.beadGalleryDialog) this.beadGalleryDialog.close();
     });
+    bindFeatureCarousel(query('#lobby-feature-list'), query<HTMLButtonElement>('#feature-list-previous'), query<HTMLButtonElement>('#feature-list-next'));
     query('#default-start-button').addEventListener('click', () => void this.startNormalMode());
+    let witness: WitnessGame | undefined;
+    query('#default-witness-mode-button').addEventListener('click', () => {
+      witness ??= new WitnessGame(query('#witness-screen'), () => this.backToLobby());
+      this.showScreen('witness');
+      witness.open();
+    });
     query('#default-bead-mode-button').addEventListener('click', () => this.openBeadMode());
     query('#default-daily-challenge-button').addEventListener('click', () => this.openDailyChallenge());
     query('#default-gallery-button').addEventListener('click', () => this.openFavorites());
